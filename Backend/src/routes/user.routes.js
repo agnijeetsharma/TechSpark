@@ -13,6 +13,7 @@ import {
   updateProfile,
   updateProfileImage,
   AllProfiles,
+  getPotentialMatches,
 } from "../controllers/profile.controller.js";
 const router = Router();
 
@@ -58,5 +59,6 @@ router.route("/update-profileImage/:username").post(
 );
 
 router.route("/allProfiles").get(verifyJWT, AllProfiles);
+router.route("/allMatchProfiles").get(verifyJWT,getPotentialMatches)
 
 export default router;

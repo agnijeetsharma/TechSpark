@@ -4,6 +4,7 @@ import { apiResponse } from "../utils/apiResponse.js";
 import apiError from "../utils/apiErrors.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { User } from "../models/user.models.js";
+import { Match} from "../models/match.model.js"
 const CreateProfile = asyncHandler(async (req, res) => {
   const {
     username,
@@ -111,12 +112,36 @@ const AllProfiles = asyncHandler(async (req, res) => {
   res.status(200).json(new apiResponse(200, profiles, "All profiles found"));
 });
 
-const getAllMatchProfile = asyncHandler(async (req, res) => {
+const getPotentialMatches = asyncHandler(async (req, res) => {
   const currentUser = req.user._id;
-  if (!currentUser) throw new apiError(400, "current user have some problems");
-    const profile=await Profile.findById({user:currentUser});
-    // if(profile)throw new apiError(400,"prfile not found");
-    
+  const userProfile = await Profile.findOne({ user: currentUser });
+  if (!userProfile) throw new apiError(404, "User profile not found");
+
+  const existingConnections = await Match.find({
+    $or: [
+      { sender: currentUser, status: { $in: ["Pending", "Accepted"] } },
+      { receiver: currentUser, status: { $in: ["Pending", "Accepted"] } },
+    ],
+  }).select("sender receiver");
+
+  const excludedUserIds = existingConnections.map((connection) =>
+    connection.sender.equals(currentUser) ? connection.receiver : connection.sender
+  );
+
+  const potentialMatches = await Profile.find({
+    user: { $ne: currentUser, $nin: excludedUserIds },
+    $or: [
+      { skills: { $in: userProfile.skills } },
+      { interests: { $in: userProfile.interests } },
+      { experienceLevel: userProfile.experienceLevel },
+    ]
+  });
+
+  if (!potentialMatches || potentialMatches.length === 0) {
+    throw new apiError(404, "No potential matches found");
+  }
+
+  res.status(200).json(new apiResponse(200, potentialMatches, "Potential match profiles retrieved successfully"));
 });
 
 export {
@@ -124,5 +149,5 @@ export {
   updateProfile,
   updateProfileImage,
   AllProfiles,
-  getAllMatchProfile,
+  getPotentialMatches
 };
