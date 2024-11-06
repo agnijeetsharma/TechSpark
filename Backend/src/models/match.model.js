@@ -1,4 +1,4 @@
-import mongoose from 'moongoose'
+import mongoose from "mongoose";
 
 const matchSchema = new mongoose.Schema({
    sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -7,6 +7,5 @@ const matchSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
   });
   
-  module.exports = mongoose.model('Match', matchSchema);
 
 export const Match=mongoose.model('Match',matchSchema);
