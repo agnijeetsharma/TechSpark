@@ -8,4 +8,4 @@ const ChatSchema = new mongoose.Schema({
   lastMessageAt: { type: Date, default: Date.now },
   createdAt: { type: Date, default: Date.now },
 });
-export const Chat = mogoose.model("Chat", ChatSchema);
+export const Chat = mongoose.model("Chat", ChatSchema);
