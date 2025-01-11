@@ -40,6 +40,7 @@ userSchema.methods.isPasswordCorrect = async function (password) {
     return isMatch;
   } catch (error) {
     // console.error("Error comparing passwords:", error);
+    // next(error)
     throw new Error("Error comparing passwords");
   }
 };

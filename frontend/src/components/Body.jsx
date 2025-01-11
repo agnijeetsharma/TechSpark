@@ -12,7 +12,7 @@ const Body = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const fetchUser = async () => {
-    if(!selector)return;
+    if(selector)return;
     try {
       const response = await axios.get(Base_URL + "/profile/view", {
         withCredentials: true,
@@ -22,6 +22,7 @@ const Body = () => {
       navigate("/");
     } catch (error) {
       if (error.status == 401) navigate("/login");
+      navigate("/login")       //for now i will change it
       console.log("refresh error", error);
     }
   };

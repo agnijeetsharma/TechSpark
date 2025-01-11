@@ -1,7 +1,7 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import { Profile } from "../models/profile.models.js";
 import { apiResponse } from "../utils/apiResponse.js";
-import apiError from "../utils/apiErrors.js";
+import {apiError} from "../utils/apiErrors.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { User } from "../models/user.models.js";
 import { Match} from "../models/match.model.js"

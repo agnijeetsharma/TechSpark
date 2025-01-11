@@ -1,4 +1,4 @@
-import apiError from "../utils/apiErrors.js";
+import {apiError} from "../utils/apiErrors.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { Match } from "../models/match.model.js";
 import { apiResponse } from "../utils/apiResponse.js";

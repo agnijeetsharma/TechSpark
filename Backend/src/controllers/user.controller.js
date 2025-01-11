@@ -1,5 +1,5 @@
 import asyncHandler from "../utils/asyncHandler.js";
-import apiError from "../utils/apiErrors.js";
+import{ apiError} from "../utils/apiErrors.js";
 import { User } from "../models/user.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { apiResponse } from "../utils/apiResponse.js";
@@ -76,9 +76,9 @@ const loginUser = asyncHandler(async (req, res) => {
     email,
   });
 // console.log(user);
-  if (!user) throw new apiError(400, "User not found");
+  if (!user) throw new apiError(404, "User not found");
   const isPasswordCorrect = await user.isPasswordCorrect(password);
-  if (!isPasswordCorrect) throw new apiError(400, "Password is not correct");
+  if (!isPasswordCorrect) throw new apiError(401, "Password is not correct");
   const { accessToken, refreshToken } =
     await generateAccessTokenAndRefreshToken(user._id);
 
@@ -109,7 +109,7 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 const logOutUser = asyncHandler(async (req, res) => {
-  await User.findByIdAndDelete(
+  const updatedUser=await User.findByIdAndUpdate(
     req.user._id,
     {
       $set: {
@@ -124,6 +124,11 @@ const logOutUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
   };
+  if (!updatedUser) {
+    return res
+      .status(404)
+      .json(new apiResponse(404, {}, "User not found"));
+  }
   return res
     .status(200)
     .clearCookie("accessToken", option)
