@@ -9,7 +9,6 @@ import { upload } from "../middlewares/multer.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { refreshAccessToken } from "../controllers/user.controller.js";
 import {
-  CreateProfile,
   updateProfile,
   updateProfileImage,
   AllProfiles,
@@ -37,16 +36,16 @@ router.route("/register").post(
 router.route("/login").post(loginUser);
 router.route("/logout").post(verifyJWT, logOutUser);
 router.route("/refesh-Token").post(refreshAccessToken);
-router.route("/profile").post(
-  verifyJWT,
-  upload.fields([
-    {
-      name: "profileImage",
-      maxCount: 1,
-    },
-  ]),
-  CreateProfile,
-);
+// router.route("/profile").post(
+//   verifyJWT,
+//   upload.fields([
+//     {
+//       name: "profileImage",
+//       maxCount: 1,
+//     },
+//   ]),
+//   CreateProfile,
+// );
 router.route("/updateProfile/:username").put(verifyJWT, updateProfile);
 router.route("/update-profileImage/:username").post(
   verifyJWT,

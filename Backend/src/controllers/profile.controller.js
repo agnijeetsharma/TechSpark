@@ -1,73 +1,72 @@
 import asyncHandler from "../utils/asyncHandler.js";
-import { Profile } from "../models/profile.models.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import {apiError} from "../utils/apiErrors.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { User } from "../models/user.models.js";
 import { Match} from "../models/match.model.js"
 
-const CreateProfile = asyncHandler(async (req, res) => {
-  const {
-    username,
-    bio,
-    skills,
-    experienceLevel,
-    interests,
-    goals,
-    location,
-    githubLink,
-    linkedinLink,
-  } = req.body;
+// const CreateProfile = asyncHandler(async (req, res) => {
+//   const {
+//     username,
+//     bio,
+//     skills,
+//     experienceLevel,
+//     interests,
+//     goals,
+//     location,
+//     githubLink,
+//     linkedinLink,
+//   } = req.body;
 
-  if (!username) {
-    return res.status(400).json({ message: "username is required." });
-  }
-  const user = await User.findOne({ username });
-  if (!user) {
-    throw new apiError("user not found");
-  }
+//   if (!username) {
+//     return res.status(400).json({ message: "username is required." });
+//   }
+//   const user = await User.findOne({ username });
+//   if (!user) {
+//     throw new apiError("user not found");
+//   }
 
-  let coverImagelocalpath;
-  if (
-    req.files &&
-    Array.isArray(req.files.coverImage) &&
-    req.files.coverImage.length > 0
-  ) {
-    coverImagelocalpath = req?.files?.coverImage[0]?.path;
-  }
+//   let coverImagelocalpath;
+//   if (
+//     req.files &&
+//     Array.isArray(req.files.coverImage) &&
+//     req.files.coverImage.length > 0
+//   ) {
+//     coverImagelocalpath = req?.files?.coverImage[0]?.path;
+//   }
 
-  const coverImage = await uploadOnCloudinary(coverImagelocalpath);
+//   const coverImage = await uploadOnCloudinary(coverImagelocalpath);
 
-  const existingProfile = await Profile.findOne({ username });
-  if (existingProfile) {
-    return res.status(400).json({ message: "Username is already taken." });
-  }
+//   const existingProfile = await Profile.findOne({ username });
+//   if (existingProfile) {
+//     return res.status(400).json({ message: "Username is already taken." });
+//   }
 
-  const profile = new Profile({
-    username,
-    bio,
-    skills,
-    experienceLevel,
-    interests,
-    goals: goals || "",
-    location: location || "",
-    profileImage: coverImage?.url || "",
-    githubLink,
-    linkedinLink,
-    user: user._id,
-  });
+//   const profile = new Profile({
+//     username,
+//     bio,
+//     skills,
+//     experienceLevel,
+//     interests,
+//     goals: goals || "",
+//     location: location || "",
+//     profileImage: coverImage?.url || "",
+//     githubLink,
+//     linkedinLink,
+//     user: user._id,
+//   });
 
-  await profile.save();
-  res
-    .status(201)
-    .json(new apiResponse(200, profile, "profile created successfully"));
-});
+//   await profile.save();
+//   res
+//     .status(201)
+//     .json(new apiResponse(200, profile, "profile created successfully"));
+// });
 
 const updateProfile = asyncHandler(async (req, res) => {
   const { username } = req.params;
   if (!username) throw new apiError(400, "username not found");
   const updatedData = req.body;
-  const profile = await Profile.findOneAndUpdate({ username }, updatedData, {
+  const profile = await User.findOneAndUpdate({ username }, updatedData, {
     new: true,
   });
   if (!profile) throw new apiError(404, "profile not found");
@@ -80,7 +79,7 @@ const updateProfileImage = asyncHandler(async (req, res) => {
   const { username } = req.params;
   if (!username) throw new apiError(400, "Username not found");
 
-  const profile = await Profile.findOne({ username });
+  const profile = await User.findOne({ username });
   if (!profile) throw new apiError(404, "Profile not found");
   // console.log(req.files)
   const profileImagelocalpath = req?.files?.profileImage?.[0]?.path;
@@ -106,7 +105,7 @@ const updateProfileImage = asyncHandler(async (req, res) => {
 });
 
 const AllProfiles = asyncHandler(async (req, res) => {
-  const profiles = await Profile.find().select("-password");
+  const profiles = await User.find().select("-password");
   if (!profiles) {
     throw new apiError(404, "No profiles found");
   }
@@ -115,7 +114,7 @@ const AllProfiles = asyncHandler(async (req, res) => {
 
 const getPotentialMatches = asyncHandler(async (req, res) => {
   const currentUser = req.user._id;
-  const userProfile = await Profile.findOne({ user: currentUser });
+  const userProfile = await User.findOne({ user: currentUser });
   if (!userProfile) throw new apiError(404, "User profile not found");
 
   const existingConnections = await Match.find({
@@ -129,7 +128,7 @@ const getPotentialMatches = asyncHandler(async (req, res) => {
     connection.sender.equals(currentUser) ? connection.receiver : connection.sender
   );
 
-  const potentialMatches = await Profile.find({
+  const potentialMatches = await User.find({
     user: { $ne: currentUser, $nin: excludedUserIds },
     $or: [
       { skills: { $in: userProfile.skills } },
@@ -147,14 +146,13 @@ const getPotentialMatches = asyncHandler(async (req, res) => {
 
 const getUserProfile=asyncHandler(async (req,res)=>{
   const user = req.user;
-  const userId=req.user._id
-  const userProfile = await Profile.findOne({ user: userId});
-  if (!user||!userProfile) throw new apiError(404, "User profile not found");
-  res.status(200).json(new apiResponse(200, {user:user,profile:userProfile}, "User profile retrieved successfully"))
+  
+  if (!user) throw new apiError(404, "User profile not found");
+  res.status(200).json(new apiResponse(200, {user:user}, "User profile retrieved successfully"))
 })
 
 export {
-  CreateProfile,
+  
   updateProfile,
   updateProfileImage,
   AllProfiles,

@@ -1,10 +1,9 @@
 import asyncHandler from "../utils/asyncHandler.js";
-import{ apiError} from "../utils/apiErrors.js";
+import { apiError } from "../utils/apiErrors.js";
 import { User } from "../models/user.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import jwt from "jsonwebtoken";
-import { Profile } from "../models/profile.models.js";
 
 const generateAccessTokenAndRefreshToken = async (userId) => {
   try {
@@ -22,39 +21,56 @@ const generateAccessTokenAndRefreshToken = async (userId) => {
   }
 };
 const registerUser = asyncHandler(async (req, res) => {
-  const { email, password,username } = req.body;
-  if ([email, password,username].some((field) => field?.trim() === "")) {
+  const {
+    username,
+    password,
+    email,
+    profileImage,
+    bio,
+    skills,
+    experienceLevel,
+    interests,
+    goals,
+    location,
+    githubLink,
+    linkedinLink,
+  } = req.body;
+
+  if ([email, password, username].some((field) => field?.trim() === "")) {
     throw apiError(400, "All fields are requried");
   }
-  const existedUser = User.findOne({ email  });
-  if (!existedUser) {
-    throw new apiError(409, "User should have unique details");
+  const existedUser = await User.findOne({ email });
+
+  if (existedUser) {
+    throw new apiError(400, "Email is already registered");
+  }
+  let coverImagelocalpath;
+  if (
+    req.files &&
+    Array.isArray(req.files.profileImage) &&
+    req.files.profileImage.length > 0
+  ) {
+    coverImagelocalpath = req?.files?.profileImage[0]?.path;
   }
 
-  // const avatarlocalpath = req?.files?.avatar[0]?.path;
-  // let coverImagelocalpath;
-  // if (
-  //   req.files &&
-  //   Array.isArray(req.files.coverImage) &&
-  //   req.files.coverImage.length > 0
-  // ) {
-  //   coverImagelocalpath = req?.files?.coverImage[0]?.path;
-  // }
-  // if (!avatarlocalpath) {
-  //   throw new apiError(400, "avtar not found");
-  // }
-  // const avatar = await uploadOnCloudinary(avatarlocalpath);
-  // const coverImage = await uploadOnCloudinary(coverImagelocalpath);
-  // if (!avatar) {
-  //   throw new apiError(400, "avatar file is requried");
-  // }
-  const user = await User.create({
-    // avatar: avatar?.url,
-    // coverImage: coverImage?.url || "",
+  const coverImage = await uploadOnCloudinary(coverImagelocalpath);
+  const user = new User({
+    username,
+    bio,
     email,
     password,
-    username
+    skills,
+    experienceLevel,
+    interests,
+    goals: goals || "",
+    location: location || "",
+    profileImage: coverImage?.url || "",
+    githubLink,
+    linkedinLink,
   });
+  await user.save();
+
+  if (!user) throw new apiError(500, "User creation Error");
   const createdUser = await User.findById(user._id).select(
     "-password  -refreshToken",
   );
@@ -75,7 +91,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({
     email,
   });
-// console.log(user);
+
   if (!user) throw new apiError(404, "User not found");
   const isPasswordCorrect = await user.isPasswordCorrect(password);
   if (!isPasswordCorrect) throw new apiError(401, "Password is not correct");
@@ -89,8 +105,7 @@ const loginUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
   };
-  const profile=await Profile.findOne({user:user._id});
-  
+
   return res
     .status(200)
     .cookie("accessToken", accessToken, option)
@@ -100,7 +115,6 @@ const loginUser = asyncHandler(async (req, res) => {
         200,
         {
           user: loggedInUser,
-          profile:profile||"",
           accessToken,
           refreshToken,
         },
@@ -109,7 +123,7 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 const logOutUser = asyncHandler(async (req, res) => {
-  const updatedUser=await User.findByIdAndUpdate(
+  const updatedUser = await User.findByIdAndUpdate(
     req.user._id,
     {
       $set: {
@@ -125,9 +139,7 @@ const logOutUser = asyncHandler(async (req, res) => {
     secure: true,
   };
   if (!updatedUser) {
-    return res
-      .status(404)
-      .json(new apiResponse(404, {}, "User not found"));
+    return res.status(404).json(new apiResponse(404, {}, "User not found"));
   }
   return res
     .status(200)

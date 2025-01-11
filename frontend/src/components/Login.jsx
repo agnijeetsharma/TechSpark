@@ -22,7 +22,7 @@ const Login = () => {
       navigate("/feed");
       // console.log(result);
     } catch (error) {
-      setError(error?.response?.data?.message||
+      setError("Error: " + error?.response?.data?.message||
         "Something went wrong"
       )
       
