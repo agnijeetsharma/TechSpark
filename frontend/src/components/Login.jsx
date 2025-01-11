@@ -3,10 +3,10 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { Base_URL } from "../constant";
-import {useNavigate }from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 const Login = () => {
-  const dispatch=useDispatch()
-  const navigate=useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,12 +14,12 @@ const Login = () => {
     console.log(emailId, password);
     try {
       const result = await axios.post(
-        Base_URL+"/login",
-        { email:emailId, password },
-        {withCredentials:true}
+        Base_URL + "/login",
+        { email: emailId, password },
+        { withCredentials: true }
       );
-      dispatch(addUser(result?.data?.data))
-      navigate("/feed")
+      dispatch(addUser(result?.data?.data));
+      navigate("/feed");
       // console.log(result);
     } catch (error) {
       console.log("Try after some time", error);

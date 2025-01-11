@@ -100,9 +100,9 @@ const loginUser = asyncHandler(async (req, res) => {
         200,
         {
           user: loggedInUser,
+          profile:profile||"",
           accessToken,
           refreshToken,
-          profile:profile||""
         },
         "User logged In successfully",
       ),

@@ -5,6 +5,7 @@ import apiError from "../utils/apiErrors.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { User } from "../models/user.models.js";
 import { Match} from "../models/match.model.js"
+
 const CreateProfile = asyncHandler(async (req, res) => {
   const {
     username,
@@ -144,10 +145,19 @@ const getPotentialMatches = asyncHandler(async (req, res) => {
   res.status(200).json(new apiResponse(200, potentialMatches, "Potential match profiles retrieved successfully"));
 });
 
+const getUserProfile=asyncHandler(async (req,res)=>{
+  const user = req.user;
+  const userId=req.user._id
+  const userProfile = await Profile.findOne({ user: userId});
+  if (!user||!userProfile) throw new apiError(404, "User profile not found");
+  res.status(200).json(new apiResponse(200, {user:user,profile:userProfile}, "User profile retrieved successfully"))
+})
+
 export {
   CreateProfile,
   updateProfile,
   updateProfileImage,
   AllProfiles,
-  getPotentialMatches
+  getPotentialMatches,
+  getUserProfile
 };
