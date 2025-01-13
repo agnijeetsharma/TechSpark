@@ -12,17 +12,17 @@ const Body = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const fetchUser = async () => {
-    if(selector)return;
+    if (selector) return;
     try {
       const response = await axios.get(Base_URL + "/profile/view", {
         withCredentials: true,
       });
-      console.log(response);
+      // console.log(response);
       dispatch(addUser(response?.data?.data));
       navigate("/");
     } catch (error) {
       if (error.status == 401) navigate("/login");
-      navigate("/login")       //for now i will change it
+      navigate("/login"); //for now i will change it
       console.log("refresh error", error);
     }
   };
@@ -34,8 +34,13 @@ const Body = () => {
   return (
     <div>
       <NavBar />
-      <Outlet />
-      <Footer />
+      <div className="relative">
+        <Outlet />
+      </div>
+
+      <div>
+        <Footer />
+      </div>
     </div>
   );
 };

@@ -1,9 +1,9 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import { apiResponse } from "../utils/apiResponse.js";
-import {apiError} from "../utils/apiErrors.js";
+import { apiError } from "../utils/apiErrors.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { User } from "../models/user.models.js";
-import { Match} from "../models/match.model.js"
+import { Match } from "../models/match.model.js";
 
 // const CreateProfile = asyncHandler(async (req, res) => {
 //   const {
@@ -63,13 +63,14 @@ import { Match} from "../models/match.model.js"
 // });
 
 const updateProfile = asyncHandler(async (req, res) => {
-  const { username } = req.params;
-  if (!username) throw new apiError(400, "username not found");
+  const userId = req.user._id;
+  if (!userId) throw new apiError(404, "user not found");
   const updatedData = req.body;
-  const profile = await User.findOneAndUpdate({ username }, updatedData, {
+  const profile = await User.findByIdAndUpdate(userId, updatedData, {
     new: true,
-  });
-  if (!profile) throw new apiError(404, "profile not found");
+  }).select("-password -refrenshToken");
+
+  if (!profile) throw new apiError(404, "Profile updation unsuccessful");
   res
     .status(200)
     .json(new apiResponse(200, profile, "profile updated successfully"));
@@ -105,10 +106,15 @@ const updateProfileImage = asyncHandler(async (req, res) => {
 });
 
 const AllProfiles = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    throw new apiError(401, "Unauthorized request");
+  }
+
   const profiles = await User.find().select("-password");
-  if (!profiles) {
+  if (!profiles || profiles.length === 0) {
     throw new apiError(404, "No profiles found");
   }
+
   res.status(200).json(new apiResponse(200, profiles, "All profiles found"));
 });
 
@@ -125,7 +131,9 @@ const getPotentialMatches = asyncHandler(async (req, res) => {
   }).select("sender receiver");
 
   const excludedUserIds = existingConnections.map((connection) =>
-    connection.sender.equals(currentUser) ? connection.receiver : connection.sender
+    connection.sender.equals(currentUser)
+      ? connection.receiver
+      : connection.sender,
   );
 
   const potentialMatches = await User.find({
@@ -134,28 +142,43 @@ const getPotentialMatches = asyncHandler(async (req, res) => {
       { skills: { $in: userProfile.skills } },
       { interests: { $in: userProfile.interests } },
       { experienceLevel: userProfile.experienceLevel },
-    ]
+    ],
   });
 
   if (!potentialMatches || potentialMatches.length === 0) {
     throw new apiError(404, "No potential matches found");
   }
 
-  res.status(200).json(new apiResponse(200, potentialMatches, "Potential match profiles retrieved successfully"));
+  res
+    .status(200)
+    .json(
+      new apiResponse(
+        200,
+        potentialMatches,
+        "Potential match profiles retrieved successfully",
+      ),
+    );
 });
 
-const getUserProfile=asyncHandler(async (req,res)=>{
+const getUserProfile = asyncHandler(async (req, res) => {
   const user = req.user;
-  
+
   if (!user) throw new apiError(404, "User profile not found");
-  res.status(200).json(new apiResponse(200, {user:user}, "User profile retrieved successfully"))
-})
+  res
+    .status(200)
+    .json(
+      new apiResponse(
+        200,
+        { user: user },
+        "User profile retrieved successfully",
+      ),
+    );
+});
 
 export {
-  
   updateProfile,
   updateProfileImage,
   AllProfiles,
   getPotentialMatches,
-  getUserProfile
+  getUserProfile,
 };

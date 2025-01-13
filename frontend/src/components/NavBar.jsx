@@ -1,20 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link,  useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Base_URL } from "../constant";
 import axios from "axios";
 import { removeUser } from "../utils/userSlice";
+import { useLogin } from "../utils/LoginContext";
+
 const NavBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  const { setLoginVisible } = useLogin();
+
   const handleLogout = async () => {
     try {
-      const response = await axios.post(
-        Base_URL + "/logout",
-        {},
-        { withCredentials: true }
-      );
-      console.log(response);
+      await axios.post(Base_URL + "/logout", {}, { withCredentials: true });
       dispatch(removeUser());
       navigate("/login");
     } catch (error) {
@@ -23,21 +22,16 @@ const NavBar = () => {
   };
   return (
     <div>
-      <div className="navbar bg-base-300">
+      <div className="navbar bg-base-300 fixed top-0 z-50">
         <div className="flex-1">
-          <Link to={"/"} className="btn btn-ghost text-xl">
+          <Link to={user ? "/" : "/login"} className="btn btn-ghost text-xl">
             TechSpark
           </Link>
         </div>
         <div className="flex-none gap-2">
           {user && (
             <div className="form-control">
-              <h>Welcome,{user?.user?.username}</h>
-              {/* <input
-              type="text"
-              placeholder="Search"
-              className="input input-bordered w-24 md:w-auto"
-            /> */}
+              <p>Welcome,{user?.user?.username}</p>
             </div>
           )}
           {user && (
@@ -71,6 +65,26 @@ const NavBar = () => {
                   <a onClick={handleLogout}>Logout</a>
                 </li>
               </ul>
+            </div>
+          )}
+          {!user && (
+            <div className="flex">
+              <div>
+                <ul className="menu menu-horizontal px-4 pt-3 gap-4">
+                  <Link to={"/login"}>
+                    <li>Explore</li>
+                  </Link>
+                  <Link to={"/about"}>
+                    <li>About Us</li>
+                  </Link>
+                </ul>
+              </div>
+              <button
+                className="btn btn-outline mr-4"
+                onClick={() => setLoginVisible(true)}
+              >
+                LogIn
+              </button>
             </div>
           )}
         </div>

@@ -34,6 +34,7 @@ const registerUser = asyncHandler(async (req, res) => {
     location,
     githubLink,
     linkedinLink,
+    gender
   } = req.body;
 
   if ([email, password, username].some((field) => field?.trim() === "")) {
@@ -59,6 +60,7 @@ const registerUser = asyncHandler(async (req, res) => {
     bio,
     email,
     password,
+    gender,
     skills,
     experienceLevel,
     interests,

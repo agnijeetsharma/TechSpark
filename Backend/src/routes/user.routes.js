@@ -18,19 +18,19 @@ import {
 const router = Router();
 
 router.route("/register").post(
-  // upload.fields(
-  //     [
-  //         {
-  //          name:"avatar",
-  //          maxCount:1
-  //         },
-  //         {
-  //         name:"coverImage",
-  //         maxCount:1
+  upload.fields(
+      [
+          {
+           name:"profileImage",
+           maxCount:1
+          },
+          // {
+          // name:"coverImage",
+          // maxCount:1
 
-  //         }
-  //     ]
-  // ),
+          // }
+      ]
+  ),
   registerUser,
 );
 router.route("/login").post(loginUser);
@@ -46,7 +46,7 @@ router.route("/refesh-Token").post(refreshAccessToken);
 //   ]),
 //   CreateProfile,
 // );
-router.route("/updateProfile/:username").put(verifyJWT, updateProfile);
+router.route("/updateProfile").put(verifyJWT, updateProfile);
 router.route("/update-profileImage/:username").post(
   verifyJWT,
   upload.fields([
@@ -58,7 +58,7 @@ router.route("/update-profileImage/:username").post(
   updateProfileImage,
 );
 
-router.route("/allProfiles").get(verifyJWT, AllProfiles);
+router.route("/feed").get(verifyJWT, AllProfiles);
 router.route("/allMatchProfiles").get(verifyJWT,getPotentialMatches)
 router.route("/profile/view").get(verifyJWT,getUserProfile)
 
