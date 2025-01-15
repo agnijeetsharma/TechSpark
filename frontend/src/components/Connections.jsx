@@ -40,7 +40,7 @@ const Connections = () => {
   );
 
   return (
-    <div className="bg-neutral min-h-screen p-6 mt-28">
+    <div className="bg-neutral min-h-screen p-4 mt-20">
       <div className="max-w-4xl mx-auto">
         
         <div className="mb-6 flex flex-center text-center">

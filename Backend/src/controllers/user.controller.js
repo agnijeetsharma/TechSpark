@@ -79,15 +79,24 @@ const registerUser = asyncHandler(async (req, res) => {
   await user.save();
 
   if (!user) throw new apiError(500, "User creation Error");
+  const { accessToken, refreshToken } =
+    await generateAccessTokenAndRefreshToken(user._id);
+
+ 
   const createdUser = await User.findById(user._id).select(
     "-password  -refreshToken",
   );
-
+  const option = {
+    httpOnly: true,
+    secure: true,
+  };
   if (!createdUser) {
     throw new apiError(500, "Something went wrong ,try after some time!");
   }
   return res
     .status(200)
+    .cookie("accessToken", accessToken, option)
+    .cookie("refreshToken", refreshToken, option)
     .json(new apiResponse(200, createdUser, "user registered successfully"));
 });
 

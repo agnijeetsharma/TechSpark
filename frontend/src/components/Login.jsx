@@ -11,6 +11,8 @@ const Login = () => {
   const navigate = useNavigate();
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
+  const [username,setUserName]=useState("")
+  const [isLogin,setIsLogin]=useState(true)
   const [error, setError] = useState("");
   const { isLoginVisible } = useLogin();
   const handleLogin = async () => {
@@ -29,6 +31,17 @@ const Login = () => {
       );
     }
   };
+  const SignUpUser=async()=>{
+    try {
+      const response=await axios.post(Base_URL+"/register",{username,email:emailId,password},{withCredentials:true})
+      console.log(response?.data?.data)
+      navigate("/profile");
+    } catch (error) {
+      console.log(error)
+
+      
+    }
+  }
 
   return (
     <div
@@ -50,6 +63,15 @@ const Login = () => {
           <div className="card-body ">
             <h2 className="card-title justify-center">Login!</h2>
             <div className="">
+           { !isLogin&&<fieldset className="fieldset py-2  w-full">
+                <legend className="fieldset-legend">UserName</legend>
+                <input
+                  type="text"
+                  className="input max-w-xs w-full"
+                  value={username}
+                  onChange={(e) => setUserName(e.target.value)}
+                />
+              </fieldset>}
               <fieldset className="fieldset py-2 max-w-xs w-full">
                 <legend className="fieldset-legend"> Email Id</legend>
                 <input
@@ -70,10 +92,11 @@ const Login = () => {
               </fieldset>
             </div>
             <p className="text-red-500 font-thin">{error}</p>
-            <div className="card-actions justify-center">
-              <button className="btn btn-default" onClick={handleLogin}>
-                Login
-              </button>
+            <div className="card-actions items-center flex flex-col">
+              <button className="btn btn-default " onClick={isLogin?handleLogin:SignUpUser}>
+                {isLogin?"Login":"SignUp"}
+              </button>   
+              <p className="cursor-pointer text-red-400" onClick={()=>setIsLogin(value=>!value)}>{isLogin?"New User Sign Up":"LogIn Now"}</p>
             </div>
           </div>
         </div>

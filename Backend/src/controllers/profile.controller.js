@@ -58,13 +58,16 @@ const AllProfiles = asyncHandler(async (req, res) => {
     throw new apiError(401, "Unauthorized request");
   }
 
-  const profiles = await User.find().select("-password");
+  // Exclude the current user's profile from the results
+  const profiles = await User.find({ _id: { $ne: req.user._id } }).select("-password");
+  
   if (!profiles || profiles.length === 0) {
     throw new apiError(404, "No profiles found");
   }
 
   res.status(200).json(new apiResponse(200, profiles, "All profiles found"));
 });
+
 
 const getPotentialMatches = asyncHandler(async (req, res) => {
   const currentUser = req.user._id;
