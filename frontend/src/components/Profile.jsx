@@ -1,42 +1,104 @@
-import  { useState } from "react";
-import image from "../assets/image.png"
+import axios from "axios";
+import {  useState,useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Base_URL } from "../constant";
+import { addUser } from "../utils/userSlice";
 const Profile = () => {
-  const [user, setUser] = useState({
-    firstName: "Arthur",
-    lastName: "Nancy",
-    email: "bradley.ortiz@gmail.com",
-    phone: "477-046-1827",
-    bio: "Land acquisition specialist with over 10 years of experience in commercial real estate.",
-    gender: "Male",
-    age: 34,
-    skills: ["Negotiation", "Market Analysis", "Project Management"], // Initial skills
-  });
-
+  let currUser = useSelector((store) => store.user);
+  // currUser = currUser?.user;
+  const dispatch = useDispatch();
   const [editMode, setEditMode] = useState(false);
   const [newSkill, setNewSkill] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
+  const fileInputRef=useRef()
+  // const token = currUser?.accessToken;
+  let [newUser, setUser] = useState({
+    username: currUser?.username,
+    firstName: currUser?.firstName,
+    lastName: currUser?.lastName,
+    email: currUser?.email,
+    bio: currUser?.bio,
+    gender: currUser?.gender,
+    age: currUser?.age,
+    skills: currUser?.skills||[],
+    linkedinLink: currUser?.linkedinLink,
+    githubLink: currUser?.githubLink,
+  });
+  const Updateduser = async () => {
+    try {
+      const updateUser = await axios.patch(
+        Base_URL + "/updateProfile",
+        { newUser },
+
+        { withCredentials: true }
+      );
+      console.log(updateUser?.data);
+      // dispatch(removeUser())
+      dispatch(addUser(updateUser?.data?.data));
+
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+        newUser = currUser;
+      }, 3000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setUser({ ...newUser, [name]: value });
   };
 
   const addSkill = () => {
     if (newSkill.trim() !== "") {
-      setUser({ ...user, skills: [...user.skills, newSkill.trim()] });
+      setUser({ ...newUser, skills: [...newUser.skills, newSkill.trim()] });
       setNewSkill("");
     }
   };
+  
 
   const removeSkill = (index) => {
-    const updatedSkills = user.skills.filter((_, i) => i !== index);
-    setUser({ ...user, skills: updatedSkills });
+    const updatedSkills = newUser?.skills?.filter((_, i) => i !== index);
+    setUser({ ...newUser, skills: updatedSkills });
   };
 
   const saveProfile = () => {
     setEditMode(false);
-    alert("Profile updated successfully!");
+    Updateduser();
+  };
+  const handleFileChange = (e) => {
+    setProfileImage(e.target.files[0]);
+  };
+  const handleProfileImage = async (e) => {
+    fileInputRef.current.click();
+    e.preventDefault(); 
+  
+    if (!profileImage) {
+      console.log("No profile image selected");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("profileImage", profileImage);
+  
+    try {
+      const response = await axios.post(`${Base_URL}/update-profileImage`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", 
+        },
+        withCredentials: true, 
+      });
+      console.log("Profile image updated successfully:", response?.data);
+      dispatch(addUser(response?.data?.data))
+    } catch (error) {
+      console.error("Error uploading profile image:", error.response?.data || error.message);
+    }
   };
 
+  if (!newUser) return;
   return (
     <div className="min-h-screen bg-base-200 text-base-content py-24">
       <div className="max-w-5xl mx-auto p-8 bg-neutral rounded-lg shadow-lg">
@@ -44,14 +106,33 @@ const Profile = () => {
         <div className="flex gap-6">
           {/* Left Column */}
           <div className="w-1/3">
-            <div className="avatar mb-6 gap-7">
-              <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img src={image} alt="Profile" />
+            <div className="avatar mb-6 gap-5 flex justify-center">
+              <div className="w-28 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
+               onClick={handleProfileImage}
+               title="Click to change image">
+                <img src={currUser?.profileImage|| "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Profile" />
               </div>
               <div>
-              <button className="btn btn-sm btn-primary mt-7">Change</button>
-
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  className="hidden" 
+                />
               </div>
+            </div>
+            <div className="mb-4">
+              <label className="block font-semibold">UserName</label>
+              <input
+                type="text"
+                name="username"
+                value={!editMode ? currUser?.username : newUser?.username}
+                onChange={handleChange}
+                disabled={!editMode}
+                className={`input input-bordered w-full ${
+                  editMode ? "bg-base-100" : "bg-base-300"
+                }`}
+              />
             </div>
 
             <div className="mb-4">
@@ -59,7 +140,7 @@ const Profile = () => {
               <input
                 type="text"
                 name="firstName"
-                value={user.firstName}
+                value={!editMode ? currUser?.firstName : newUser?.firstName}
                 onChange={handleChange}
                 disabled={!editMode}
                 className={`input input-bordered w-full ${
@@ -73,7 +154,7 @@ const Profile = () => {
               <input
                 type="text"
                 name="lastName"
-                value={user.lastName}
+                value={!editMode ? currUser?.lastName : newUser?.lastName}
                 onChange={handleChange}
                 disabled={!editMode}
                 className={`input input-bordered w-full ${
@@ -87,21 +168,7 @@ const Profile = () => {
               <input
                 type="email"
                 name="email"
-                value={user.email}
-                onChange={handleChange}
-                disabled={!editMode}
-                className={`input input-bordered w-full ${
-                  editMode ? "bg-base-100" : "bg-base-300"
-                }`}
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block font-semibold">Phone</label>
-              <input
-                type="tel"
-                name="phone"
-                value={user.phone}
+                value={!editMode ? currUser?.email : newUser?.email}
                 onChange={handleChange}
                 disabled={!editMode}
                 className={`input input-bordered w-full ${
@@ -119,7 +186,7 @@ const Profile = () => {
                 {editMode ? (
                   <select
                     name="gender"
-                    value={user.gender}
+                    value={newUser.gender}
                     onChange={handleChange}
                     className="select select-bordered w-full bg-base-100"
                   >
@@ -128,7 +195,9 @@ const Profile = () => {
                     <option value="Other">Other</option>
                   </select>
                 ) : (
-                  <p className="bg-base-300 p-2 rounded">{user.gender}</p>
+                  <p className="bg-base-300 p-2 rounded">
+                    {!editMode ? currUser?.gender : newUser?.gender}
+                  </p>
                 )}
               </div>
 
@@ -137,7 +206,7 @@ const Profile = () => {
                 {editMode ? (
                   <select
                     name="age"
-                    value={user.age}
+                    value={newUser.age}
                     onChange={handleChange}
                     className="select select-bordered w-full bg-base-100"
                   >
@@ -148,8 +217,72 @@ const Profile = () => {
                     ))}
                   </select>
                 ) : (
-                  <p className="bg-base-300 p-2 rounded">{user.age}</p>
+                  <p className="bg-base-300 p-2 rounded">
+                    {!editMode ? currUser?.age : newUser?.age}
+                  </p>
                 )}
+              </div>
+
+              {/* GitHub and LinkedIn Links */}
+              <div className="col-span-2 flex justify-between gap-4">
+                <div className="w-1/2">
+                  <label className="block font-semibold">GitHub</label>
+                  {editMode ? (
+                    <input
+                      type="url"
+                      name="githubLink"
+                      value={
+                        !editMode ? currUser?.githubLink : newUser?.githubLink
+                      }
+                      onChange={handleChange}
+                      className="input input-bordered w-full bg-base-100"
+                      placeholder="GitHub Profile Link"
+                    />
+                  ) : (
+                    <a
+                      href={
+                        !editMode ? currUser?.githubLink : newUser?.githubLink
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block bg-base-300 p-2 rounded text-primary"
+                    >
+                      {!editMode ? currUser?.githubLink : newUser?.githubLink}
+                    </a>
+                  )}
+                </div>
+                <div className="w-1/2">
+                  <label className="block font-semibold">LinkedIn</label>
+                  {editMode ? (
+                    <input
+                      type="url"
+                      name="linkedinLink"
+                      value={
+                        !editMode
+                          ? currUser?.linkedinLink
+                          : newUser?.linkedinLink
+                      }
+                      onChange={handleChange}
+                      className="input input-bordered w-full bg-base-100"
+                      placeholder="LinkedIn Profile Link"
+                    />
+                  ) : (
+                    <a
+                      href={
+                        !editMode
+                          ? currUser?.linkedinLink
+                          : newUser?.linkedinLink
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block bg-base-300 p-2 rounded text-primary"
+                    >
+                      {!editMode
+                        ? currUser?.linkedinLink
+                        : newUser?.linkedinLink}
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -158,35 +291,39 @@ const Profile = () => {
               {editMode ? (
                 <textarea
                   name="bio"
-                  value={user.bio}
+                  value={newUser.bio}
                   onChange={handleChange}
                   className="textarea textarea-bordered w-full bg-base-100"
                   rows="4"
                 />
               ) : (
-                <p className="bg-base-300 p-4 rounded">{user.bio}</p>
+                <p className="bg-base-300 p-4 rounded">
+                  {!editMode ? currUser?.bio : newUser?.bio}
+                </p>
               )}
             </div>
 
             <div className="mt-6">
               <h3 className="text-lg font-bold">Skills</h3>
               <div className="bg-base-300 p-4 rounded">
-                {user.skills.map((skill, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center mb-2"
-                  >
-                    <span>{skill}</span>
-                    {editMode && (
-                      <button
-                        className="btn btn-xs btn-error"
-                        onClick={() => removeSkill(index)}
-                      >
-                        Remove
-                      </button>
-                    )}
-                  </div>
-                ))}
+                {(!editMode ? currUser : newUser)?.skills?.map(
+                  (skill, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center mb-2"
+                    >
+                      <span>{skill}</span>
+                      {editMode && (
+                        <button
+                          className="btn btn-xs btn-error"
+                          onClick={() => removeSkill(index)}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  )
+                )}
                 {editMode && (
                   <div className="flex mt-4">
                     <input
@@ -196,10 +333,7 @@ const Profile = () => {
                       className="input input-bordered w-full bg-base-100"
                       placeholder="Add a new skill"
                     />
-                    <button
-                      className="btn btn-primary ml-2"
-                      onClick={addSkill}
-                    >
+                    <button className="btn btn-primary ml-2" onClick={addSkill}>
                       Add
                     </button>
                   </div>
@@ -232,6 +366,13 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      {showToast && (
+        <div className="toast toast-top toast-center mt-24">
+          <div className="alert alert-success">
+            <span>Profile Updated successfully🔥</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

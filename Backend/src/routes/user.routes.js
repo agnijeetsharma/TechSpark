@@ -46,8 +46,8 @@ router.route("/refesh-Token").post(refreshAccessToken);
 //   ]),
 //   CreateProfile,
 // );
-router.route("/updateProfile").put(verifyJWT, updateProfile);
-router.route("/update-profileImage/:username").post(
+router.route("/updateProfile").patch(verifyJWT, updateProfile);
+router.route("/update-profileImage").post(
   verifyJWT,
   upload.fields([
     {

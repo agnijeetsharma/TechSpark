@@ -65,7 +65,8 @@ import { Match } from "../models/match.model.js";
 const updateProfile = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   if (!userId) throw new apiError(404, "user not found");
-  const updatedData = req.body;
+  const updatedData = req?.body.newUser;
+
   const profile = await User.findByIdAndUpdate(userId, updatedData, {
     new: true,
   }).select("-password -refrenshToken");
@@ -77,33 +78,37 @@ const updateProfile = asyncHandler(async (req, res) => {
 });
 
 const updateProfileImage = asyncHandler(async (req, res) => {
-  const { username } = req.params;
-  if (!username) throw new apiError(400, "Username not found");
+  const userId = req.user._id;
+  if (!userId) throw new apiError(400, "User ID not found");
 
-  const profile = await User.findOne({ username });
+  const profile = await User.findById(userId);
   if (!profile) throw new apiError(404, "Profile not found");
-  // console.log(req.files)
+// console.log(req?.files)
+  
   const profileImagelocalpath = req?.files?.profileImage?.[0]?.path;
-  // console.log(profileImagelocalpath)
   if (!profileImagelocalpath)
     throw new apiError(400, "Profile image is not found");
 
+  
   const profileCoverImage = await uploadOnCloudinary(profileImagelocalpath);
-  if (!profileCoverImage)
+  if (!profileCoverImage || !profileCoverImage.url)
     throw new apiError(500, "Profile image cloud upload problem");
 
-  const updatedProfile = await Profile.findOneAndUpdate(
-    { username },
+ 
+  const updatedProfile = await User.findByIdAndUpdate(
+    userId,
     { profileImage: profileCoverImage.url },
-    { new: true },
+    { new: true }
   );
   if (!updatedProfile)
     throw new apiError(500, "Something went wrong when updating profile");
 
+  
   res
     .status(200)
     .json(new apiResponse(200, updatedProfile, "Image uploaded successfully"));
 });
+
 
 const AllProfiles = asyncHandler(async (req, res) => {
   if (!req.user) {

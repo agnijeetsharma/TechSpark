@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 import axios from "axios";
@@ -11,6 +11,7 @@ const Body = () => {
   const selector = useSelector((store) => store.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location =useLocation()
   const fetchUser = async () => {
     if (selector) return;
     try {
@@ -18,8 +19,10 @@ const Body = () => {
         withCredentials: true,
       });
       // console.log(response);
+      // dispatch(removeUser())
       dispatch(addUser(response?.data?.data));
-      navigate("/");
+      navigate(location?.pathname);
+
     } catch (error) {
       if (error.status == 401) navigate("/login");
       navigate("/login"); //for now i will change it

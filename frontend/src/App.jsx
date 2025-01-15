@@ -7,13 +7,14 @@ import appStore from "./utils/appStore";
 import Feed from "./components/Feed";
 import { LoginProvider } from "./utils/LoginContext";
 import About from "./components/About";
+// import { PersistGate } from 'redux-persist/integration/react';
 function App() {
   return (
     <>
     <LoginProvider>
 
     <Provider store={appStore}>
-
+    {/* <PersistGate loading={null} persistor={persistor}> */}
       <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<Body />}>
@@ -24,6 +25,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+    {/* </PersistGate> */}
     </Provider>
     </LoginProvider>
     </>

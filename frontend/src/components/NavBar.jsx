@@ -31,7 +31,7 @@ const NavBar = () => {
         <div className="flex-none gap-2">
           {user && (
             <div className="form-control">
-              <p>Welcome,{user?.user?.username}</p>
+              <p>Welcome,{user?.username}</p>
             </div>
           )}
           {user && (
@@ -42,9 +42,11 @@ const NavBar = () => {
                 className="btn btn-ghost btn-circle avatar"
               >
                 <div className="w-10 rounded-full">
+                
                   <img
                     alt="Tailwind CSS Navbar component"
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                    src={user?.profileImage || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
+
                   />
                 </div>
               </div>
