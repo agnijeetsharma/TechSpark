@@ -1,65 +1,117 @@
-import  { useState } from "react";
+import { useEffect, useState } from "react";
+import { Base_URL, IMAGE_URL } from "../constant";
+import axios from "axios";
 
 const Requests = () => {
-  // Sample pending requests data
-  const [requests, setRequests] = useState([
-    { id: 1, name: "John Doe", mutualConnections: 5 },
-    { id: 2, name: "Jane Smith", mutualConnections: 2 },
-    { id: 3, name: "Alex Johnson", mutualConnections: 3 },
-  ]);
+  const [requests, setRequests] = useState([]);
+  const fetchReceivedRequest = async () => {
+    try {
+      const response = await axios.get(
+        Base_URL + "/match/pending-receivedrequest",
+        { withCredentials: true }
+      );
+      setRequests(response?.data?.data);
+      console.log(response?.data?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchReceivedRequest();
+  }, []);
 
-  // Handle accept and reject
-  const handleAccept = (id) => {
-    setRequests(requests.filter((request) => request.id !== id));
-    alert(`Accepted request from ID: ${id}`);
+  const acceptRejectRequest = async (status, _id) => {
+    try {
+      const response = await axios.post(
+        Base_URL + "/match/accept-request/" + status + "/" + _id,
+        {},
+        { withCredentials: true }
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+//   useEffect(() => {
+//     acceptRejectRequest();
+//   }, []);
+  if (requests?.length === 0) {
+    return (
+      <div className="text-center font-bold text-primary text-3xl mt-44">
+        No Requests
+      </div>
+    );
+  }
+  const handleAccept = (status,_id) => {
+    acceptRejectRequest(status,_id);
+    setRequests(requests.filter((request) => request?.sender._id !== _id));
+    alert("Request Accepted!");
   };
 
-  const handleReject = (id) => {
-    setRequests(requests.filter((request) => request.id !== id));
-    alert(`Rejected request from ID: ${id}`);
+  const handleReject = (status,_id) => {
+    acceptRejectRequest(status,_id);
+    setRequests(requests.filter((request) => request?.sender._id !== _id));
+    alert("Request Rejected!");
   };
 
   return (
-    <div className="p-4 bg-base-100 dark:bg-gray-900 min-h-screen">
-      <h1 className="text-2xl font-bold text-base-content mb-4">
-        Pending Connection Requests
-      </h1>
-      <div className="flex flex-wrap gap-4">
-        {requests.length > 0 ? (
-          requests.map((request) => (
+    <div className="bg-neutral min-h-screen p-6 mt-24">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-primary text-2xl font-bold mb-6">
+          Connection Requests
+        </h1>
+
+        <div className="space-y-4">
+          {requests.map((request) => (
             <div
-              key={request.id}
-              className="card w-full sm:w-96 bg-base-200 shadow-xl"
+              key={request?.sender?.id}
+              className="flex items-center bg-base-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow"
             >
-              <div className="card-body">
-                <h2 className="card-title text-base-content">
-                  {request.name}
+              <img
+                src={request?.sender?.profileImage || IMAGE_URL}
+                alt={request?.sender?.username}
+                className="w-16 h-16 rounded-full"
+              />
+
+              <div className="flex-1 ml-4">
+                <h2 className="font-semibold text-lg text-primary">
+                  {request?.sender?.username}
                 </h2>
-                <p className="text-gray-500">
-                  {request.mutualConnections} mutual connections
+                <p className="text-sm text-gray-400">{request?.sender?.bio}</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  {new Date(request?.createdAt).toLocaleString("en-US", {
+                    timeZone: "Asia/Kolkata",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  })}
                 </p>
-                <div className="card-actions justify-end mt-4">
-                  <button
-                    onClick={() => handleAccept(request.id)}
-                    className="btn btn-primary"
-                  >
-                    Accept
-                  </button>
-                  <button
-                    onClick={() => handleReject(request.id)}
-                    className="btn btn-error"
-                  >
-                    Reject
-                  </button>
-                </div>
+              </div>
+
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => handleAccept("Accepted", request?.sender?._id)}
+                  className="btn btn-primary text-sm"
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={() => handleReject("Rejected", request?.sender?._id)}
+                  className="btn btn-outline btn-error text-sm"
+                >
+                  Reject
+                </button>
               </div>
             </div>
-          ))
-        ) : (
-          <p className="text-gray-500 text-center w-full">
-            No pending requests.
-          </p>
-        )}
+          ))}
+
+          {requests.length === 0 && (
+            <p className="text-gray-400 text-center">No connection requests.</p>
+          )}
+        </div>
       </div>
     </div>
   );

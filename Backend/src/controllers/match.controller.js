@@ -47,9 +47,9 @@ const SendConnectionRequest = asyncHandler(async (req, res) => {
 });
 
 const acceptConnectionRequests = asyncHandler(async (req, res) => {
-  const sender = req.query.fromUserId;
+  const sender = req.params.fromUserId;
   const receiver = req.user._id;
-  const status = req.query.status;
+  const status = req.params.status;
 
   if (!sender || !receiver) {
     throw new apiError(400, "Sender or receiver is not accessible");
@@ -135,14 +135,20 @@ const AllsentRequest = asyncHandler(async (req, res) => {
 });
 const AllreceivedRequest = asyncHandler(async (req, res) => {
   const userId = req.user._id;
-  // console.log(req.user._id);
+  // console.log("userId:", userId);
+
   if (!userId) throw new apiError(400, "userId is not found");
-  const Connctions = await Match.find({ reveiver: userId, status: "Pending" });
-  if (!Connctions) throw new apiError(400, "No connection exist");
-  res
-    .status(200)
-    .json(new apiResponse(200, Connctions, "All connection find successfully"));
+
+  const Connctions = await Match.find({ receiver: userId, status: "Pending" }).populate('sender');
+  
+
+  if (!Connctions || Connctions.length === 0) {
+    throw new apiError(400, "No connection exists");
+  }
+
+  res.status(200).json(new apiResponse(200, Connctions, "All connections found successfully"));
 });
+
 
 export {
   SendConnectionRequest,
