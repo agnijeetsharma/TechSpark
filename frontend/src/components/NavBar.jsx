@@ -4,6 +4,7 @@ import { Base_URL } from "../constant";
 import axios from "axios";
 import { removeUser } from "../utils/userSlice";
 import { useLogin } from "../utils/LoginContext";
+import { IMAGE_URL } from "../constant";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -42,11 +43,12 @@ const NavBar = () => {
                 className="btn btn-ghost btn-circle avatar"
               >
                 <div className="w-10 rounded-full">
-                
                   <img
                     alt="Tailwind CSS Navbar component"
-                    src={user?.profileImage || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
-
+                    src={
+                      user?.profileImage ||
+                      IMAGE_URL
+                    }
                   />
                 </div>
               </div>
@@ -61,7 +63,10 @@ const NavBar = () => {
                   </Link>
                 </li>
                 <li>
-                  <a>Settings</a>
+                  <Link to={"/connections"}>Connections</Link>
+                </li>
+                <li>
+                  <Link to={"/requests"}>Requests</Link>
                 </li>
                 <li>
                   <a onClick={handleLogout}>Logout</a>

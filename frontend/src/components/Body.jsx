@@ -11,7 +11,7 @@ const Body = () => {
   const selector = useSelector((store) => store.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const location =useLocation()
+  const location = useLocation();
   const fetchUser = async () => {
     if (selector) return;
     try {
@@ -22,7 +22,6 @@ const Body = () => {
       // dispatch(removeUser())
       dispatch(addUser(response?.data?.data));
       navigate(location?.pathname);
-
     } catch (error) {
       if (error.status == 401) navigate("/login");
       navigate("/login"); //for now i will change it
@@ -35,9 +34,9 @@ const Body = () => {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <NavBar />
-      <div className="relative">
+      <div className="relative  flex-grow">
         <Outlet />
       </div>
 

@@ -5,63 +5,6 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { User } from "../models/user.models.js";
 import { Match } from "../models/match.model.js";
 
-// const CreateProfile = asyncHandler(async (req, res) => {
-//   const {
-//     username,
-//     bio,
-//     skills,
-//     experienceLevel,
-//     interests,
-//     goals,
-//     location,
-//     githubLink,
-//     linkedinLink,
-//   } = req.body;
-
-//   if (!username) {
-//     return res.status(400).json({ message: "username is required." });
-//   }
-//   const user = await User.findOne({ username });
-//   if (!user) {
-//     throw new apiError("user not found");
-//   }
-
-//   let coverImagelocalpath;
-//   if (
-//     req.files &&
-//     Array.isArray(req.files.coverImage) &&
-//     req.files.coverImage.length > 0
-//   ) {
-//     coverImagelocalpath = req?.files?.coverImage[0]?.path;
-//   }
-
-//   const coverImage = await uploadOnCloudinary(coverImagelocalpath);
-
-//   const existingProfile = await Profile.findOne({ username });
-//   if (existingProfile) {
-//     return res.status(400).json({ message: "Username is already taken." });
-//   }
-
-//   const profile = new Profile({
-//     username,
-//     bio,
-//     skills,
-//     experienceLevel,
-//     interests,
-//     goals: goals || "",
-//     location: location || "",
-//     profileImage: coverImage?.url || "",
-//     githubLink,
-//     linkedinLink,
-//     user: user._id,
-//   });
-
-//   await profile.save();
-//   res
-//     .status(201)
-//     .json(new apiResponse(200, profile, "profile created successfully"));
-// });
-
 const updateProfile = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   if (!userId) throw new apiError(404, "user not found");
@@ -83,7 +26,7 @@ const updateProfileImage = asyncHandler(async (req, res) => {
 
   const profile = await User.findById(userId);
   if (!profile) throw new apiError(404, "Profile not found");
-// console.log(req?.files)
+
   
   const profileImagelocalpath = req?.files?.profileImage?.[0]?.path;
   if (!profileImagelocalpath)

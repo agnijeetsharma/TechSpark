@@ -7,6 +7,8 @@ import appStore from "./utils/appStore";
 import Feed from "./components/Feed";
 import { LoginProvider } from "./utils/LoginContext";
 import About from "./components/About";
+import Connections from "./components/Connections";
+import  Requests  from "./components/Requests";
 // import { PersistGate } from 'redux-persist/integration/react';
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/about" element={<About />} />
+            <Route path="/requests" element={<Requests/>} />
+            <Route path="/connections" element={<Connections/>} />
           </Route>
         </Routes>
       </BrowserRouter>

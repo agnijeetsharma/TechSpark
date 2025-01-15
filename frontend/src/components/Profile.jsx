@@ -1,18 +1,19 @@
 import axios from "axios";
-import {  useState,useRef } from "react";
+import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Base_URL } from "../constant";
 import { addUser } from "../utils/userSlice";
+import { IMAGE_URL } from "../constant";
 const Profile = () => {
   let currUser = useSelector((store) => store.user);
-  // currUser = currUser?.user;
+
   const dispatch = useDispatch();
   const [editMode, setEditMode] = useState(false);
   const [newSkill, setNewSkill] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
-  const fileInputRef=useRef()
-  // const token = currUser?.accessToken;
+  const fileInputRef = useRef();
+
   let [newUser, setUser] = useState({
     username: currUser?.username,
     firstName: currUser?.firstName,
@@ -21,7 +22,7 @@ const Profile = () => {
     bio: currUser?.bio,
     gender: currUser?.gender,
     age: currUser?.age,
-    skills: currUser?.skills||[],
+    skills: currUser?.skills || [],
     linkedinLink: currUser?.linkedinLink,
     githubLink: currUser?.githubLink,
   });
@@ -34,7 +35,7 @@ const Profile = () => {
         { withCredentials: true }
       );
       console.log(updateUser?.data);
-      // dispatch(removeUser())
+
       dispatch(addUser(updateUser?.data?.data));
 
       setShowToast(true);
@@ -58,7 +59,6 @@ const Profile = () => {
       setNewSkill("");
     }
   };
-  
 
   const removeSkill = (index) => {
     const updatedSkills = newUser?.skills?.filter((_, i) => i !== index);
@@ -74,27 +74,34 @@ const Profile = () => {
   };
   const handleProfileImage = async (e) => {
     fileInputRef.current.click();
-    e.preventDefault(); 
-  
+    e.preventDefault();
+
     if (!profileImage) {
       console.log("No profile image selected");
       return;
     }
-  
+
     const formData = new FormData();
     formData.append("profileImage", profileImage);
-  
+
     try {
-      const response = await axios.post(`${Base_URL}/update-profileImage`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", 
-        },
-        withCredentials: true, 
-      });
+      const response = await axios.post(
+        `${Base_URL}/update-profileImage`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
       console.log("Profile image updated successfully:", response?.data);
-      dispatch(addUser(response?.data?.data))
+      dispatch(addUser(response?.data?.data));
     } catch (error) {
-      console.error("Error uploading profile image:", error.response?.data || error.message);
+      console.error(
+        "Error uploading profile image:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -107,17 +114,25 @@ const Profile = () => {
           {/* Left Column */}
           <div className="w-1/3">
             <div className="avatar mb-6 gap-5 flex justify-center">
-              <div className="w-28 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
-               onClick={handleProfileImage}
-               title="Click to change image">
-                <img src={currUser?.profileImage|| "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Profile" />
+              <div
+                className="w-28 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
+                onClick={handleProfileImage}
+                title="Click to change image"
+              >
+                <img
+                  src={
+                    currUser?.profileImage ||
+                   IMAGE_URL
+                  }
+                  alt="Profile"
+                />
               </div>
               <div>
                 <input
                   type="file"
                   ref={fileInputRef}
                   onChange={handleFileChange}
-                  className="hidden" 
+                  className="hidden"
                 />
               </div>
             </div>
