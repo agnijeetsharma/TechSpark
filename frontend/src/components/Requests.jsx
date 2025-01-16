@@ -4,6 +4,9 @@ import axios from "axios";
 
 const Requests = () => {
   const [requests, setRequests] = useState([]);
+  const [showToast, setShowToast] = useState(false);
+  const [requestType, setRequestType] = useState("");
+
   const fetchReceivedRequest = async () => {
     try {
       const response = await axios.get(
@@ -11,11 +14,11 @@ const Requests = () => {
         { withCredentials: true }
       );
       setRequests(response?.data?.data);
-      console.log(response?.data?.data);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     fetchReceivedRequest();
   }, []);
@@ -32,9 +35,18 @@ const Requests = () => {
       console.log(error);
     }
   };
-//   useEffect(() => {
-//     acceptRejectRequest();
-//   }, []);
+
+  const handleAction = (status, _id) => {
+    acceptRejectRequest(status, _id);
+    setRequests(requests.filter((request) => request?.sender?._id !== _id));
+    setShowToast(true);
+    setRequestType(status);
+    setTimeout(() => {
+      setShowToast(false);
+      setRequestType("");
+    }, 3000);
+  };
+
   if (requests?.length === 0) {
     return (
       <div className="text-center font-bold text-primary text-3xl mt-44">
@@ -42,20 +54,9 @@ const Requests = () => {
       </div>
     );
   }
-  const handleAccept = (status,_id) => {
-    acceptRejectRequest(status,_id);
-    setRequests(requests.filter((request) => request?.sender._id !== _id));
-    alert("Request Accepted!");
-  };
-
-  const handleReject = (status,_id) => {
-    acceptRejectRequest(status,_id);
-    setRequests(requests.filter((request) => request?.sender._id !== _id));
-    alert("Request Rejected!");
-  };
 
   return (
-    <div className="bg-neutral min-h-screen p-6 mt-24">
+    <div className="min-h-screen p-6 mt-24">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-primary text-2xl font-bold mb-6">
           Connection Requests
@@ -64,8 +65,8 @@ const Requests = () => {
         <div className="space-y-4">
           {requests.map((request) => (
             <div
-              key={request?.sender?.id}
-              className="flex items-center bg-base-100 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+              key={request?.sender?._id}
+              className="flex items-center bg-base-200 p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
             >
               <img
                 src={request?.sender?.profileImage || IMAGE_URL}
@@ -93,13 +94,13 @@ const Requests = () => {
 
               <div className="flex space-x-2">
                 <button
-                  onClick={() => handleAccept("Accepted", request?.sender?._id)}
+                  onClick={() => handleAction("Accepted", request?.sender?._id)}
                   className="btn btn-primary text-sm"
                 >
                   Accept
                 </button>
                 <button
-                  onClick={() => handleReject("Rejected", request?.sender?._id)}
+                  onClick={() => handleAction("Rejected", request?.sender?._id)}
                   className="btn btn-outline btn-error text-sm"
                 >
                   Reject
@@ -107,12 +108,16 @@ const Requests = () => {
               </div>
             </div>
           ))}
-
-          {requests.length === 0 && (
-            <p className="text-gray-400 text-center">No connection requests.</p>
-          )}
         </div>
       </div>
+
+      {showToast && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
+          <div className="alert alert-success shadow-lg">
+            <span>Request {requestType} successfully 🔥</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

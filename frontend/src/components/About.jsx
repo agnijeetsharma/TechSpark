@@ -2,8 +2,8 @@
 
 const About = () => {
   return (
-    <div className="bg-gray-900 text-white min-h-screen flex flex-col items-center px-6 py-10 mt-10">
-      <div className="max-w-4xl text-center">
+    <div className="bg-base text-base-content-h-screen flex flex-col items-center px-6 py-10 mt-10">
+      <div className="max-w-4xl  text-center">
         <h1 className="text-4xl font-bold mb-4 text-blue-500">About TechSpark</h1>
         <p className="text-lg mb-6">
           Welcome to <span className="font-semibold">TechSpark</span>, the ultimate platform for developers and tech enthusiasts. 
@@ -13,7 +13,7 @@ const About = () => {
       </div>
 
       <div className="flex flex-col md:flex-row gap-10 mt-10 max-w-5xl">
-        <div className="flex-1 bg-gray-800 p-6 rounded-lg shadow-lg">
+        <div className="flex-1 bg-base-200 p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-semibold mb-3 text-blue-400">Our Mission</h2>
           <p className="text-base">
             At TechSpark, our mission is to connect talented individuals, foster knowledge sharing, and provide tools and 
@@ -21,7 +21,7 @@ const About = () => {
             for everyone in the IT community.
           </p>
         </div>
-        <div className="flex-1 bg-gray-800 p-6 rounded-lg shadow-lg">
+        <div className="flex-1 bg-base-200 p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-semibold mb-3 text-blue-400">Our Vision</h2>
           <p className="text-base">
             To be the leading platform for developers, empowering them to innovate, collaborate, and achieve excellence. 
@@ -30,7 +30,7 @@ const About = () => {
         </div>
       </div>
 
-      <div className="mt-10 bg-gray-800 p-6 rounded-lg shadow-lg max-w-5xl">
+      <div className="mt-10 bg-base-200 p-6 rounded-lg shadow-lg max-w-5xl">
         <h2 className="text-2xl font-semibold mb-3 text-blue-400">Why Choose TechSpark?</h2>
         <ul className="list-disc list-inside text-base">
           <li className="mb-2">A dedicated community of tech enthusiasts and professionals.</li>
@@ -41,7 +41,7 @@ const About = () => {
       </div>
 
       <div className="mt-16 text-center">
-        <h3 className="text-lg text-gray-400">Join TechSpark today and spark your innovation journey!</h3>
+        <h3 className="text-lg ">Join TechSpark today and spark your innovation journey!</h3>
       </div>
     </div>
   );

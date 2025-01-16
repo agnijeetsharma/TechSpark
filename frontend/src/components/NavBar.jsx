@@ -5,13 +5,27 @@ import axios from "axios";
 import { removeUser } from "../utils/userSlice";
 import { useLogin } from "../utils/LoginContext";
 import { IMAGE_URL } from "../constant";
+import { SunIcon, MoonIcon } from "@heroicons/react/solid";
+import { useState, useEffect } from "react";
 
 const NavBar = () => {
+  const [theme, setTheme] = useState("dark");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const { setLoginVisible } = useLogin();
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+    document.documentElement.setAttribute("data-theme", savedTheme);
+  }, []);
 
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
   const handleLogout = async () => {
     try {
       await axios.post(Base_URL + "/logout", {}, { withCredentials: true });
@@ -30,6 +44,15 @@ const NavBar = () => {
           </Link>
         </div>
         <div className="flex-none gap-2">
+          <div>
+            <button className="btn " onClick={toggleTheme}>
+              {theme === "light" ? (
+                <MoonIcon className="w-6 h-6 text-gray-700" />
+              ) : (
+                <SunIcon className="w-6 h-6 text-yellow-500" />
+              )}
+            </button>
+          </div>
           {user && (
             <div className="form-control">
               <p>Welcome,{user?.username}</p>
@@ -45,10 +68,7 @@ const NavBar = () => {
                 <div className="w-10 rounded-full">
                   <img
                     alt="Tailwind CSS Navbar component"
-                    src={
-                      user?.profileImage ||
-                      IMAGE_URL
-                    }
+                    src={user?.profileImage || IMAGE_URL}
                   />
                 </div>
               </div>
@@ -76,7 +96,7 @@ const NavBar = () => {
           )}
           {!user && (
             <div className="flex">
-              <div>
+              {/* <div>
                 <ul className="menu menu-horizontal px-4 pt-3 gap-4">
                   <Link to={"/login"}>
                     <li>Explore</li>
@@ -85,7 +105,7 @@ const NavBar = () => {
                     <li>About Us</li>
                   </Link>
                 </ul>
-              </div>
+              </div> */}
               <button
                 className="btn btn-outline mr-4"
                 onClick={() => setLoginVisible(true)}

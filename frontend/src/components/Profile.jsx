@@ -11,7 +11,7 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [newSkill, setNewSkill] = useState("");
   const [showToast, setShowToast] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
+  const [imageToast, setImageToast] = useState(false);
   const fileInputRef = useRef();
 
   let [newUser, setUser] = useState({
@@ -69,11 +69,13 @@ const Profile = () => {
     setEditMode(false);
     Updateduser();
   };
-  const handleFileChange = (e) => {
-    setProfileImage(e.target.files[0]);
-  };
+  // const handleFileChange = (e) => {
+  //   setProfileImage(e.target.files[0]);
+  // };
   const handleProfileImage = async (e) => {
-    fileInputRef.current.click();
+    // fileInputRef.current.click();
+    // setProfileImage(e.target.files[0]);
+    const profileImage = e.target.files[0];
     e.preventDefault();
 
     if (!profileImage) {
@@ -95,8 +97,15 @@ const Profile = () => {
           withCredentials: true,
         }
       );
-      console.log("Profile image updated successfully:", response?.data);
+      // console.log("Profile image updated successfully:", response?.data);
       dispatch(addUser(response?.data?.data));
+      setImageToast(true);
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+        setImageToast(false);
+        newUser = currUser;
+      }, 3000);
     } catch (error) {
       console.error(
         "Error uploading profile image:",
@@ -107,31 +116,25 @@ const Profile = () => {
 
   if (!newUser) return;
   return (
-    <div className="min-h-screen bg-base-200 text-base-content py-24">
-      <div className="max-w-5xl mx-auto p-8 bg-neutral rounded-lg shadow-lg">
+    <div className="min-h-screen text-base-content py-24 ">
+      <div className="max-w-5xl mx-auto p-8 bg-base-100 text-base-content rounded-lg shadow-xl">
         <h1 className="text-3xl font-bold mb-8 text-primary">My Profile</h1>
-        <div className="flex gap-6">
+        <div className="flex gap-6 ">
           {/* Left Column */}
           <div className="w-1/3">
-            <div className="avatar mb-6 gap-5 flex justify-center">
+            <div className="avatar mb-6 gap-5 flex justify-center  ">
               <div
                 className="w-28 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
-                onClick={handleProfileImage}
+                onClick={() => fileInputRef.current.click()}
                 title="Click to change image"
               >
-                <img
-                  src={
-                    currUser?.profileImage ||
-                   IMAGE_URL
-                  }
-                  alt="Profile"
-                />
+                <img src={currUser?.profileImage || IMAGE_URL} alt="Profile" />
               </div>
               <div>
                 <input
                   type="file"
                   ref={fileInputRef}
-                  onChange={handleFileChange}
+                  onChange={handleProfileImage}
                   className="hidden"
                 />
               </div>
@@ -194,8 +197,8 @@ const Profile = () => {
           </div>
 
           {/* Right Column */}
-          <div className="w-2/3">
-            <div className="grid grid-cols-2 gap-4">
+          <div className="w-2/3 ">
+            <div className="grid grid-cols-2 gap-4  flex-col">
               <div>
                 <label className="block font-semibold">Gender</label>
                 {editMode ? (
@@ -384,7 +387,9 @@ const Profile = () => {
       {showToast && (
         <div className="toast toast-top toast-center mt-24">
           <div className="alert alert-success">
-            <span>Profile Updated successfully🔥</span>
+            <span>
+              {imageToast ? "ProfileImage" : "Profile "}Updated successfully🔥
+            </span>
           </div>
         </div>
       )}

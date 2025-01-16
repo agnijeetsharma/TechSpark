@@ -1,38 +1,69 @@
-import {useSelector} from 'react'
 
-const Landing=()=>{
-   const isLoggedIn=useSelector(store=>store.user)
+import { useLogin } from "../utils/LoginContext";
 
-    return (
-        <div>
-        {!isLoggedIn ? (
-          // Landing Page with Background
-          <div
-            className="flex items-center justify-center text-white"
-            style={{
-              backgroundImage: `url('./assets/bg.webp')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              minHeight: '100vh',
-            }}
-          >
-            <div className="text-center">
-              <h1 className="text-5xl font-bold">Welcome to TechSpark</h1>
-              <button
-                // onClick={handleLogin}
-                className="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded"
-              >
-                Login
-              </button>
+const FrontPage = () => {
+  const { setLoginVisible } = useLogin();
+  const { isLoginVisible } = useLogin();
+  return (
+    <div className="min-h-screen bg-base-200">
+    <section className="hero min-h-screen bg-gradient-to-r from-primary to-secondary text-white">
+    { !isLoginVisible&&<div className="hero-content text-center">
+          <div>
+            <h1 className="text-5xl font-extrabold">Welcome to TechSpark</h1>
+            <p className="py-6 text-lg">
+              Connect with the brightest minds in tech. Share, learn, and grow
+              together.
+            </p>
+            <button
+              className="btn btn-primary text-white font-bold text-lg rounded-full px-6 py-3 transition-transform transform hover:scale-105"
+              onClick={() => setLoginVisible(true)}
+            >
+              Get Started
+            </button>
+          </div>
+        </div>}
+      </section>
+
+      <section className="py-16 bg-base-100">
+        <div className="container mx-auto text-center">
+          <h2 className="text-4xl font-semibold mb-12 text-primary">
+            What We Offer
+          </h2>
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            <div className="card w-96 bg-base-200 text-base-content shadow-xl">
+              <div className="card-body">
+                <h2 className="card-title">Collaborate</h2>
+                <p>
+                  Join forces with developers and IT professionals from all over
+                  the world.
+                </p>
+              </div>
+            </div>
+
+            <div className="card w-96 bg-base-200 text-base-content shadow-xl">
+              <div className="card-body">
+                <h2 className="card-title">Learn</h2>
+                <p>
+                  Access a wealth of tutorials, guides, and projects to expand
+                  your knowledge.
+                </p>
+              </div>
+            </div>
+
+            <div className="card w-96 bg-base-200 text-base-content shadow-xl">
+              <div className="card-body">
+                <h2 className="card-title">Network</h2>
+                <p>
+                  Connect with like-minded professionals and take your career to
+                  the next level.
+                </p>
+              </div>
             </div>
           </div>
-        ) : (
-          // Main Application Content After Login
-          <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <h1 className="text-3xl font-bold">Welcome Back, User!</h1>
-          </div>
-        )}
-      </div>
-    )
-}
-export default Landing
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default FrontPage;
