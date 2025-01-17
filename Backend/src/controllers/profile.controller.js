@@ -133,18 +133,19 @@ const getOtherUser = asyncHandler(async (req, res) => {
 
 const getFeed = asyncHandler(async (req, res, next) => {
   const user = req.user;
-
-  // Check if the user exists
+  let limit=parseInt(req.query.limit)||10
+  const page=parseInt(req.query.page)||1
+  limit=limit>51?51:limit
+  const skip = (page - 1) * limit;
+ 
   if (!user) {
     return next(new apiError(404, "User not found"));
   }
 
-  // Fetch all connection requests
   const connectionRequests = await Match.find({
     $or: [{ receiver: user._id }, { sender: user._id }],
   });
 
-  // Collect IDs to hide from the feed
   const hideUserFromFeed = new Set();
   connectionRequests.forEach((connection) => {
     hideUserFromFeed.add(connection.sender.toString());
@@ -155,7 +156,7 @@ const getFeed = asyncHandler(async (req, res, next) => {
 
   const feed = await User.find({
     _id: { $nin: Array.from(hideUserFromFeed) },
-  }).select("-password -email");
+  }).select("-password -email").skip(skip).limit(limit);
 
   if (!feed || feed.length === 0) {
     return next(new apiError(400, "No users available in the feed"));

@@ -22,8 +22,8 @@ const UserProfileView = () => {
       },[id])
     if (!user) return <div>No user selected</div>;
   return (
-    <div className="bg-base-200 text-base-content min-h-screen p-6 flex items-center justify-center mt-24">
-      <div className="w-full max-w-4xl bg-base-100 shadow-lg rounded-lg p-6">
+    <div className="bg-base-200 text-base-content min-h-screen  flex items-center justify-center mt-20">
+      <div className="w-full max-w-4xl bg-base-100 text-base-content shadow-lg rounded-lg p-6">
        
         <div className="flex flex-col items-center justify-center mb-6">
           <div className="avatar">

@@ -10,7 +10,7 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.route("/connection-request").post(verifyJWT, SendConnectionRequest);
+router.route("/connection-request/:status/:userId").post(verifyJWT, SendConnectionRequest);
 router.route("/connection").get(verifyJWT, getAllConnection);
 router.route("/pending-sentrequest").get(verifyJWT, AllsentRequest);
 router.route("/pending-receivedrequest").get(verifyJWT, AllreceivedRequest);

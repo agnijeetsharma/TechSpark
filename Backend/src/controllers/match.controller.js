@@ -6,7 +6,8 @@ import { connections } from "mongoose";
 
 const SendConnectionRequest = asyncHandler(async (req, res) => {
   const sender = req.user._id;
-  const receiver = req.query.toUserId;
+  const status=req.params.status
+  const receiver = req.params.userId;
   console.log(sender, receiver);
   if (!sender || !receiver) {
     throw new apiError(404, "UserId not found.");
@@ -26,7 +27,7 @@ const SendConnectionRequest = asyncHandler(async (req, res) => {
   const newConnection = await Match.create({
     sender: sender,
     receiver: receiver,
-    status: "Pending",
+    status: status,
   });
 
   await newConnection.save();
@@ -41,7 +42,7 @@ const SendConnectionRequest = asyncHandler(async (req, res) => {
       new apiResponse(
         200,
         newConnection,
-        "Connection request sent successfully",
+       `${status} Request sent successfully`
       ),
     );
 });
@@ -135,7 +136,6 @@ const AllsentRequest = asyncHandler(async (req, res) => {
 });
 const AllreceivedRequest = asyncHandler(async (req, res) => {
   const userId = req.user._id;
-  // console.log("userId:", userId);
 
   if (!userId) throw new apiError(400, "userId is not found");
 
