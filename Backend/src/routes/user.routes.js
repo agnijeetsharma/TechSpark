@@ -14,6 +14,8 @@ import {
   AllProfiles,
   getPotentialMatches,
   getUserProfile,
+  getOtherUser,
+  getFeed,
 } from "../controllers/profile.controller.js";
 const router = Router();
 
@@ -58,8 +60,11 @@ router.route("/update-profileImage").post(
   updateProfileImage,
 );
 
-router.route("/feed").get(verifyJWT, AllProfiles);
+// router.route("/feed").get(verifyJWT, AllProfiles);
 router.route("/allMatchProfiles").get(verifyJWT,getPotentialMatches)
 router.route("/profile/view").get(verifyJWT,getUserProfile)
+router.route("/profile/:id").get(verifyJWT,getOtherUser)
+router.route("/feed").get(verifyJWT,getFeed)
+
 
 export default router;

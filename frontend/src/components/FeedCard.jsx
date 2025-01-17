@@ -1,6 +1,5 @@
-const FeedCard = ({user}) => {
-    console.log(user)
-    const {username}=user
+const FeedCard = ({ user }) => {
+  const { username } = user;
   return (
     <div className="card bg-base-300 w-56 sm:w-64 lg:w-72 mx-auto shadow-xl">
       <figure>

@@ -5,9 +5,10 @@ import { useSelector } from "react-redux";
 import { addFeed } from "../utils/feedSlice";
 import { useDispatch } from "react-redux";
 import FeedCard from "./FeedCard";
-
+import { useNavigate } from "react-router-dom";
 const Feed = () => {
   const feed = useSelector((store) => store.feed);
+  const navigate=useNavigate()
   // console.log(feed)
   const dispatch = useDispatch();
   const fetchFeed = async () => {
@@ -25,14 +26,17 @@ const Feed = () => {
   useEffect(() => {
     fetchFeed();
   }, []);
-
+  const handleViewProfile = () => {
+    navigate(`/profile/${feed[0]._id}`);
+  };
   if (!feed) return;
 
   if (feed.length <= 0)
     return <h1 className="flex justify-center ">No new users founds!</h1>;
   return (
     feed && (
-      <div className="flex justify-center my-28 relative">
+      <div className="flex justify-center my-28 relative" onClick={handleViewProfile}>
+      
         <FeedCard user={feed[0]} />
       </div>
     )

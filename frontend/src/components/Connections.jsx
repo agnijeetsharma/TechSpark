@@ -2,9 +2,11 @@ import { useState } from "react";
 import { IMAGE_URL } from "../constant";
 import { useEffect } from "react";
 import { Base_URL } from "../constant";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Connections = () => {
+    const navigate=useNavigate()
   const [searchQuery, setSearchQuery] = useState("");
   const [connections, setConnections] = useState([])
   
@@ -41,7 +43,7 @@ const Connections = () => {
 
   return (
     <div className="min-h-screen p-4 mt-20">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto pt-9">
         
         <div className="mb-6 flex flex-center text-center">
           <input
@@ -58,7 +60,9 @@ const Connections = () => {
           {filteredConnections.map((connection) => (
             <div
               key={connection.id}
-              className="flex items-center bg-base-200 p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow"
+              className="flex items-center cursor-pointer bg-base-200 p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow"
+              onClick={()=>navigate(`/profile/${connection._id}`)}
+
             >
             
               <img

@@ -4,6 +4,7 @@ import { apiError } from "../utils/apiErrors.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { User } from "../models/user.models.js";
 import { Match } from "../models/match.model.js";
+import { set } from "mongoose";
 
 const updateProfile = asyncHandler(async (req, res) => {
   const userId = req.user._id;
@@ -27,31 +28,26 @@ const updateProfileImage = asyncHandler(async (req, res) => {
   const profile = await User.findById(userId);
   if (!profile) throw new apiError(404, "Profile not found");
 
-  
   const profileImagelocalpath = req?.files?.profileImage?.[0]?.path;
   if (!profileImagelocalpath)
     throw new apiError(400, "Profile image is not found");
 
-  
   const profileCoverImage = await uploadOnCloudinary(profileImagelocalpath);
   if (!profileCoverImage || !profileCoverImage.url)
     throw new apiError(500, "Profile image cloud upload problem");
 
- 
   const updatedProfile = await User.findByIdAndUpdate(
     userId,
     { profileImage: profileCoverImage.url },
-    { new: true }
+    { new: true },
   );
   if (!updatedProfile)
     throw new apiError(500, "Something went wrong when updating profile");
 
-  
   res
     .status(200)
     .json(new apiResponse(200, updatedProfile, "Image uploaded successfully"));
 });
-
 
 const AllProfiles = asyncHandler(async (req, res) => {
   if (!req.user) {
@@ -59,15 +55,16 @@ const AllProfiles = asyncHandler(async (req, res) => {
   }
 
   // Exclude the current user's profile from the results
-  const profiles = await User.find({ _id: { $ne: req.user._id } }).select("-password");
-  
+  const profiles = await User.find({ _id: { $ne: req.user._id } }).select(
+    "-password",
+  );
+
   if (!profiles || profiles.length === 0) {
     throw new apiError(404, "No profiles found");
   }
 
   res.status(200).json(new apiResponse(200, profiles, "All profiles found"));
 });
-
 
 const getPotentialMatches = asyncHandler(async (req, res) => {
   const currentUser = req.user._id;
@@ -125,6 +122,50 @@ const getUserProfile = asyncHandler(async (req, res) => {
       ),
     );
 });
+const getOtherUser = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  const user = await User.findById(userId);
+  if (!user) throw new apiError(404, "User not found");
+  res
+    .status(200)
+    .json(new apiResponse(200, user, "User profile retrieved successfully"));
+});
+
+const getFeed = asyncHandler(async (req, res, next) => {
+  const user = req.user;
+
+  // Check if the user exists
+  if (!user) {
+    return next(new apiError(404, "User not found"));
+  }
+
+  // Fetch all connection requests
+  const connectionRequests = await Match.find({
+    $or: [{ receiver: user._id }, { sender: user._id }],
+  });
+
+  // Collect IDs to hide from the feed
+  const hideUserFromFeed = new Set();
+  connectionRequests.forEach((connection) => {
+    hideUserFromFeed.add(connection.sender.toString());
+    hideUserFromFeed.add(connection.receiver.toString());
+  });
+
+  hideUserFromFeed.add(user._id.toString());
+
+  const feed = await User.find({
+    _id: { $nin: Array.from(hideUserFromFeed) },
+  }).select("-password -email");
+
+  if (!feed || feed.length === 0) {
+    return next(new apiError(400, "No users available in the feed"));
+  }
+
+  return res
+    .status(200)
+    .json(new apiResponse(200, feed, "Feed fetched successfully"));
+});
+
 
 export {
   updateProfile,
@@ -132,4 +173,6 @@ export {
   AllProfiles,
   getPotentialMatches,
   getUserProfile,
+  getOtherUser,
+  getFeed,
 };

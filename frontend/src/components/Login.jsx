@@ -52,7 +52,7 @@ const Login = () => {
     >
    <FrontPage/>
       {isLoginVisible && (
-        <div className="card card-border bg-base-300 text-base-content w-96 ">
+        <div className="card card-border bg-base-300 text-base-content w-96 absolute mt-12">
           <div className="card-body ">
             <h2 className="card-title justify-center">Login!</h2>
             <div className="">
@@ -98,7 +98,7 @@ const Login = () => {
                 className="cursor-pointer text-red-400"
                 onClick={() => setIsLogin((value) => !value)}
               >
-                {isLogin ? "New User Sign Up" : "LogIn Now"}
+                {isLogin ? "New User? Sign Up" : "Already have an account? Log In"}
               </p>
             </div>
           </div>

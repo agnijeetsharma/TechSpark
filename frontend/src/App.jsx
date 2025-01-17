@@ -9,6 +9,7 @@ import { LoginProvider } from "./utils/LoginContext";
 import About from "./components/About";
 import Connections from "./components/Connections";
 import  Requests  from "./components/Requests";
+import UserProfileView from "./components/UserProfilePage";
 // import { PersistGate } from 'redux-persist/integration/react';
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/requests" element={<Requests/>} />
             <Route path="/connections" element={<Connections/>} />
+            <Route path="/profile/:id" element={<UserProfileView />} />
           </Route>
         </Routes>
       </BrowserRouter>
