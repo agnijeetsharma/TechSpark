@@ -7,8 +7,7 @@ import matchRouter from "./routes/match.routes.js"
 
 const app = express();
 
-// app.options(process.env.CORS_ORIGIN, cors());                    
-// Middleware setup
+
 app.use(cors({
     origin: process.env.CORS_ORIGIN || "*",  
     credentials: true,

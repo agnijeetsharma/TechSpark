@@ -3,13 +3,14 @@ import { IMAGE_URL } from "../constant";
 import { useEffect } from "react";
 import { Base_URL } from "../constant";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const Connections = () => {
-    const navigate=useNavigate()
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [connections, setConnections] = useState([])
-  
+  const [connections, setConnections] = useState([]);
+
   const fetchConnections = async () => {
     try {
       const response = await axios.get(`${Base_URL}/match/connection`, {
@@ -44,7 +45,6 @@ const Connections = () => {
   return (
     <div className="min-h-screen p-4 mt-20">
       <div className="max-w-4xl mx-auto pt-9">
-        
         <div className="mb-6 flex flex-center text-center">
           <input
             type="text"
@@ -55,24 +55,23 @@ const Connections = () => {
           />
         </div>
 
-        
         <div className="space-y-4">
           {filteredConnections.map((connection) => (
             <div
               key={connection.id}
               className="flex items-center cursor-pointer bg-base-200 p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow"
-              onClick={()=>navigate(`/profile/${connection._id}`)}
-
             >
-            
               <img
-                src={connection.profileImage||IMAGE_URL}
+                src={connection.profileImage || IMAGE_URL}
                 alt={connection?.username}
                 className="w-16 h-16 rounded-full"
+                onClick={() => navigate(`/profile/${connection._id}`)}
               />
 
-            
-              <div className="flex-1 ml-4">
+              <div
+                className="flex-1 ml-4"
+                onClick={() => navigate(`/profile/${connection._id}`)}
+              >
                 <h2 className="font-semibold text-lg text-primary">
                   {connection.username}
                 </h2>
@@ -82,10 +81,11 @@ const Connections = () => {
                 </p>
               </div>
 
-             
-              <button className="btn btn-outline btn-primary text-sm">
-                Message
-              </button>
+              <Link to={"/chat/" + connection?._id}>
+                <button className="btn btn-outline btn-primary text-sm">
+                  Message
+                </button>
+              </Link>
             </div>
           ))}
 

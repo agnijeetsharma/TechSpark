@@ -55,7 +55,7 @@ const NavBar = () => {
           </div>
           {user && (
             <div className="form-control">
-              <p>Welcome,{user?.username}</p>
+              <p>Hi,{user?.username}</p>
             </div>
           )}
           {user && (
