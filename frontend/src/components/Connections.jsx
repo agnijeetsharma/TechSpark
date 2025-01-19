@@ -58,7 +58,7 @@ const Connections = () => {
         <div className="space-y-4">
           {filteredConnections.map((connection) => (
             <div
-              key={connection.id}
+              key={connection._id}
               className="flex items-center cursor-pointer bg-base-200 p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow"
             >
               <img

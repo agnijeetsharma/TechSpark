@@ -1,9 +1,8 @@
 // controllers/chatController.js
 import asyncHandler from "../utils/asyncHandler.js";
-import { Chat } from "../models/Chat.js";
-import { Message } from "../models/Message.js";
+import { Chat } from "../models/chat.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
-
+import { apiResponse } from "../utils/apiResponse.js";
 
 export const sendMessage = asyncHandler(async (req, res) => {
   const { chatId } = req.params;
@@ -24,16 +23,31 @@ export const sendMessage = asyncHandler(async (req, res) => {
   const chat = await Chat.findByIdAndUpdate(
     chatId,
     { $push: { messages: message._id }, lastMessageAt: Date.now() },
-    { new: true }
+    { new: true },
   );
 
   res.status(200).json(message);
 });
 
-// Create chat
-export const createChat = asyncHandler(async (req, res) => {
-  const { participants } = req.body;
-  const chat = new Chat({ participants });
-  await chat.save();
-  res.status(201).json(chat);
+
+// main working logic for the chat API
+
+const ChatFeature = asyncHandler(async (req, res) => {  
+  const targetUserId = req.params;
+  const userId = req.user._id;
+
+  let chat = await findOne({ $all: [userId, targetUserId] }).populate({
+    path: "messages.senderId",
+    select: "username",
+  });
+
+  if (!chat) {
+    chat = new Chat({ participants: [userId, targetUserId], messages: [] });
+    await chat.save();
+  }
+  return res
+    .status(201)
+    .json(new apiResponse(201, chat, "chat fetched successfully"));
 });
+
+export {ChatFeature}

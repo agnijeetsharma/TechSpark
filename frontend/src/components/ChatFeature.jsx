@@ -1,16 +1,42 @@
 import { useState, useRef, useEffect } from "react";
+import { BrowserRouter, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "../App.css";
+import { createSocketConnection } from "../utils/socket";
+import axios from "axios";
+import { Base_URL } from "../constant";
 
 const ChatFeature = () => {
-  const [messages, setMessages] = useState([
-    { sender: "John", text: "Hey! How's it going?", timestamp: "10:30 AM" },
-    { sender: "You", text: "Good, how about you?", timestamp: "10:31 AM" },
-    { sender: "John", text: "I'm doing great, thanks!", timestamp: "10:32 AM" },
-  ]);
-
+  const targetUserId = useParams().id;
+  const user = useSelector((store) => store.user);
+  const userId = user?._id;
+  const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
-  
+// const getChat=async()=>{
+//   const allChat=await axios.get(Base_URL+"/targetUserId/"+targetUserId,{withCredentials:true});
+// }
+
+
+
+  useEffect(() => {
+    if (!userId) return;
+    const socket = createSocketConnection();
+    socket.emit("joinChat", userId, targetUserId);
+    socket.on("newMessageReceived", ({ username, text }) => {
+      console.log(username, text);
+      const currentTime = new Date().toLocaleTimeString();
+      setMessages((messages) => [
+        ...messages,
+        { sender: username, text: text, timestamp: currentTime },
+      ]);
+    });
+    return () => {
+      console.log("disconnect");
+      socket.disconnect();
+    };
+  }, [userId, targetUserId]);
+
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -21,14 +47,18 @@ const ChatFeature = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]); 
+  }, [messages]);
 
   const handleSendMessage = () => {
+    const socket = createSocketConnection();
     if (inputMessage.trim()) {
-      setMessages([
-        ...messages,
-        { sender: "You", text: inputMessage, timestamp: "Now" },
-      ]);
+      socket.emit("sendMessage", {
+        username: user?.username,
+        userId,
+        targetUserId,
+        text: inputMessage,
+      });
+
       setInputMessage("");
     }
   };
@@ -39,30 +69,29 @@ const ChatFeature = () => {
       <div className="flex flex-col w-full max-w-screen-md h-full bg-base-100 border border-base-300 rounded-lg shadow-lg overflow-hidden">
         {/* Chat Messages */}
         <div
-          className="flex-grow overflow-y-auto p-4 bg-base-200 custom-scrollbar"
-          style={{ paddingBottom: "6rem" }}
+          className="flex-grow overflow-y-auto p-4 bg-base-200"
+          style={{ paddingBottom: "6rem", maxHeight: "calc(100% - 10rem)" }}
         >
           {messages.map((msg, index) => (
             <div
               key={index}
               className={`flex ${
-                msg.sender === "You" ? "justify-end" : "justify-start"
+                msg.sender === user?.username ? "justify-end" : "justify-start"
               } mb-4`}
             >
               <div
-                className={`p-3 rounded-lg max-w-lg ${
-                  msg.sender === "You"
+                className={`p-3 rounded-lg max-w-lg break-words whitespace-pre-wrap ${
+                  msg.sender === user?.username
                     ? "bg-primary text-primary-content self-end"
                     : "bg-base-100 border border-base-300 self-start"
                 }`}
               >
                 <p className="font-semibold">{msg.sender}</p>
-                <p>{msg.text}</p>
+                <p>{msg?.text}</p>
                 <p className="text-xs text-gray-500 mt-1">{msg.timestamp}</p>
               </div>
             </div>
           ))}
-          {/* Ref to auto-scroll */}
           <div ref={messagesEndRef} />
         </div>
 
@@ -74,7 +103,8 @@ const ChatFeature = () => {
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               placeholder="Type your message..."
-              className="input input-bordered flex-grow"
+              className="input input-bordered flex-grow resize-none"
+              style={{ overflowY: "auto", maxHeight: "5rem" }}
             />
             <button
               className="btn btn-primary ml-4"

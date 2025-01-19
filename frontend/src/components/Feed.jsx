@@ -26,8 +26,10 @@ const Feed = () => {
   
   if (!feed) return;
 
-  if (feed.length <= 0)
-    return <h1 className="flex justify-center ">No new users founds!</h1>;
+  if (feed.length <= 0||feed===null){
+    console.log("fedd emt")
+    return <h1 className="flex justify-center text-base-content">No new users founds!</h1>;
+  }
   return (
     feed && (
       <div className="flex justify-center my-28 relative" >

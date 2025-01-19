@@ -11,12 +11,12 @@ import { refreshAccessToken } from "../controllers/user.controller.js";
 import {
   updateProfile,
   updateProfileImage,
-  AllProfiles,
   getPotentialMatches,
   getUserProfile,
   getOtherUser,
   getFeed,
 } from "../controllers/profile.controller.js";
+import {ChatFeature }from  "../controllers/chatMessage.controller.js";
 const router = Router();
 
 router.route("/register").post(
@@ -38,16 +38,6 @@ router.route("/register").post(
 router.route("/login").post(loginUser);
 router.route("/logout").post(verifyJWT, logOutUser);
 router.route("/refesh-Token").post(refreshAccessToken);
-// router.route("/profile").post(
-//   verifyJWT,
-//   upload.fields([
-//     {
-//       name: "profileImage",
-//       maxCount: 1,
-//     },
-//   ]),
-//   CreateProfile,
-// );
 router.route("/updateProfile").patch(verifyJWT, updateProfile);
 router.route("/update-profileImage").post(
   verifyJWT,
@@ -60,11 +50,11 @@ router.route("/update-profileImage").post(
   updateProfileImage,
 );
 
-// router.route("/feed").get(verifyJWT, AllProfiles);
 router.route("/allMatchProfiles").get(verifyJWT,getPotentialMatches)
 router.route("/profile/view").get(verifyJWT,getUserProfile)
 router.route("/profile/:id").get(verifyJWT,getOtherUser)
 router.route("/feed").get(verifyJWT,getFeed)
+router.route("/chatMessage/:targetUserId").get(verifyJWT,ChatFeature)
 
 
 export default router;
