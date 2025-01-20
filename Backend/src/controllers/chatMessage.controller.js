@@ -3,6 +3,9 @@ import asyncHandler from "../utils/asyncHandler.js";
 import { Chat } from "../models/chat.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { apiResponse } from "../utils/apiResponse.js";
+import { Types } from "mongoose";import { apiError } from "../utils/apiErrors.js";
+console.log("sendMessage function executed");
+console.log("ChatFeature function executed");
 
 export const sendMessage = asyncHandler(async (req, res) => {
   const { chatId } = req.params;
@@ -32,11 +35,12 @@ export const sendMessage = asyncHandler(async (req, res) => {
 
 // main working logic for the chat API
 
-const ChatFeature = asyncHandler(async (req, res) => {  
-  const targetUserId = req.params;
+const ChatFeature = asyncHandler(async (req, res) => {
+  const { targetUserId } = req.params;
   const userId = req.user._id;
-
-  let chat = await findOne({ $all: [userId, targetUserId] }).populate({
+  let chat = await Chat.findOne({
+    participants: { $all: [userId, targetUserId] },
+  }).populate({
     path: "messages.senderId",
     select: "username",
   });
@@ -45,9 +49,13 @@ const ChatFeature = asyncHandler(async (req, res) => {
     chat = new Chat({ participants: [userId, targetUserId], messages: [] });
     await chat.save();
   }
-  return res
-    .status(201)
-    .json(new apiResponse(201, chat, "chat fetched successfully"));
+   if(!chat)throw new apiError("Chat not found", 404);
+  return res.status(chat ? 200 : 201).json(
+    new apiResponse(
+      chat ? 200 : 201,
+      chat,
+      chat ? "Chat fetched successfully" : "Chat created successfully"
+    )
+  );
 });
-
 export {ChatFeature}

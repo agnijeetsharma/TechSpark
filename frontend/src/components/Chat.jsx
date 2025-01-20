@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { BrowserRouter, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "../App.css";
 import { createSocketConnection } from "../utils/socket";
@@ -13,22 +13,39 @@ const ChatFeature = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
-// const getChat=async()=>{
-//   const allChat=await axios.get(Base_URL+"/targetUserId/"+targetUserId,{withCredentials:true});
-// }
+  const getChat = async () => {
+    try {
+      const allChat = await axios.get(Base_URL + "/chat/" + targetUserId, {
+        withCredentials: true,
+      });
+      console.log(allChat?.data?.data?.messages);
+      const chatMessages = allChat?.data?.data?.messages.map((msg) => {
+        const { senderId, text } = msg;
+        console.log(senderId?.username)
+        return {
+          sender: senderId?.username,
+          text,
+        };
+      });
+      setMessages(chatMessages);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-
-
+  useEffect(() => {
+    getChat();
+  }, []);
   useEffect(() => {
     if (!userId) return;
     const socket = createSocketConnection();
     socket.emit("joinChat", userId, targetUserId);
     socket.on("newMessageReceived", ({ username, text }) => {
       console.log(username, text);
-      const currentTime = new Date().toLocaleTimeString();
+      // const currentTime = new Date().toLocaleTimeString();
       setMessages((messages) => [
         ...messages,
-        { sender: username, text: text, timestamp: currentTime },
+        { sender: username, text: text },
       ]);
     });
     return () => {

@@ -133,11 +133,11 @@ const getOtherUser = asyncHandler(async (req, res) => {
 
 const getFeed = asyncHandler(async (req, res, next) => {
   const user = req.user;
-  let limit=parseInt(req.query.limit)||10
-  const page=parseInt(req.query.page)||1
-  limit=limit>51?51:limit
+  let limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
+  limit = limit > 51 ? 51 : limit;
   const skip = (page - 1) * limit;
- 
+
   if (!user) {
     return next(new apiError(404, "User not found"));
   }
@@ -156,17 +156,19 @@ const getFeed = asyncHandler(async (req, res, next) => {
 
   const feed = await User.find({
     _id: { $nin: Array.from(hideUserFromFeed) },
-  }).select("-password -email").skip(skip).limit(limit);
+  })
+    .select("-password -email")
+    .skip(skip)
+    .limit(limit);
 
   if (!feed || feed.length === 0) {
-    return next(new apiError(400, "No users available in the feed"));
+    return new apiError(400, "No users available in the feed");
   }
 
   return res
     .status(200)
     .json(new apiResponse(200, feed, "Feed fetched successfully"));
 });
-
 
 export {
   updateProfile,

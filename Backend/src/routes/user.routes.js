@@ -54,7 +54,7 @@ router.route("/allMatchProfiles").get(verifyJWT,getPotentialMatches)
 router.route("/profile/view").get(verifyJWT,getUserProfile)
 router.route("/profile/:id").get(verifyJWT,getOtherUser)
 router.route("/feed").get(verifyJWT,getFeed)
-router.route("/chatMessage/:targetUserId").get(verifyJWT,ChatFeature)
+router.route("/chat/:targetUserId").get(verifyJWT,ChatFeature)
 
 
 export default router;

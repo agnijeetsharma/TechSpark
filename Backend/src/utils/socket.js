@@ -32,7 +32,7 @@ const initializeSocket = (server) => {
               messages: [],
             });
           }
-          chat.messages.push({ sender: userId, text });
+          chat.messages.push({ senderId: userId, text });
           await chat.save()
           io.to(roomId).emit("newMessageReceived", {
             username,

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const message = new mongoose.Schema(
   {
-    sender:{
+    senderId:{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       requried:true
