@@ -24,12 +24,11 @@ const Feed = () => {
     fetchFeed();
   }, []);
   
-  if (!feed) return;
-
-  if (feed.length <= 0||feed===null){
-    console.log("fedd emt")
+  
+  if (feed?.length <= 0||feed===null){
     return <h1 className="flex justify-center text-base-content">No new users founds!</h1>;
   }
+  if (!feed) return;
   return (
     feed && (
       <div className="flex justify-center my-28 relative" >

@@ -11,6 +11,9 @@ import Connections from "./components/Connections";
 import  Requests  from "./components/Requests";
 import UserProfileView from "./components/UserProfilePage";
 import ChatFeature from "./components/Chat";
+import PostCard from "./components/UsersPosts";
+import ReadMorePage from "./components/PostContent";
+import CreatePost from "./components/CreatePost";
 // import { PersistGate } from 'redux-persist/integration/react';
 function App() {
   return (
@@ -30,6 +33,9 @@ function App() {
             <Route path="/connections" element={<Connections/>} />
             <Route path="/profile/:id" element={<UserProfileView />} />
             <Route path="/chat/:id" element={<ChatFeature />} />
+            <Route path="/posts" element={<PostCard/>} />
+            <Route path="/post/content" element={<ReadMorePage/>} />
+            <Route path="/userPost" element={<CreatePost/>} />
 
           </Route>
         </Routes>

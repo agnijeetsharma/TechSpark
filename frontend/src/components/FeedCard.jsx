@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Base_URL } from "../constant";
+import { Base_URL, IMAGE_URL } from "../constant";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 
@@ -8,6 +8,7 @@ const FeedCard = ({ user }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { username } = user;
+
   const handleViewProfile = () => {
     navigate(`/profile/${user._id}`);
   };
@@ -27,28 +28,30 @@ const FeedCard = ({ user }) => {
   };
 
   return (
-    <div className="card bg-base-300 w-56 sm:w-64 lg:w-72 mx-auto shadow-xl">
-      <figure onClick={handleViewProfile}>
+    <div className="card bg-base-300 w-full sm:w-64 lg:w-72 mx-auto shadow-xl">
+      <figure onClick={handleViewProfile} className="cursor-pointer">
         <img
-          src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-          alt="Shoes"
+          src={user?.profileImage || IMAGE_URL}
+          alt="Profile"
+          className="w-full h-48 object-cover"
         />
       </figure>
       <div className="card-body">
-        <h2 className="card-title">{username}</h2>
-        <p>
-          A card component has a figure, a body part, and inside body there are
-          title and actions parts
+        <h2 className="card-title text-center text-lg font-semibold">
+          {username}
+        </h2>
+        <p className="text-sm text-gray-600 text-center line-clamp-2">
+          {user?.bio}
         </p>
-        <div className="card-actions justify-between">
+        <div className="card-actions flex flex-col sm:flex-row justify-center gap-2 mt-4">
           <button
-            className="btn btn-primary"
+            className="btn btn-secondary w-full sm:w-auto"
             onClick={() => handleRequest("Rejected", user._id)}
           >
-            Interseted
+            Interested
           </button>
           <button
-            className="btn btn-primary"
+            className="btn btn-primary w-full sm:w-auto"
             onClick={() => handleRequest("Pending", user._id)}
           >
             Ignore

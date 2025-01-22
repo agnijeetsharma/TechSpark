@@ -89,6 +89,13 @@ const NavBar = () => {
                   <Link to={"/requests"}>Requests</Link>
                 </li>
                 <li>
+                  <Link to={"/posts"}>Posts</Link>
+                </li>
+                <li>
+                  <Link to={"/UserPost"}>Your Post</Link>
+                </li>
+
+                <li>
                   <a onClick={handleLogout}>Logout</a>
                 </li>
               </ul>
@@ -106,12 +113,12 @@ const NavBar = () => {
                   </Link>
                 </ul>
               </div> */}
-              <button
+             { !setLoginVisible&&<button
                 className="btn btn-outline mr-4"
                 onClick={() => setLoginVisible(true)}
               >
                 LogIn
-              </button>
+              </button>}
             </div>
           )}
         </div>

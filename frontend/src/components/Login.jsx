@@ -52,7 +52,7 @@ const Login = () => {
     >
    <FrontPage/>
       {isLoginVisible && (
-        <div className="card card-border bg-base-300 text-base-content w-96 absolute mt-12">
+        <div className="card card-border bg-base-300 text-base-content w-96 absolute mt-20">
           <div className="card-body ">
             <h2 className="card-title justify-center">Login!</h2>
             <div className="">
@@ -64,6 +64,7 @@ const Login = () => {
                     className="input max-w-xs w-full"
                     value={username}
                     onChange={(e) => setUserName(e.target.value)}
+                    
                   />
                 </fieldset>
               )}
