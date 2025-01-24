@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
 import matchRouter from "./routes/match.routes.js"
+import postRouter from "./routes/post.routes.js"
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/v1/users", userRouter);  
-app.use("/api/v1/users/match",matchRouter)      
+app.use("/api/v1/users/match",matchRouter)   
+app.use("/api/v1/users/post",postRouter)   
 
 export { app };

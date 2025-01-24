@@ -1,17 +1,31 @@
-import { Post } from "../models/post.models"
-import asyncHandler from "../utils/asyncHandler"
-import { apiError } from "../utils/apiErrors"
-import{ apiResponse} from "../utils/apiResponse"
+import { Post } from "../models/post.models.js"
+import asyncHandler from "../utils/asyncHandler.js"
+import { apiError } from "../utils/apiErrors.js"
+import{ apiResponse} from "../utils/apiResponse.js"
+import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 const createPost=asyncHandler(async(req,res)=>{
-    const {title,description,postImage}=req.body
-    if(!title||!description){
+    const {title,content}=req.body
+    console.log(title,content)
+    if(!title||!content){
         throw new apiError(401,"Post details are missing ")
     }
+   let postImagelocalpath;
+
+   if (
+     req.files &&
+     Array.isArray(req.files.postImage) &&
+     req.files.postImage.length > 0
+   ) {
+     postImagelocalpath = req?.files?.postImage[0]?.path;
+    }
+    const PostImage = await uploadOnCloudinary(postImagelocalpath)
+ 
+
     const post =new Post({
         title:title
-        ,description:description
-        ,postImage:postImage||""
+        ,content
+        ,postImage:PostImage?.url||""
     })
     await post.save()
     return res.status(200).json(new apiResponse(200,post,"new Post created successfully"));
@@ -40,4 +54,4 @@ const deletePost=asyncHandler(async(req,res)=>{
 })
 
 
-export {createPost,postFeed,deletePost}
+export {createPost,postFeed,deletePost,updatePost}

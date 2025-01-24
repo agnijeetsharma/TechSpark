@@ -37,7 +37,7 @@ const registerUser = asyncHandler(async (req, res) => {
     location,
     githubLink,
     linkedinLink,
-    gender
+    gender,
   } = req.body;
 
   if ([email, password, username].some((field) => field?.trim() === "")) {
@@ -82,7 +82,6 @@ const registerUser = asyncHandler(async (req, res) => {
   const { accessToken, refreshToken } =
     await generateAccessTokenAndRefreshToken(user._id);
 
- 
   const createdUser = await User.findById(user._id).select(
     "-password  -refreshToken",
   );
@@ -116,7 +115,7 @@ const loginUser = asyncHandler(async (req, res) => {
     await generateAccessTokenAndRefreshToken(user._id);
 
   const loggedInUser = await User.findById(user._id).select(
-    "-password -refrenshToken",
+    "-password  -refreshToken",
   );
   const option = {
     httpOnly: true,
@@ -132,8 +131,6 @@ const loginUser = asyncHandler(async (req, res) => {
         200,
         {
           user: loggedInUser,
-          accessToken,
-          refreshToken,
         },
         "User logged In successfully",
       ),
