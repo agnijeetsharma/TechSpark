@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { createPost,deletePost,postFeed,updatePost } from "../controllers/post.controllers.js";
+import { createPost,deletePost,postFeed,updatePost, userPost } from "../controllers/post.controllers.js";
 
 import { upload } from "../middlewares/multer.js";
 
@@ -16,9 +16,10 @@ router.route("/create").post(
               },
           ]
       ),verifyJWT,createPost)
-router.route("/update").post(verifyJWT,updatePost)
+router.route("/update").patch(verifyJWT,updatePost)
 router.route("/delete").delete(verifyJWT,deletePost)
 router.route("/feed").get(verifyJWT,postFeed)
+router.route("/userPost").get(verifyJWT,userPost)
 
 
 

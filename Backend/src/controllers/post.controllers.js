@@ -6,7 +6,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const createPost = asyncHandler(async (req, res) => {
   const { title, content } = req.body;
-  console.log(title, content);
+  const user=req.user
   if (!title || !content) {
     throw new apiError(401, "Post details are missing ");
   }
@@ -25,6 +25,7 @@ const createPost = asyncHandler(async (req, res) => {
     title: title,
     content,
     postImage: PostImage?.url || "",
+    author:user._id
   });
   await post.save();
   return res
@@ -54,7 +55,10 @@ const postFeed = asyncHandler(async (req, res) => {
 });
 
 const updatePost = asyncHandler(async (req, res) => {
-  const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
+  const Id=req.query._id
+  if(!Id)
+    throw new apiError(401,"Post Id not received")
+  const post = await Post.findByIdAndUpdate(Id, req.body, {
     new: true,
   });
   if (!post) {
@@ -77,4 +81,12 @@ const deletePost = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, "Post deleted successfully"));
 });
 
-export { createPost, postFeed, deletePost, updatePost };
+const userPost=asyncHandler(async(req,res)=>{
+    const userId = req.user._id;
+    const post = await Post.find({ author: userId });
+    return res.status(200).json(new apiResponse(200,post,"User Post find Successfully"))
+
+
+})
+
+export { createPost, postFeed, deletePost, updatePost ,userPost};
