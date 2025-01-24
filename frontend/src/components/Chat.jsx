@@ -21,7 +21,7 @@ const ChatFeature = () => {
       console.log(allChat?.data?.data?.messages);
       const chatMessages = allChat?.data?.data?.messages.map((msg) => {
         const { senderId, text } = msg;
-        console.log(senderId?.username)
+        console.log(senderId?.username);
         return {
           sender: senderId?.username,
           text,

@@ -133,7 +133,7 @@ const getOtherUser = asyncHandler(async (req, res) => {
 
 const getFeed = asyncHandler(async (req, res, next) => {
   const user = req.user;
-  let limit = parseInt(req.query.limit) || 10;
+  let limit = parseInt(req.query.limit) || 100;
   const page = parseInt(req.query.page) || 1;
   limit = limit > 51 ? 51 : limit;
   const skip = (page - 1) * limit;

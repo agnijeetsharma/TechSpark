@@ -1,0 +1,68 @@
+import { useEffect, useState } from "react";
+import PostFeedCard from "./PostFeedCard";
+import { Base_URL } from "../constant";
+import axios from "axios";
+
+const PostFeed = () => {
+  const [posts, setPosts] = useState([]);
+  const [lastPostId, setLastPostId] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const fetchPosts = async () => {
+    if (!hasMore || loading) return;  
+
+    setLoading(true);
+    try {
+      const { data } = await axios.get(`${Base_URL}/post/feed`, {
+        params: {
+          lastPostId: lastPostId || undefined,
+          limit: 10,
+        },
+        withCredentials: true,
+      });
+
+      const newPosts = data?.posts || [];
+      setPosts((prev) => [...prev, ...newPosts]); 
+      setLastPostId(data?.nextCursor);  
+      if (!data?.nextCursor) setHasMore(false);  
+    } catch (err) {
+      console.error("Failed to fetch posts:", err);
+    } finally {
+      setLoading(false);  
+    }
+  };
+
+  const handleScroll = () => {
+    if (loading || !hasMore) return;  
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - 50
+    ) {
+      fetchPosts();  
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts();  
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+
+  if (loading && posts.length === 0) return <p>Loading...</p>;
+
+ 
+  if (posts.length === 0 && !loading) return <p>No posts available.</p>;
+
+  return (
+    <div className="mt-24">
+      {posts.map((post, index) => (
+        <PostFeedCard key={index} post={post} />
+      ))}
+      {loading && <p>Loading more posts...</p>} 
+    </div>
+  );
+};
+
+export default PostFeed;

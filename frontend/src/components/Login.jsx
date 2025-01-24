@@ -1,12 +1,13 @@
 import axios from "axios";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { Base_URL } from "../constant";
 import { useNavigate } from "react-router-dom";
 import FrontPage from "./Landing";
 import { useLogin } from "../utils/LoginContext";
 const Login = () => {
+  const user=useSelector(store=>store.user)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [emailId, setEmailId] = useState("");
@@ -16,7 +17,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const { isLoginVisible } = useLogin();
   const handleLogin = async () => {
-    console.log(emailId, password);
+   
     try {
       const result = await axios.post(
         Base_URL + "/login",
@@ -45,7 +46,11 @@ const Login = () => {
       console.log(error);
     }
   };
-
+  useEffect(()=>{
+    if(user){
+     navigate("/")
+    }
+  })
   return (
     <div
       className="flex justify-center mt-16"

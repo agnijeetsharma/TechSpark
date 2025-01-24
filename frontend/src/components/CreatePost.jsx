@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 
 const CreatePost = () => {
   const [formData, setFormData] = useState({
@@ -26,14 +27,12 @@ const CreatePost = () => {
     }
 
     try {
-      const response = await fetch("/api/posts", {
+      const response = await axios.post("/api/post/create", {postData},{
         method: "POST",
         body: postData,
       });
-
-      const result = await response.json();
-      console.log("Post created successfully:", result);
-      // Reset the form
+        
+      console.log("Post created successfully:", response);
       setFormData({ title: "", content: "", image: null });
     } catch (error) {
       console.error("Error creating post:", error);
