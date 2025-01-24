@@ -31,12 +31,28 @@ const createPost=asyncHandler(async(req,res)=>{
     return res.status(200).json(new apiResponse(200,post,"new Post created successfully"));
 })
 
-const postFeed=asyncHandler(async(req,res)=>{
-    const posts=await Post.find().sort({createdAt:-1}).limit(10)
-    return res.status(200).json(new apiResponse(200,posts,"Posts Feed"))
+//postFeed with infinite scrolling using last post
 
-})
+const postFeed = asyncHandler(async (req, res) => {
+    const { lastPostId, limit = 10 } = req.query;
+  
+    // If no cursor provided, fetch the most recent posts
+    let query = {};
+    if (lastPostId) {
+      const lastPost = await Post.findById(lastPostId);
+      query = { createdAt: { $lt: lastPost.createdAt } }; // Fetch posts older than the last fetched post
+    }
+  
+    const posts = await Post.find(query)
+      .sort({ createdAt: -1 })
+      .limit(parseInt(limit));
+  
+    res.status(200).json({ posts, nextCursor: posts[posts.length - 1]?._id || null });
+  });
+  
 
+
+  
 const updatePost=asyncHandler(async(req,res)=>{
     const post=await Post.findByIdAndUpdate(req.params.id,req.body,{new:true})
     if(!post){
