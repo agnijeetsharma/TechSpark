@@ -1,19 +1,24 @@
 
 import { useParams } from "react-router-dom"; // To fetch dynamic post data based on ID
-import { IMAGE_URL } from "../constant";
+import { Base_URL, IMAGE_URL } from "../constant";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const ReadMorePage = () => {
-  
+   const [post,setPost]=useState("")
   const { postId } = useParams(); 
-  const post = {
-    title: "Exploring the Beauty of Nature",
-    content: "Nature has always been a source of peace and tranquility. The vast landscapes, majestic mountains, and serene lakes create an environment that fosters relaxation and inspiration. Join me as I explore the hidden gems of the natural world. The beauty of nature is not just in the grand landscapes but also in the smallest details, like a blooming flower or the sound of rustling leaves. It reminds us to slow down and appreciate the simple things in life. Nature’s ever-changing beauty is a reminder that life, too, is ever-evolving and full of surprises.",
-    username: "JaneDoe",
-    createdAt: "2025-01-01T10:00:00Z",
-  };
-
+  const getContent=async()=>{
+    const reponse=await axios.get(Base_URL+"/post/content/"+postId,{withCredentials:true})
+    console.log(reponse)
+    setPost(reponse?.data)
+  }
+     useEffect(()=>{
+      getContent()
+     },[])
+     if(post===undefined||post==="")
+      return <div className="flex justify-center mt-52 font-bold text-xl">No content for this post! Check Again After Some Time</div>
   return (
-    <div className="container text-base-content mx-auto mt-28 mb-8 px-4 mt-24">
+    <div className="container text-base-content mx-auto mt-28 mb-8 px-4">
      
       <div className="card bg-base-100 shadow-xl max-w-4xl mx-auto">
         <figure>
@@ -25,16 +30,16 @@ const ReadMorePage = () => {
         </figure>
         <div className="card-body p-6">
          
-          <h1 className="text-3xl font-bold text-center mb-4">{post.title}</h1>
+          <h1 className="text-3xl font-bold text-center mb-4">{post?.title}</h1>
           
          
           <div className="flex justify-between items-center text-sm text-base-content mb-4">
-            <p className="text-base-content font-medium">Posted by {post.username}</p>
+            <p className="text-base-content font-medium">Posted by {post?.username}</p>
             <p>{new Date(post.createdAt).toDateString()}</p>
           </div>
 
         
-          <p className="text-lg  leading-relaxed mb-6">{post.content}</p>
+          <p className="text-lg  leading-relaxed mb-6">{post?.content}</p>
           
          
           <div className="flex justify-center gap-4">

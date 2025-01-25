@@ -6,7 +6,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const createPost = asyncHandler(async (req, res) => {
   const { title, content } = req.body;
-  const user=req.user
+  const user = req.user;
   if (!title || !content) {
     throw new apiError(401, "Post details are missing ");
   }
@@ -25,7 +25,7 @@ const createPost = asyncHandler(async (req, res) => {
     title: title,
     content,
     postImage: PostImage?.url || "",
-    author:user._id
+    author: user._id,
   });
   await post.save();
   return res
@@ -55,9 +55,8 @@ const postFeed = asyncHandler(async (req, res) => {
 });
 
 const updatePost = asyncHandler(async (req, res) => {
-  const Id=req.query._id
-  if(!Id)
-    throw new apiError(401,"Post Id not received")
+  const Id = req.query._id;
+  if (!Id) throw new apiError(401, "Post Id not received");
   const post = await Post.findByIdAndUpdate(Id, req.body, {
     new: true,
   });
@@ -81,12 +80,23 @@ const deletePost = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, "Post deleted successfully"));
 });
 
-const userPost=asyncHandler(async(req,res)=>{
-    const userId = req.user._id;
-    const post = await Post.find({ author: userId });
-    return res.status(200).json(new apiResponse(200,post,"User Post find Successfully"))
+const userPost = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const post = await Post.find({ author: userId });
+  return res
+    .status(200)
+    .json(new apiResponse(200, post, "User Post find Successfully"));
+});
 
+const postDetails = asyncHandler(async (req, res) => {
+  const postId = req.params.postId;
+  console.log(postId);
 
-})
+  const post = await Post.findById({ _id: postId });
+  if (!post) throw new apiError(401, "Post not found");
+  return res
+    .status(200)
+    .json(new apiResponse(200, post, "Post Details find Successfully"));
+});
 
-export { createPost, postFeed, deletePost, updatePost ,userPost};
+export { createPost, postFeed, deletePost, updatePost, userPost, postDetails };

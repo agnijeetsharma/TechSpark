@@ -33,7 +33,7 @@ function App() {
             <Route path="/profile/:id" element={<UserProfileView />} />
             <Route path="/chat/:id" element={<ChatFeature />} />
             <Route path="/posts" element={<PostFeed/>} />
-            <Route path="/post/content" element={<ReadMorePage/>} />
+            <Route path="/post/content/:postId" element={<ReadMorePage/>} />
             {/* <Route path="/userPost" element={<CreatePost/>} /> */}
 
           </Route>
