@@ -69,7 +69,7 @@ const updatePost = asyncHandler(async (req, res) => {
 });
 
 const deletePost = asyncHandler(async (req, res) => {
-  const Id = req.query._id;
+  const Id = req.params.postId;
   const post = await Post.findByIdAndDelete(Id);
 
   if (!post) {

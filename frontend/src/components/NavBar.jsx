@@ -94,6 +94,9 @@ const NavBar = () => {
                 <li>
                   <Link to={"/createPost"}>Post Now</Link>
                 </li>
+                <li>
+                  <Link to={"/myPost"}>My Post</Link>
+                </li>
 
                 <li>
                   <a onClick={handleLogout}>Logout</a>
