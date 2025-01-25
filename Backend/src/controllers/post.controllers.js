@@ -92,7 +92,7 @@ const postDetails = asyncHandler(async (req, res) => {
   const postId = req.params.postId;
   console.log(postId);
 
-  const post = await Post.findById({ _id: postId });
+  const post = await Post.findById( postId ).populate("author","username");
   if (!post) throw new apiError(401, "Post not found");
   return res
     .status(200)

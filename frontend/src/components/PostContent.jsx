@@ -8,9 +8,8 @@ const ReadMorePage = () => {
    const [post,setPost]=useState("")
   const { postId } = useParams(); 
   const getContent=async()=>{
-    const reponse=await axios.get(Base_URL+"/post/content/"+postId,{withCredentials:true})
-    console.log(reponse)
-    setPost(reponse?.data)
+    const response=await axios.get(Base_URL+"/post/content/"+postId,{withCredentials:true})
+    setPost(response?.data?.data)
   }
      useEffect(()=>{
       getContent()
@@ -20,10 +19,10 @@ const ReadMorePage = () => {
   return (
     <div className="container text-base-content mx-auto mt-28 mb-8 px-4">
      
-      <div className="card bg-base-100 shadow-xl max-w-4xl mx-auto">
+      <div className="card bg-base-300 shadow-xl max-w-4xl mx-auto">
         <figure>
           <img
-            src={IMAGE_URL}
+            src={post?.postImage||IMAGE_URL}
             alt="Post Image"
             className="w-full sm:h-28 lg:h-64 object-cover rounded-lg"
           />
@@ -34,7 +33,7 @@ const ReadMorePage = () => {
           
          
           <div className="flex justify-between items-center text-sm text-base-content mb-4">
-            <p className="text-base-content font-medium">Posted by {post?.username}</p>
+            <p className="text-base-content font-medium">Posted by {post?.author?.username}</p>
             <p>{new Date(post.createdAt).toDateString()}</p>
           </div>
 

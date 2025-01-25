@@ -92,7 +92,7 @@ const NavBar = () => {
                   <Link to={"/posts"}>Posts</Link>
                 </li>
                 <li>
-                  <Link to={"/UserPost"}>Your Post</Link>
+                  <Link to={"/createPost"}>Post Now</Link>
                 </li>
 
                 <li>
