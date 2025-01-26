@@ -47,7 +47,6 @@ const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {
           >
             Read More
           </button>
-          <button className="btn btn-primary btn-sm">Like</button>
           {isDeletable && (
             <button
               onClick={() => handleDelete(post?._id)}

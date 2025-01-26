@@ -38,8 +38,8 @@ const Connections = () => {
 
   const filteredConnections = connections.filter(
     (connection) =>
-      connection.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      connection.bio.toLowerCase().includes(searchQuery.toLowerCase())
+      connection?.username?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
+      connection?.bio?.toLowerCase()?.includes(searchQuery?.toLowerCase())
   );
 
   return (

@@ -15,7 +15,7 @@ import ReadMorePage from "./components/PostContent";
 import PostFeed from "./components/PostFeed";
 import CreatePost from "./components/CreatePost";
 import UserPosts from "./components/UserPosts";
-// import { PersistGate } from 'redux-persist/integration/react';
+
 function App() {
   return (
     <>

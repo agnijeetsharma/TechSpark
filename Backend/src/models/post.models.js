@@ -20,6 +20,7 @@ const PostSchema = new mongoose.Schema(
       requried: true,
       index: true,
     },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true },
 );

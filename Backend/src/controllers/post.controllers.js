@@ -99,4 +99,62 @@ const postDetails = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, post, "Post Details find Successfully"));
 });
 
-export { createPost, postFeed, deletePost, updatePost, userPost, postDetails };
+const fetchInitialLikes = asyncHandler(async (req, res) => {
+  const postId = req.params.postId;
+  const userId = req.user.id; 
+
+  
+  const post = await Post.findById(postId);
+  if (!post) {
+    throw new apiError(404, "Post not found");
+  }
+
+  const isLiked = post.likes.includes(userId);
+
+  
+  return res.status(200).json(
+    new apiResponse(
+      200,
+      { likesCount: post.likes.length, isLiked },
+      "Likes details retrieved successfully"
+    )
+  );
+});
+
+
+
+
+
+const toggleLike = asyncHandler(async (req, res) => {
+  const userId = req.user._id; // Logged-in user ID
+  const postId = req.params.postId; // Post ID from route parameter
+
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json(new apiResponse(404, null, "Post not found"));
+    }
+
+    // Check if the user already liked the post
+    const index = post.likes.indexOf(userId);
+
+    if (index === -1) {
+      // User hasn't liked it yet, so add their ID to the likes array
+      post.likes.push(userId);
+    } else {
+      // User already liked it, so remove their ID (unlike)
+      post.likes.splice(index, 1);
+    }
+
+    await post.save();
+
+    const isLiked = post.likes.includes(userId);
+    return res
+      .status(200)
+      .json(new apiResponse(200, { likesCount: post.likes.length, isLiked }, "Like status updated successfully"));
+    
+});
+
+
+
+export { createPost, postFeed, deletePost, updatePost, userPost, postDetails,toggleLike,fetchInitialLikes };
