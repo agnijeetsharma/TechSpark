@@ -45,7 +45,7 @@ const NavBar = () => {
         </div>
         <div className="flex-none gap-2">
           <div>
-            <button className="btn " onClick={toggleTheme}>
+            <button className="btn " title=" SwitchMode" onClick={toggleTheme}>
               {theme === "light" ? (
                 <MoonIcon className="w-6 h-6 text-gray-700" />
               ) : (

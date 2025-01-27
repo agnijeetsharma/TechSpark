@@ -29,9 +29,9 @@ const CreatePost = () => {
     }
   
     try {
-      const response = await axios.post(Base_URL+"/post/create", postData,{withCredentials:true});
+      await axios.post(Base_URL+"/post/create", postData,{withCredentials:true});
         
-      console.log("Post created successfully:", response);
+     
       setFormData({ title: "", content: "", postImage: null });
       setShowToast(true);
       setTimeout(() => {

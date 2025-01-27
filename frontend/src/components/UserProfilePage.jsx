@@ -13,7 +13,7 @@ const UserProfileView = () => {
       const response = await axios.get(Base_URL + "/profile/" + id, {
         withCredentials: true,
       });
-      console.log(response);
+     
       setUser(response?.data?.data);
     } catch (error) {
       console.log(error);

@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { IMAGE_URL } from "../constant";
 
 const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {

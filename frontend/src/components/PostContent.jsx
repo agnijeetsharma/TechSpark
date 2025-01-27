@@ -79,17 +79,19 @@ const ReadMorePage = () => {
 
           <div className="flex justify-center gap-4">
             <button
-              className={`btn btn-primary flex items-center gap-2 px-4 py-2 rounded-lg shadow-md transition-all duration-200 ${
+              className={`btn flex items-center gap-2 px-4 py-2 rounded-lg shadow-md transition-all duration-200 ${
                 isLike
-                  ? "bg-blue-500 hover:bg-blue-600"
-                  : "bg-red-500 hover:bg-red-600"
+                  ? "bg-blue-500 hover:bg-blue-600 text-white"
+                  : "bg-gray-300 hover:bg-gray-400 text-black"
               }`}
               onClick={toggleLike}
             >
-              <span className="text-white font-medium">
-                {isLike ? "Liked" : "Disliked"}
-              </span>
-              <span className="bg-white text-black font-bold px-2 py-1 rounded-lg">
+              <span className="font-medium">{isLike ? "Liked" : "Like"}</span>
+              <span
+                className={`font-bold px-2 py-1 rounded-lg ${
+                  isLike ? "bg-white text-blue-500" : "bg-gray-500 text-white"
+                }`}
+              >
                 {likeCount}
               </span>
             </button>

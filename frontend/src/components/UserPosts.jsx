@@ -31,7 +31,7 @@ const UserPosts = () => {
     }
   };
 
-  if (posts.length <= 0) return <p>No posts available.</p>;
+  if (posts.length <= 0) return <p className="text-center font-bold text-primary text-3xl mt-56">You have not posted yet.</p>;
 
   return (
     <div className="mt-24">

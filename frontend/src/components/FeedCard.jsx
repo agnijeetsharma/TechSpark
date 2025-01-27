@@ -21,7 +21,7 @@ const FeedCard = ({ user }) => {
         { withCredentials: true }
       );
       dispatch(removeUserFromFeed(userId));
-      console.log(response.data);
+      
     } catch (error) {
       console.log(error);
     }
@@ -34,6 +34,7 @@ const FeedCard = ({ user }) => {
           src={user?.profileImage || IMAGE_URL}
           alt="Profile"
           className="w-full h-48 object-cover"
+          title="Click to view full profile"
         />
       </figure>
       <div className="card-body">
@@ -47,12 +48,14 @@ const FeedCard = ({ user }) => {
           <button
             className="btn btn-secondary w-full sm:w-auto"
             onClick={() => handleRequest("Rejected", user._id)}
+            title="Send request to the user"
           >
             Interested
           </button>
           <button
             className="btn btn-primary w-full sm:w-auto"
             onClick={() => handleRequest("Pending", user._id)}
+            title="You won't see this user after ignoring"
           >
             Ignore
           </button>
