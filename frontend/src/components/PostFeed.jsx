@@ -53,7 +53,13 @@ const PostFeed = () => {
   if (loading && posts.length === 0) return <p>Loading...</p>;
 
  
-  if (posts.length === 0 && !loading) return <p>No posts available.</p>;
+  if (posts?.length === 0) {
+    return (
+      <div className="text-center font-bold text-primary text-3xl mt-44">
+        No Posts Available
+      </div>
+    );
+  }
 
   return (
     <div className="mt-24">

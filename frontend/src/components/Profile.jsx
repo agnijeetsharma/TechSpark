@@ -105,7 +105,7 @@ const Profile = () => {
       setTimeout(() => {
         setShowToast(false);
         setImageToast(false);
-        newUser = currUser;
+        // newUser = currUser;
       }, 3000);
     } catch (error) {
       console.error(
@@ -205,12 +205,12 @@ const Profile = () => {
                 {editMode ? (
                   <select
                     name="gender"
-                    value={newUser.gender}
+                    value={!editMode ? currUser?.gender : newUser?.gender}
                     onChange={handleChange}
                     className="select select-bordered w-full bg-base-100"
-                  >
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
+                  > <option value="">Not Disclose</option>
+                    <option value="Male">male</option>
+                    <option value="Female">female</option>
                     <option value="Other">Other</option>
                   </select>
                 ) : (
@@ -310,7 +310,7 @@ const Profile = () => {
               {editMode ? (
                 <textarea
                   name="bio"
-                  value={newUser.bio}
+                  value= {!editMode ? currUser?.bio : newUser?.bio}
                   onChange={handleChange}
                   className="textarea textarea-bordered w-full bg-base-100"
                   rows="4"

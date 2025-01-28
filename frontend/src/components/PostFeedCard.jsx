@@ -9,6 +9,7 @@ const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {
       onDelete(postId);
     }
   };
+  
 
   return (
     <div className="card lg:card-side bg-base-300 shadow-xl w-full sm:w-3/4 lg:w-2/3 mx-auto my-10 ">
