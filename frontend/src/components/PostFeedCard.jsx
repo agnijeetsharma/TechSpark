@@ -11,7 +11,7 @@ const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {
   };
 
   return (
-    <div className="card lg:card-side bg-base-300 shadow-xl w-full sm:w-3/4 lg:w-2/3 mx-auto my-10">
+    <div className="card lg:card-side bg-base-300 shadow-xl w-full sm:w-3/4 lg:w-2/3 mx-auto my-10 ">
       <figure className="w-full lg:w-1/3">
         <img
           src={post?.postImage || IMAGE_URL}

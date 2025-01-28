@@ -1,15 +1,17 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import validator from 'validator';
 
 
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true,
+   required: [true, 'Username is required'],
     unique: true,
-    minLength: 4,
-    maxLength: 55,
+    minlength: [3, 'Username must be at least 3 characters'],
+    maxlength: [20, 'Username can be at most 20 characters'],
+
   },
   firstName: {
     type: String,
@@ -22,28 +24,31 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: true,
+    required: [true, 'Email is required'],
     unique: true,
     lowercase: true,
     trim: true,
-    // validate: {
-    //   validator: function (email) {
-    //     if (!validator.isEmail(email)) {
-    //       throw new apiError(400, `Invalid Email address: ${email}`);
-    //     }
-    //     return true;
-    //   },
-    //   message: (props) => `Invalid Email address: ${props.value}`,
-    // },
+    validate: {
+      validator: function(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error('Enter a valid email address');
+        }
+      },
+      message: 'Invalid email address',
+    },
   },
   password: {
     type: String,
-    required: true,
-    // validate(value) {
-    //   if (!validator.isStrongPassword(value)) {
-    //     throw new Error("Enter a Strong Password: " + value);
-    //   }
-    // },
+    required: [true, 'Username is required'],
+    minlength: [6, 'Password must be at least 6 characters'],
+    validate: {
+      validator: function(value) {
+        if (!validator.isStrongPassword(value)) {
+          throw new Error('Weak Password (at least 8 char, one uppercase letter, one number, and one symbol)');
+        }
+      },
+      message: 'Password is not strong enough',
+    },
   },
   age: {
     type: Number,

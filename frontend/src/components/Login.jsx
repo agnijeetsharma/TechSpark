@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import FrontPage from "./Landing";
 import { useLogin } from "../utils/LoginContext";
 const Login = () => {
-  const user=useSelector(store=>store.user)
+  const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [emailId, setEmailId] = useState("");
@@ -17,7 +17,6 @@ const Login = () => {
   const [error, setError] = useState("");
   const { isLoginVisible } = useLogin();
   const handleLogin = async () => {
-   
     try {
       const result = await axios.post(
         Base_URL + "/login",
@@ -34,7 +33,7 @@ const Login = () => {
   };
   const SignUpUser = async () => {
     try {
-      const response = await axios.post(
+      let response = await axios.post(
         Base_URL + "/register",
         { username, email: emailId, password },
         { withCredentials: true }
@@ -43,38 +42,47 @@ const Login = () => {
       dispatch(addUser(response?.data?.data));
       navigate("/profile");
     } catch (error) {
+      setError(
+        "Error: " + error?.response?.data?.errors[0] ||
+          "Error: " + error?.response?.data?.message ||
+          "Something went wrong"
+      );
       console.log(error);
     }
   };
-  useEffect(()=>{
-    if(user){
-     navigate("/")
+  useEffect(() => {
+    if (user) {
+      navigate("/");
     }
-  })
+  });
+  const handleSignUpAndSignIn = () => {
+    setIsLogin((value) => !value);
+    setError("");
+    setPassword("");
+    setEmailId("");
+    setUserName("");
+  };
   return (
-    <div
-      className="flex justify-center mt-16"
-    >
-   <FrontPage/>
+    <div className="flex justify-center mt-16">
+      <FrontPage />
       {isLoginVisible && (
         <div className="card card-border bg-base-300 text-base-content w-96 absolute mt-20">
           <div className="card-body ">
-            <h2 className="card-title justify-center">Login!</h2>
+            <h2 className="card-title justify-center">{isLogin?"Login!":"SignUp!"}</h2>
             <div className="">
               {!isLogin && (
                 <fieldset className="fieldset py-2  w-full">
-                  <legend className="fieldset-legend">UserName</legend>
+                  <legend className="fieldset-legend">UserName*</legend>
                   <input
                     type="text"
                     className="input max-w-xs w-full"
                     value={username}
                     onChange={(e) => setUserName(e.target.value)}
-                    
                   />
                 </fieldset>
               )}
               <fieldset className="fieldset py-2 max-w-xs w-full">
-                <legend className="fieldset-legend"> Email Id</legend>
+                <legend className="fieldset-legend"> Email Id*</legend>
                 <input
                   type="text"
                   className="input max-w-xs w-full"
@@ -83,7 +91,7 @@ const Login = () => {
                 />
               </fieldset>
               <fieldset className="fieldset py-2  w-full">
-                <legend className="fieldset-legend">Password</legend>
+                <legend className="fieldset-legend">Password*</legend>
                 <input
                   type="text"
                   className="input max-w-xs w-full"
@@ -102,9 +110,11 @@ const Login = () => {
               </button>
               <p
                 className="cursor-pointer text-red-400"
-                onClick={() => setIsLogin((value) => !value)}
+                onClick={() => handleSignUpAndSignIn()}
               >
-                {isLogin ? "New User? Sign Up" : "Already have an account? Log In"}
+                {isLogin
+                  ? "New User? Sign Up"
+                  : "Already have an account? Log In"}
               </p>
             </div>
           </div>

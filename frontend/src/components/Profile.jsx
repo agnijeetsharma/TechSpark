@@ -68,6 +68,7 @@ const Profile = () => {
   const saveProfile = () => {
     setEditMode(false);
     Updateduser();
+    setUser(currUser)
   };
   // const handleFileChange = (e) => {
   //   setProfileImage(e.target.files[0]);

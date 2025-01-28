@@ -5,7 +5,8 @@ import axios from "axios";
 import { removeUser } from "../utils/userSlice";
 import { useLogin } from "../utils/LoginContext";
 import { IMAGE_URL } from "../constant";
-import { SunIcon, MoonIcon } from "@heroicons/react/solid";
+// import { SunIcon, MoonIcon } from "@heroicons/react/solid";
+import { Power, SunDim } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const NavBar = () => {
@@ -44,15 +45,16 @@ const NavBar = () => {
           </Link>
         </div>
         <div className="flex-none gap-2">
-          <div>
-            <button className="btn " title=" SwitchMode" onClick={toggleTheme}>
-              {theme === "light" ? (
-                <MoonIcon className="w-6 h-6 text-gray-700" />
-              ) : (
-                <SunIcon className="w-6 h-6 text-yellow-500" />
-              )}
+          <div className="flex items-center gap-2">
+            <button
+              className="btn btn-circle bg-base-100 text-base-content hover:bg-primary  shadow-md transition-all"
+              title={`Switch to ${theme === "light" ? "Dark" : "Light"} Mode`}
+              onClick={toggleTheme}
+            >
+              <SunDim className="w-5 h-5" />
             </button>
           </div>
+
           {user && (
             <div className="form-control">
               <p>Hi,{user?.username}</p>
@@ -106,22 +108,14 @@ const NavBar = () => {
           )}
           {!user && (
             <div className="flex">
-              {/* <div>
-                <ul className="menu menu-horizontal px-4 pt-3 gap-4">
-                  <Link to={"/login"}>
-                    <li>Explore</li>
-                  </Link>
-                  <Link to={"/about"}>
-                    <li>About Us</li>
-                  </Link>
-                </ul>
-              </div> */}
-             { !setLoginVisible&&<button
-                className="btn btn-outline mr-4"
-                onClick={() => setLoginVisible(true)}
-              >
-                LogIn
-              </button>}
+              {!setLoginVisible && (
+                <button
+                  className="btn btn-outline mr-4"
+                  onClick={() => setLoginVisible(true)}
+                >
+                  LogIn
+                </button>
+              )}
             </div>
           )}
         </div>
