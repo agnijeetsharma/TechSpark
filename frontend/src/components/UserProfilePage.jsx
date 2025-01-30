@@ -2,7 +2,7 @@ import axios from "axios";
 import { Base_URL, IMAGE_URL } from "../constant";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import userImage from "../assets/user.png";
 const UserProfileView = () => {
   const [user, setUser] = useState(null); // Fixed initial state for better checks
   const { id } = useParams();
@@ -38,7 +38,7 @@ const UserProfileView = () => {
           <div className="avatar">
             <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
               <img
-                src={user?.profileImage || IMAGE_URL}
+                src={user?.profileImage || userImage}
                 alt={`${user?.username || "User"}'s Avatar`}
               />
             </div>

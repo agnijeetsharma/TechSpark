@@ -18,7 +18,9 @@ const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState("");
   const { isLoginVisible } = useLogin();
+  const [require, setRequire] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page reload
@@ -45,9 +47,10 @@ const Login = () => {
       );
     }
   };
-
+  
   // Handle signup
   const SignUpUser = async () => {
+   
     try {
       const response = await axios.post(
         `${Base_URL}/register`,
@@ -55,6 +58,7 @@ const Login = () => {
         { withCredentials: true }
       );
       dispatch(addUser(response?.data?.data));
+      setIsLogin(true)
       navigate("/profile");
     } catch (error) {
       setError(
@@ -93,6 +97,7 @@ const Login = () => {
             <h2 className="card-title justify-center text-center text-xl sm:text-2xl">
               {isLogin ? "Login!" : "SignUp!"}
             </h2>
+           
             <form onSubmit={handleSubmit}>
               {!isLogin && (
                 <fieldset className="fieldset py-2 w-full">
@@ -102,6 +107,7 @@ const Login = () => {
                     className="input w-full px-4 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={username}
                     onChange={(e) => setUserName(e.target.value)}
+                    required
                   />
                 </fieldset>
               )}
@@ -112,6 +118,7 @@ const Login = () => {
                   className="input w-full px-4 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={emailId}
                   onChange={(e) => setEmailId(e.target.value)}
+                  required
                 />
               </fieldset>
               <fieldset className="relative py-2 w-full">
@@ -122,6 +129,7 @@ const Login = () => {
                     className="input w-full px-4 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
                   <button
                     type="button"

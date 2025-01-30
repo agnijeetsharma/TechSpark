@@ -15,6 +15,8 @@ import ReadMorePage from "./components/PostContent";
 import PostFeed from "./components/PostFeed";
 import CreatePost from "./components/CreatePost";
 import UserPosts from "./components/UserPosts";
+import TermsAndConditions from "./components/TermsAndConditions";
+import ContactUs from "./components/ContactUs";
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
             <Route path="/post/content/:postId" element={<ReadMorePage/>} />
             <Route path="/createPost" element={<CreatePost/>} />
             <Route path="/myPost" element={<UserPosts/>} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="/contact" element={<ContactUs/>} />
 
           </Route>
         </Routes>

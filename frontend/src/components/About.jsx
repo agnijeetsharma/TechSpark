@@ -2,7 +2,7 @@
 
 const About = () => {
   return (
-    <div className="bg-base text-base-content-h-screen flex flex-col items-center px-6 py-10 mt-10">
+    <div className="bg-base text-base-content-h-screen flex flex-col items-center px-6 py-10 mt-14">
       <div className="max-w-4xl  text-center">
         <h1 className="text-4xl font-bold mb-4 text-blue-500">About TechSpark</h1>
         <p className="text-lg mb-6">
