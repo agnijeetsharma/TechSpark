@@ -18,12 +18,11 @@ const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState("");
   const { isLoginVisible } = useLogin();
-  const [require, setRequire] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent page reload
+    e.preventDefault(); 
     if (isLogin) {
       handleLogin();
     } else {
@@ -39,6 +38,10 @@ const Login = () => {
         { email: emailId, password },
         { withCredentials: true }
       );
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
       dispatch(addUser(result?.data?.data));
       navigate("/");
     } catch (error) {
@@ -47,10 +50,9 @@ const Login = () => {
       );
     }
   };
-  
+
   // Handle signup
   const SignUpUser = async () => {
-   
     try {
       const response = await axios.post(
         `${Base_URL}/register`,
@@ -58,8 +60,12 @@ const Login = () => {
         { withCredentials: true }
       );
       dispatch(addUser(response?.data?.data));
-      setIsLogin(true)
+      setIsLogin(true);
       navigate("/profile");
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
     } catch (error) {
       setError(
         "Error: " +
@@ -97,7 +103,7 @@ const Login = () => {
             <h2 className="card-title justify-center text-center text-xl sm:text-2xl">
               {isLogin ? "Login!" : "SignUp!"}
             </h2>
-           
+
             <form onSubmit={handleSubmit}>
               {!isLogin && (
                 <fieldset className="fieldset py-2 w-full">
@@ -162,6 +168,13 @@ const Login = () => {
                 </p>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {showToast && (
+        <div className="toast toast-top toast-center mt-32">
+          <div className="alert alert-success">
+            <span>{isLogin ? "Login" : "SignUp "} successfully🔥</span>
           </div>
         </div>
       )}
