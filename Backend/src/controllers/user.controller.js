@@ -87,7 +87,7 @@ const registerUser = asyncHandler(async (req, res) => {
   );
   const option = {
     httpOnly: true,
-    secure: true,
+    secure: false,
   };
   if (!createdUser) {
     throw new apiError(500, "Something went wrong ,try after some time!");
@@ -119,7 +119,7 @@ const loginUser = asyncHandler(async (req, res) => {
   );
   const option = {
     httpOnly: true,
-    secure: true,
+    secure: false,
   };
 
   return res
@@ -150,7 +150,7 @@ const logOutUser = asyncHandler(async (req, res) => {
   );
   const option = {
     httpOnly: true,
-    secure: true,
+    secure: false,
   };
   if (!updatedUser) {
     return res.status(404).json(new apiResponse(404, {}, "User not found"));
@@ -179,7 +179,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
     const option = {
       httpOnly: true,
-      secure: true,
+      secure: false,
     };
     const { accessToken, newRefreshToken } =
       await generateAccessTokenAndRefreshToken(user._id);
