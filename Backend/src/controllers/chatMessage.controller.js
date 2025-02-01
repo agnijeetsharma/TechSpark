@@ -4,8 +4,8 @@ import { Chat } from "../models/chat.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { Types } from "mongoose";import { apiError } from "../utils/apiErrors.js";
-console.log("sendMessage function executed");
-console.log("ChatFeature function executed");
+// console.log("sendMessage function executed");
+// console.log("ChatFeature function executed");
 
 export const sendMessage = asyncHandler(async (req, res) => {
   const { chatId } = req.params;

@@ -14,7 +14,7 @@ const initializeSocket = (server) => {
     socket.on("joinChat", (userId, fromUserId) => {
       const roomId = [userId, fromUserId].sort().join("_");
       socket.join(roomId);
-      console.log("Room ID:", roomId);
+      // console.log("Room ID:", roomId);
     });
     socket.on(
       "sendMessage",
