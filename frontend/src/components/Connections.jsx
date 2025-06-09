@@ -10,6 +10,7 @@ const Connections = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [connections, setConnections] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchConnections = async () => {
     try {
@@ -17,8 +18,8 @@ const Connections = () => {
         withCredentials: true,
       });
       setConnections(response?.data?.data);
-
-      // console.log(response?.data?.data);
+      setLoading(false);
+   
     } catch (error) {
       console.log(error, error?.message);
     }
@@ -27,6 +28,14 @@ const Connections = () => {
   useEffect(() => {
     fetchConnections();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center mt-56">
+        <button className="btn btn-square btn-lg loading"></button>
+      </div>
+    );
+  }
 
   if (connections?.length === 0) {
     return (

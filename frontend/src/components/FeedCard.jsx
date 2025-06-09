@@ -34,7 +34,7 @@ const FeedCard = ({ user }) => {
         <img
           src={user?.profileImage || userImage}
           alt="Profile"
-          className="w-full h-60 object-cover"
+          className="w-full h-full object-cover"
           title="Click to view full profile"
         />
       </figure>
@@ -45,23 +45,23 @@ const FeedCard = ({ user }) => {
         <p className="text-sm text-gray-600 text-center line-clamp-2">
           {user?.bio}
         </p>
-        <div className="card-actions flex flex-col sm:flex-row justify-center gap-2 mt-4">
-          <button
-            className="btn btn-secondary w-full sm:w-auto"
-            onClick={() => handleRequest("Pending", user?._id)}
-            title="Send request to the user"
-          >
-            Interested
-          </button>
-          <button
-            className="btn btn-primary w-full sm:w-auto"
-            onClick={() => handleRequest("Rejected", user?._id)}
-           
-            title="You won't see this user after ignoring"
-          >
-            Ignore
-          </button>
-        </div>
+        <div className="card-actions justify-center mt-4 gap-2 flex-wrap">
+  <button
+    className="btn btn-outline btn-primary"
+    onClick={() => handleRequest("Pending", user?._id)}
+    title="Send request to the user"
+  >
+    Interested
+  </button>
+  <button
+    className="btn btn-outline btn-error"
+    onClick={() => handleRequest("Rejected", user?._id)}
+    title="You won't see this user after ignoring"
+  >
+    Ignore
+  </button>
+</div>
+
       </div>
     </div>
   );

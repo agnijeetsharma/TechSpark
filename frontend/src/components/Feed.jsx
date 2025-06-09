@@ -1,17 +1,18 @@
 import axios from "axios";
 import { Base_URL } from "../constant";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { addFeed } from "../utils/feedSlice";
-import { useDispatch } from "react-redux";
 import FeedCard from "./FeedCard";
+import UserProfileDetails from "./UserProfileDetails";
+
 
 const Feed = () => {
   const feed = useSelector((store) => store.feed);
   const dispatch = useDispatch();
 
- 
   const [loading, setLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0); // track current user
 
   const fetchFeed = async () => {
     if (feed && feed.length > 0) {
@@ -34,16 +35,15 @@ const Feed = () => {
     fetchFeed();
   }, []);
 
- 
   if (loading) {
     return (
-      <div className="flex justify-center items-center mt-56">
-        <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+      <div className="flex justify-center items-center h-screen">
+        <button className="btn btn-square btn-lg loading"></button>
       </div>
     );
   }
 
-  if (!feed || feed.length <= 0) {
+  if (!feed || feed.length === 0) {
     return (
       <h1 className="flex justify-center mt-56 font-bold text-2xl text-base-content">
         No New Users found!
@@ -51,9 +51,28 @@ const Feed = () => {
     );
   }
 
+  const handleNext = () => {
+    if (currentIndex < feed.length - 1) setCurrentIndex(currentIndex + 1);
+  };
+
+  const handlePrevious = () => {
+    if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
+  };
+
+  const currentUser = feed[currentIndex];
+
   return (
-    <div className="flex justify-center my-28 relative">
-      <FeedCard user={feed[0]} />
+    <div className="my-16 px-4 mt-36">
+      
+      <div className="flex flex-col lg:flex-row justify-center gap-6">
+        
+        <div className="hidden lg:block w-full lg:w-1/2 -mt-24">
+          <UserProfileDetails user={currentUser} />
+        </div>
+        <div className="w-full lg:w-1/2">
+          <FeedCard user={currentUser} />
+        </div>
+      </div>
     </div>
   );
 };

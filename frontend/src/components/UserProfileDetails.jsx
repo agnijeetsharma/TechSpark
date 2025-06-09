@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import userImage from "../assets/user.png";
 
-const UserProfileView = ({ user: passedUser }) => {
+const UserProfileDetails = ({ user: passedUser }) => {
   const { id } = useParams();
   const [user, setUser] = useState(passedUser || null);
 
@@ -116,4 +116,4 @@ const UserProfileView = ({ user: passedUser }) => {
   );
 };
 
-export default UserProfileView;
+export default UserProfileDetails;
