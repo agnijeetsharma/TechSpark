@@ -4,9 +4,8 @@ import { Base_URL } from "../constant";
 import axios from "axios";
 import { removeUser } from "../utils/userSlice";
 import { useLogin } from "../utils/LoginContext";
-import { IMAGE_URL } from "../constant";
-// import { SunIcon, MoonIcon } from "@heroicons/react/solid";
-import { Power, SunDim } from "lucide-react";
+import userIcon from "../assets/user.png";
+import {  SunDim } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const NavBar = () => {
@@ -70,7 +69,7 @@ const NavBar = () => {
                 <div className="w-10 rounded-full">
                   <img
                     alt="Tailwind CSS Navbar component"
-                    src={user?.profileImage || IMAGE_URL}
+                    src={user?.profileImage || userIcon}
                   />
                 </div>
               </div>
