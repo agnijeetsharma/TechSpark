@@ -6,6 +6,7 @@ const Requests = () => {
   const [requests, setRequests] = useState([]);
   const [showToast, setShowToast] = useState(false);
   const [requestType, setRequestType] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const fetchReceivedRequest = async () => {
     try {
@@ -16,6 +17,8 @@ const Requests = () => {
       setRequests(response?.data?.data);
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -30,9 +33,10 @@ const Requests = () => {
         {},
         { withCredentials: true }
       );
-      
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -46,6 +50,14 @@ const Requests = () => {
       setRequestType("");
     }, 3000);
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <button className="btn btn-square text-primary btn-sm loading"></button>
+      </div>
+    );
+  }
 
   if (requests?.length === 0) {
     return (

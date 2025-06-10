@@ -8,15 +8,25 @@ const ReadMorePage = () => {
   const { postId } = useParams();
   const [isLike, setIsLike] = useState(false);
   const [likeCount, setLikeCount] = useState();
+  const [loading, setLoading] = useState(true);
   const getContent = async () => {
-    const response = await axios.get(Base_URL + "/post/content/" + postId, {
-      withCredentials: true,
-    });
-    setPost(response?.data?.data);
+    try {
+      const response = await axios.get(Base_URL + "/post/content/" + postId, {
+        withCredentials: true,
+      });
+      setPost(response?.data?.data);
+    } catch (error) {
+      console.log(error);
+      setPost("");
+    }finally{
+      setLoading(false);
+    }
+   
   };
   useEffect(() => {
     getContent();
   }, []);
+
 
   const fetchInitialLikes = async () => {
     try {
@@ -48,6 +58,14 @@ const ReadMorePage = () => {
       console.log(error);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <button className="btn btn-square btn-sm text-primary loading"></button>
+      </div>
+    );
+  }
 
   if (post === undefined || post === "")
     return (

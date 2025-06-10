@@ -21,6 +21,7 @@ const Connections = () => {
       setLoading(false);
    
     } catch (error) {
+      setLoading(false);
       console.log(error, error?.message);
     }
   };
@@ -29,14 +30,14 @@ const Connections = () => {
     fetchConnections();
   }, []);
 
+  
   if (loading) {
     return (
-      <div className="flex justify-center items-center mt-56">
-        <button className="btn btn-square btn-lg loading"></button>
+      <div className="flex justify-center items-center h-screen">
+        <button className="btn btn-square text-primary btn-sm loading"></button>
       </div>
     );
   }
-
   if (connections?.length === 0) {
     return (
       <div className="text-center font-bold text-primary text-3xl mt-44">

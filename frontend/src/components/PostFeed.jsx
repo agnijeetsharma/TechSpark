@@ -33,6 +33,8 @@ const PostFeed = () => {
     }
   };
 
+
+
   const handleScroll = () => {
     if (loading || !hasMore) return;  
     if (
@@ -49,8 +51,13 @@ const PostFeed = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
-  if (loading && posts.length === 0) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <button className="btn btn-square btn-sm text-primary loading"></button>
+      </div>
+    );
+  }
 
  
   if (posts?.length === 0) {

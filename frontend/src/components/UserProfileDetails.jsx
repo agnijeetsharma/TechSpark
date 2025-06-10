@@ -2,20 +2,18 @@ import axios from "axios";
 import { Base_URL } from "../constant";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import userImage from "../assets/user.png";
+
 
 const UserProfileDetails = ({ user: passedUser }) => {
   const { id } = useParams();
   const [user, setUser] = useState(passedUser || null);
 
-  // Update local user state when passedUser changes
   useEffect(() => {
     if (passedUser) {
       setUser(passedUser);
     }
   }, [passedUser]);
 
-  // Fetch user from backend if used via route `/profile/:id`
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -42,15 +40,9 @@ const UserProfileDetails = ({ user: passedUser }) => {
   return (
     <div className="bg-base-100 w-full flex items-center justify-center pt-24 rounded-xl">
       <div className="w-full max-w-4xl bg-base-300 shadow-lg rounded-lg p-8">
+    
         <div className="flex flex-col items-center">
-          <div className="avatar">
-            <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-              <img
-                src={user?.profileImage || userImage}
-                alt={`${user?.username || "User"}'s Avatar`}
-              />
-            </div>
-          </div>
+         
           <h1 className="text-3xl font-bold mt-4">
             {user?.username || "Anonymous"}
           </h1>
@@ -63,7 +55,7 @@ const UserProfileDetails = ({ user: passedUser }) => {
           )}
         </div>
 
-       
+    
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           <div>
             <h2 className="text-lg font-semibold">Bio</h2>
@@ -82,6 +74,7 @@ const UserProfileDetails = ({ user: passedUser }) => {
             </ul>
           </div>
         </div>
+
         <div className="mt-8">
           <h2 className="text-lg font-semibold">Public Links</h2>
           <div className="flex flex-wrap gap-4 mt-4">
@@ -111,7 +104,6 @@ const UserProfileDetails = ({ user: passedUser }) => {
           </div>
         </div>
       </div>
-      
     </div>
   );
 };

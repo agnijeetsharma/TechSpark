@@ -22,7 +22,6 @@ const FeedCard = ({ user }) => {
         { withCredentials: true }
       );
       dispatch(removeUserFromFeed(userId));
-      
     } catch (error) {
       console.log(error);
     }
@@ -46,22 +45,21 @@ const FeedCard = ({ user }) => {
           {user?.bio}
         </p>
         <div className="card-actions justify-center mt-4 gap-2 flex-wrap">
-  <button
-    className="btn btn-outline btn-primary"
-    onClick={() => handleRequest("Pending", user?._id)}
-    title="Send request to the user"
-  >
-    Interested
-  </button>
-  <button
-    className="btn btn-outline btn-error"
-    onClick={() => handleRequest("Rejected", user?._id)}
-    title="You won't see this user after ignoring"
-  >
-    Ignore
-  </button>
-</div>
-
+          <button
+            className="btn btn-outline btn-primary"
+            onClick={() => handleRequest("Pending", user?._id)}
+            title="Send request to the user"
+          >
+            Interested
+          </button>
+          <button
+            className="btn btn-outline btn-error"
+            onClick={() => handleRequest("Rejected", user?._id)}
+            title="You won't see this user after ignoring"
+          >
+            Ignore
+          </button>
+        </div>
       </div>
     </div>
   );

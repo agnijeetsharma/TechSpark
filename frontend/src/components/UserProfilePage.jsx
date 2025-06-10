@@ -8,14 +8,14 @@ const UserProfileView = ({ user: passedUser }) => {
   const { id } = useParams();
   const [user, setUser] = useState(passedUser || null);
 
-  // Update local user state when passedUser changes
+ 
   useEffect(() => {
     if (passedUser) {
       setUser(passedUser);
     }
   }, [passedUser]);
 
-  // Fetch user from backend if used via route `/profile/:id`
+ 
   useEffect(() => {
     const fetchUser = async () => {
       try {
