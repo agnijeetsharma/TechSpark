@@ -8,53 +8,55 @@ import userImage from "../assets/user.png";
 const FeedCard = ({ user }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { username } = user;
+
+  const { username, bio, profileImage, _id } = user;
 
   const handleViewProfile = () => {
-    navigate(`/profile/${user._id}`);
+    navigate(`/profile/${_id}`);
   };
 
-  const handleRequest = async (status, userId) => {
+  const handleRequest = async (status) => {
     try {
-      const response = await axios.post(
-        Base_URL + "/match/connection-request/" + status + "/" + userId,
+      await axios.post(
+        `${Base_URL}/match/connection-request/${status}/${_id}`,
         {},
         { withCredentials: true }
       );
-      dispatch(removeUserFromFeed(userId));
+      dispatch(removeUserFromFeed(_id));
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className="card bg-base-300 w-full sm:w-64 lg:w-72 mx-auto shadow-xl">
-      <figure onClick={handleViewProfile} className="cursor-pointer">
+    <div className="card w-full max-w-sm bg-base-300 shadow-md hover:shadow-xl transition duration-300 rounded-xl mx-auto">
+      <figure
+        onClick={handleViewProfile}
+        className="cursor-pointer w-full h-64 overflow-hidden flex items-center justify-center bg-base-200"
+      >
         <img
-          src={user?.profileImage || userImage}
-          alt="Profile"
-          className="w-full h-full object-cover"
+          src={profileImage || userImage}
+          alt={`${username}'s profile`}
+          className="object-contain w-full h-full"
           title="Click to view full profile"
         />
       </figure>
-      <div className="card-body py-1 pb-10">
-        <h2 className="card-title text-center text-lg font-semibold">
-          {username}
-        </h2>
-        <p className="text-sm text-gray-600 text-center line-clamp-2">
-          {user?.bio}
-        </p>
-        <div className="card-actions justify-center mt-4 gap-2 flex-wrap">
+
+      <div className="card-body px-4 py-4 text-center">
+        <h2 className="text-xl font-semibold text-primary">{username}</h2>
+        <p className="text-gray-600 text-sm line-clamp-2">{bio || "No bio provided."}</p>
+
+        <div className="mt-4 flex flex-wrap justify-center gap-3">
           <button
-            className="btn btn-outline btn-primary"
-            onClick={() => handleRequest("Pending", user?._id)}
+            className="btn btn-sm btn-outline btn-primary"
+            onClick={() => handleRequest("Pending")}
             title="Send request to the user"
           >
             Interested
           </button>
           <button
-            className="btn btn-outline btn-error"
-            onClick={() => handleRequest("Rejected", user?._id)}
+            className="btn btn-sm btn-outline btn-error"
+            onClick={() => handleRequest("Rejected")}
             title="You won't see this user after ignoring"
           >
             Ignore

@@ -37,7 +37,7 @@ const NavBar = () => {
   };
   return (
     <div>
-      <div className="navbar bg-base-300 fixed top-0 z-50">
+      <div className="navbar h-10 bg-base-300 fixed top-0 z-50">
         <div className="flex-1">
           <Link to={user ? "/" : "/login"} className="btn btn-ghost text-xl">
             TechSpark
