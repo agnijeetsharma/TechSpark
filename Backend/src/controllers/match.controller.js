@@ -143,7 +143,7 @@ const AllreceivedRequest = asyncHandler(async (req, res) => {
   
 
   if (!Connctions || Connctions.length === 0) {
-    throw new apiError(400, "No connection exists");
+    return next(new apiError(400, "No connection exists"));
   }
 
   res.status(200).json(new apiResponse(200, Connctions, "All connections found successfully"));

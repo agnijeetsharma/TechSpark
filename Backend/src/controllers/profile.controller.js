@@ -161,9 +161,9 @@ const getFeed = asyncHandler(async (req, res, next) => {
     .skip(skip)
     .limit(limit);
 
-  if (!feed || feed.length === 0) {
-    return new apiError(400, "No users available in the feed");
-  }
+    if (!feed || feed.length === 0) {
+      return next(new apiError(400, "No users available in the feed"));
+    }
 
   return res
     .status(200)
