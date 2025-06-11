@@ -21,8 +21,9 @@ const PostFeed = () => {
         },
         withCredentials: true,
       });
-
+      
       const newPosts = data?.posts || [];
+      
       setPosts((prev) => [...prev, ...newPosts]); 
       setLastPostId(data?.nextCursor);  
       if (!data?.nextCursor) setHasMore(false);  

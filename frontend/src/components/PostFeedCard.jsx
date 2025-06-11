@@ -13,7 +13,7 @@ const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {
 
   return (
     <div className="card lg:card-side bg-base-300 shadow-xl w-full sm:w-3/4 lg:w-2/3 mx-auto my-10 ">
-      <figure className="w-full lg:w-1/3">
+      <figure className="w-full w-1/3">
         <img
           src={post?.postImage || IMAGE_URL}
           alt="Post Image"
@@ -36,7 +36,7 @@ const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {
             {new Date(post?.createdAt).toDateString()}
           </p>
 
-          <p className="mt-2 text-gray-600 line-clamp-3">
+          <p className="mt-2 text-gray-600 line-clamp-2">
             {post?.content || "No content available"}
           </p>
         </div>

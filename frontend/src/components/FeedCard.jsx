@@ -29,15 +29,12 @@ const FeedCard = ({ user }) => {
   };
 
   return (
-    <div className="card w-full max-w-sm bg-base-300 shadow-md hover:shadow-xl transition duration-300 rounded-xl mx-auto">
-      <figure
-        onClick={handleViewProfile}
-        className="cursor-pointer w-full h-64 overflow-hidden flex items-center justify-center bg-base-200"
-      >
+    <div className="card w-full lg:-mt-12 max-w-sm bg-base-300 shadow-md hover:shadow-xl transition duration-300 rounded-xl mx-auto">
+      <figure onClick={handleViewProfile} className="cursor-pointer">
         <img
-          src={profileImage || userImage}
-          alt={`${username}'s profile`}
-          className="object-contain w-full h-full"
+          src={user?.profileImage || userImage}
+          alt="Profile"
+          className="w-full h-80 object-cover"
           title="Click to view full profile"
         />
       </figure>
