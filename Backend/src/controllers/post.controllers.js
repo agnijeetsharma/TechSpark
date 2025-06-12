@@ -41,13 +41,13 @@ const postFeed = asyncHandler(async (req, res) => {
   // If no cursor provided, fetch the most recent posts
   let query = {};
   if (lastPostId) {
-    const lastPost = await Post.findById(lastPostId);
+    const lastPost = await Post.findById(lastPostId).populate("author", "username");
     query = { createdAt: { $lt: lastPost.createdAt } }; // Fetch posts older than the last fetched post
   }
 
   const posts = await Post.find(query)
     .sort({ createdAt: -1 })
-    .limit(parseInt(limit));
+    .limit(parseInt(limit)).populate("author", "username");
 
   res
     .status(200)
