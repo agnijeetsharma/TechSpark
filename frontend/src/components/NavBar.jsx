@@ -39,19 +39,17 @@ const NavBar = () => {
     <div>
       <div className="navbar h-10 bg-base-300  top-0 z-50">
         <div className="flex-1">
-          <Link to={user ? "/" : "/login"} className="btn btn-ghost text-xl">
+        <Link to={user ? "/" : "/login"} className=" ml-4 text-xl font-semibold lg:font-extrabold hover:text-primary">Add commentMore actions
             TechSpark
           </Link>
         </div>
         <div className="flex-none gap-2">
-          <div className="flex items-center gap-2">
-            <button
-              className="btn btn-circle bg-base-100 text-base-content hover:bg-primary  shadow-md transition-all"
-              title={`Switch to ${theme === "light" ? "Dark" : "Light"} Mode`}
-              onClick={toggleTheme}
-            >
-              <SunDim className="w-5 h-5" />
-            </button>
+        <div
+            className="flex bg-base-300 items-center gap-2 transition-transform duration-200 hover:scale-75 hover:text-primary cursor-pointer "
+            title={`Switch to ${theme === "light" ? "Dark" : "Light"} Mode`}
+            onClick={toggleTheme}
+          >
+            <SunDim className="w-7 h-7" />
           </div>
 
           {user && (
