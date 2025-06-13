@@ -5,9 +5,8 @@ import axios from "axios";
 import { removeUser } from "../utils/userSlice";
 import { useLogin } from "../utils/LoginContext";
 import userIcon from "../assets/user.png";
-import { SunDim } from "lucide-react";
+import {  SunDim } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Pencil, FilePlus } from "lucide-react";
 
 const NavBar = () => {
   const [theme, setTheme] = useState("dark");
@@ -38,19 +37,21 @@ const NavBar = () => {
   };
   return (
     <div>
-      <div className="navbar h-8 bg-base-300 top-0 z-50">
+      <div className="navbar h-10 bg-base-300  top-0 z-50">
         <div className="flex-1">
-          <Link to={user ? "/" : "/login"} className=" ml-4 text-xl font-semibold lg:font-extrabold hover:text-primary">
+          <Link to={user ? "/" : "/login"} className="btn btn-ghost text-xl">
             TechSpark
           </Link>
         </div>
         <div className="flex-none gap-2">
-          <div
-            className="flex bg-base-300 items-center gap-2 transition-transform duration-200 hover:scale-75 hover:text-primary cursor-pointer "
-            title={`Switch to ${theme === "light" ? "Dark" : "Light"} Mode`}
-            onClick={toggleTheme}
-          >
-            <SunDim className="w-7 h-7" />
+          <div className="flex items-center gap-2">
+            <button
+              className="btn btn-circle bg-base-100 text-base-content hover:bg-primary  shadow-md transition-all"
+              title={`Switch to ${theme === "light" ? "Dark" : "Light"} Mode`}
+              onClick={toggleTheme}
+            >
+              <SunDim className="w-5 h-5" />
+            </button>
           </div>
 
           {user && (
@@ -92,7 +93,7 @@ const NavBar = () => {
                   <Link to={"/posts"}>Posts</Link>
                 </li>
                 <li>
-                  <Link to={"/createPost"}>Post Now</Link>
+                  <Link to={"/createPost"}>Create Post</Link>
                 </li>
                 <li>
                   <Link to={"/myPost"}>My Post</Link>
