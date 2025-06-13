@@ -10,7 +10,7 @@ const PostFeed = () => {
   const [loading, setLoading] = useState(false);
 
   const fetchPosts = async () => {
-    if (!hasMore || loading) return;  
+    if (!hasMore || loading) return;
 
     setLoading(true);
     try {
@@ -21,33 +21,31 @@ const PostFeed = () => {
         },
         withCredentials: true,
       });
-      
+
       const newPosts = data?.posts || [];
-      
-      setPosts((prev) => [...prev, ...newPosts]); 
-      setLastPostId(data?.nextCursor);  
-      if (!data?.nextCursor) setHasMore(false);  
+
+      setPosts((prev) => [...prev, ...newPosts]);
+      setLastPostId(data?.nextCursor);
+      if (!data?.nextCursor) setHasMore(false);
     } catch (err) {
       console.error("Failed to fetch posts:", err);
     } finally {
-      setLoading(false);  
+      setLoading(false);
     }
   };
 
-
-
   const handleScroll = () => {
-    if (loading || !hasMore) return;  
+    if (loading || !hasMore) return;
     if (
       window.innerHeight + document.documentElement.scrollTop >=
       document.documentElement.offsetHeight - 50
     ) {
-      fetchPosts();  
+      fetchPosts();
     }
   };
 
   useEffect(() => {
-    fetchPosts();  
+    fetchPosts();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -60,7 +58,6 @@ const PostFeed = () => {
     );
   }
 
- 
   if (posts?.length === 0) {
     return (
       <div className="text-center font-bold text-primary text-3xl mt-44">
@@ -72,9 +69,12 @@ const PostFeed = () => {
   return (
     <div className="mt-24">
       {posts.map((post, index) => (
-        <PostFeedCard key={index} post={post} />
+        <div key={post.id} className="mb-6">
+          {index > 0 && <div className="divider"></div>}
+          <PostFeedCard key={index} post={post} />
+        </div>
       ))}
-      {loading && <p>Loading more posts...</p>} 
+      {loading && <p>Loading more posts...</p>}
     </div>
   );
 };

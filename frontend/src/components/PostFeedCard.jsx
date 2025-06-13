@@ -47,7 +47,7 @@ const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {
           <div className="card-actions justify-end space-x-2 mt-4">
             <button
               onClick={() => navigate("/post/content/" + post?._id)}
-              className="btn btn-secondary btn-sm"
+              className="btn btn-primary btn-outline btn-sm"
             >
               Read More
             </button>
