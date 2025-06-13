@@ -53,7 +53,7 @@ const Connections = () => {
   );
 
   return (
-    <div className="min-h-screen p-4 mt-20">
+    <div className="min-h-screen p-4 ">
       <div className="max-w-4xl mx-auto pt-9">
         <div className="mb-6 flex flex-center text-center">
           <input

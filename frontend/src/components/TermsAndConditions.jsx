@@ -1,8 +1,8 @@
-import React from "react";
+
 
 const TermsAndConditions = () => {
   return (
-    <div className="flex justify-center py-8 mt-24">
+    <div className="flex justify-center py-8">
       <div className="card w-full max-w-5xl bg-base-200 shadow-xl">
         <div className="card-body">
           <h1 className="text-3xl font-bold text-primary text-center mb-6">

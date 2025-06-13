@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="footer sm:footer-horizontal bg-base-300 text-base-content items-center p-4">
-      {/* Copyright Section */}
+    
       <aside className="grid-flow-col items-center">
         <svg
           width="36"
@@ -19,7 +19,7 @@ const Footer = () => {
         <p>Copyright © {new Date().getFullYear()} - All rights reserved</p>
       </aside>
 
-      {/* Navigation Links */}
+  
       <nav className="flex flex-row space-x-4">
         <Link to="/about" className="link link-hover">
           About Us
@@ -32,7 +32,7 @@ const Footer = () => {
         </Link>
       </nav>
 
-      {/* Social Icons */}
+      
       <nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
         <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
           <svg

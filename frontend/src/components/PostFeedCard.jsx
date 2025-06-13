@@ -11,16 +11,16 @@ const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {
   return (
     <div className="card bg-base-100  mx-auto my-8 w-full max-w-2xl rounded-lg overflow-hidden">
       <div className="flex flex-col lg:flex-row h-full">
-        {/* Fixed-size image */}
-        <div className="w-full lg:w-1/3 h-36 lg:h-auto flex-shrink-0 overflow-hidden rounded-lg">
+      
+        <div className="w-full lg:w-1/3 h-72 lg:h-56 flex-shrink-0 overflow-hidden rounded-lg">
           <img
             src={post?.postImage || IMAGE_URL}
             alt="Post"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover lg:mt-5 rounded-lg"
           />
         </div>
 
-        {/* Card content */}
+       
         <div className="card-body flex flex-col justify-between p-6">
           <div>
             <h2 className="card-title text-2xl font-bold mb-2">

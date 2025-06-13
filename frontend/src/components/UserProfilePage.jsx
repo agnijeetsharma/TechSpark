@@ -40,7 +40,7 @@ const UserProfileView = ({ user: passedUser }) => {
   }
 
   return (
-    <div className="bg-base-100 w-full flex items-center justify-center pt-24 rounded-xl">
+    <div className="bg-base-100 w-full flex items-center justify-center  rounded-xl">
       <div className="w-full max-w-4xl bg-base-300 shadow-lg rounded-lg p-8">
         <div className="flex flex-col items-center">
           <div className="avatar">

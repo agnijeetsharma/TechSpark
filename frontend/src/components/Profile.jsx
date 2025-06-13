@@ -98,14 +98,14 @@ const Profile = () => {
           withCredentials: true,
         }
       );
-      // console.log("Profile image updated successfully:", response?.data);
+      
       dispatch(addUser(response?.data?.data));
       setImageToast(true);
       setShowToast(true);
       setTimeout(() => {
         setShowToast(false);
         setImageToast(false);
-        // newUser = currUser;
+       
       }, 3000);
     } catch (error) {
       console.error(
@@ -117,11 +117,11 @@ const Profile = () => {
 
   if (!newUser) return;
   return (
-    <div className="min-h-screen text-base-content py-24 ">
+    <div className="min-h-screen text-base-content  ">
       <div className="max-w-5xl mx-auto p-8 bg-base-100 text-base-content rounded-lg shadow-xl">
         <h1 className="text-3xl font-bold mb-8 text-primary">My Profile</h1>
         <div className="flex gap-6 ">
-          {/* Left Column */}
+        
           <div className="w-1/3">
             <div className="avatar mb-6 gap-5 flex justify-center  ">
               <div

@@ -67,11 +67,11 @@ const PostFeed = () => {
   }
 
   return (
-    <div className="mt-24">
+    <div className="">
       {posts.map((post, index) => (
-        <div key={post.id} className="mb-6">
-          {index > 0 && <div className="divider"></div>}
-          <PostFeedCard key={index} post={post} />
+        <div key={post._id+index} className="mb-6">
+          {index > 0 && <div className="divider" key={post._id}></div>}
+          <PostFeedCard key={index+post._id} post={post}  />
         </div>
       ))}
       {loading && <p>Loading more posts...</p>}

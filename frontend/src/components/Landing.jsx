@@ -5,7 +5,7 @@ const FrontPage = () => {
   const { setLoginVisible } = useLogin();
   const { isLoginVisible } = useLogin();
   return (
-    <div className="min-h-screen bg-base-200">
+    <div className="min-h-screen bg-base-200 -mt-16">
     <section className="hero min-h-screen bg-gradient-to-r from-primary to-secondary text-white">
     { !isLoginVisible&&<div className="hero-content text-center">
           <div>

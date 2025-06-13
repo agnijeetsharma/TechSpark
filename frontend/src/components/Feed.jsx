@@ -11,7 +11,7 @@ const Feed = () => {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
-  const [fetched, setFetched] = useState(false); // ✅ track fetch completion
+  const [fetched, setFetched] = useState(false); 
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const fetchFeed = async () => {
@@ -25,7 +25,7 @@ const Feed = () => {
       console.error("Feed fetch error:", error);
     } finally {
       setLoading(false);
-      setFetched(true); // ✅ mark fetch complete
+      setFetched(true); 
     }
   };
 
@@ -56,9 +56,9 @@ const Feed = () => {
   const currentUser = feed[currentIndex];
 
   return (
-    <div className="my-16 px-4 mt-36">
+    <div className="my-16 px-4">
       <div className="flex flex-col lg:flex-row justify-center gap-6">
-        <div className="hidden lg:block w-full lg:w-1/2 -mt-24">
+        <div className="hidden lg:block w-full lg:w-1/2 mt-18">
           <UserProfileDetails user={currentUser} />
         </div>
         <div className="w-full lg:w-1/2">

@@ -43,10 +43,10 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="card w-full sm:w-3/4 lg:w-2/3 mx-auto shadow-xl bg-base-300 p-6 mt-24">
+    <div className="card w-full sm:w-3/4 lg:w-2/3 mx-auto shadow-xl bg-base-300 p-6 mt-10">
       <h2 className="text-2xl font-bold mb-4 text-center">Create a New Post</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Title Input */}
+       
         <div>
           <label className="label">
             <span className="label-text">Title</span>
@@ -62,7 +62,6 @@ const CreatePost = () => {
           />
         </div>
 
-        {/* Content Input */}
         <div>
           <label className="label">
             <span className="label-text">Content</span>
@@ -77,7 +76,7 @@ const CreatePost = () => {
           ></textarea>
         </div>
 
-        {/* Image Upload */}
+   
         <div>
           <label className="label">
             <span className="label-text">Upload an Image</span>
@@ -91,9 +90,8 @@ const CreatePost = () => {
           />
         </div>
 
-        {/* Submit Button */}
         <div className="flex justify-center">
-          <button type="submit" className="btn btn-primary w-full sm:w-auto">
+          <button type="submit" className="btn btn-primary btn-outline w-full sm:w-auto">
             Create Post
           </button>
         </div>

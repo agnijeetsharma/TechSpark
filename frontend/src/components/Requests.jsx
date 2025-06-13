@@ -68,7 +68,7 @@ const Requests = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 mt-24">
+    <div className="min-h-screen p-6 mt-7">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-primary text-2xl font-bold mb-6">
           Connection Requests
@@ -107,7 +107,7 @@ const Requests = () => {
               <div className="flex space-x-2">
                 <button
                   onClick={() => handleAction("Accepted", request?.sender?._id)}
-                  className="btn btn-primary text-sm"
+                  className="btn btn-primary btn-outline text-sm"
                 >
                   Accept
                 </button>

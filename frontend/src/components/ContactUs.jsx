@@ -43,7 +43,7 @@ const ContactUs = () => {
   };
 
   return (
-    <div className=" min-h-screen mt-24">
+    <div className=" min-h-screen mt-4">
     
       <div className="flex justify-center items-center py-8 text-base-content">
         <div className=" shadow-lg rounded-lg w-full max-w-xl p-8 bg-base-300">
