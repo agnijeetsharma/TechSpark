@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { createPost,deletePost,fetchInitialLikes,postDetails,postFeed,toggleLike,updatePost, userPost } from "../controllers/post.controllers.js";
+import { createPost,deletePost,fetchInitialLikes,postDetails,postFeed,toggleLike,updatePost, userPost,FeaturePost } from "../controllers/post.controllers.js";
 
 import { upload } from "../middlewares/multer.js";
 
@@ -23,6 +23,7 @@ router.route("/userPost").get(verifyJWT,userPost)
 router.route("/content/:postId").get(verifyJWT,postDetails)
 router.route("/like/:postId").put(verifyJWT,toggleLike)
 router.route("/like/details/:postId").get(verifyJWT,fetchInitialLikes)
+router.route("/feature").get(verifyJWT,FeaturePost)
 
 
 

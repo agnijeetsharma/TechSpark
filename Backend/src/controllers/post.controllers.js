@@ -33,21 +33,19 @@ const createPost = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, post, "new Post created successfully"));
 });
 
-//postFeed with infinite scrolling using last post
 
 const postFeed = asyncHandler(async (req, res) => {
   const { lastPostId, limit = 10 } = req.query;
 
-  // If no cursor provided, fetch the most recent posts
   let query = {};
   if (lastPostId) {
-    const lastPost = await Post.findById(lastPostId).populate("author", "username");
-    query = { createdAt: { $lt: lastPost.createdAt } }; // Fetch posts older than the last fetched post
+    const lastPost = await Post.findById(lastPostId).populate("author", "username profileImage");
+    query = { createdAt: { $lt: lastPost.createdAt } }; 
   }
 
   const posts = await Post.find(query)
     .sort({ createdAt: -1 })
-    .limit(parseInt(limit)).populate("author", "username");
+    .limit(parseInt(limit)).populate("author", "username profileImage");
 
   res
     .status(200)
@@ -135,14 +133,14 @@ const toggleLike = asyncHandler(async (req, res) => {
       return res.status(404).json(new apiResponse(404, null, "Post not found"));
     }
 
-    // Check if the user already liked the post
+
     const index = post.likes.indexOf(userId);
 
     if (index === -1) {
-      // User hasn't liked it yet, so add their ID to the likes array
+    
       post.likes.push(userId);
     } else {
-      // User already liked it, so remove their ID (unlike)
+     
       post.likes.splice(index, 1);
     }
 
@@ -156,5 +154,14 @@ const toggleLike = asyncHandler(async (req, res) => {
 });
 
 
+const FeaturePost=asyncHandler(async(req,res)=>{
+  const posts = await Post.find().sort({ createdAt: -1 }).limit(3).populate("author", "username profileImage");
+  if (!posts || posts.length === 0) {
+    return res.status(404).json(new apiResponse(404, null, "No posts found"));
+  }
+  return res.status(200).json(new apiResponse(200, posts, "Featured posts retrieved successfully"));
+})
 
-export { createPost, postFeed, deletePost, updatePost, userPost, postDetails,toggleLike,fetchInitialLikes };
+
+
+export { createPost, postFeed, deletePost, updatePost, userPost, postDetails,toggleLike,fetchInitialLikes,FeaturePost };

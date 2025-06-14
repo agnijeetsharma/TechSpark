@@ -40,9 +40,7 @@ const Body = () => {
 
       if (currentScrollY > lastScrollY) {
         setShowNavbar(false);
-      }
-     
-      else if (currentScrollY < lastScrollY) {
+      } else if (currentScrollY < lastScrollY) {
         setShowNavbar(true);
       }
 
@@ -56,7 +54,6 @@ const Body = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-    
       <div
         className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 ${
           showNavbar ? "translate-y-0" : "-translate-y-full"
@@ -65,7 +62,6 @@ const Body = () => {
         <NavBar />
       </div>
 
-      
       <div className="pt-16 flex-grow">
         <Outlet />
       </div>

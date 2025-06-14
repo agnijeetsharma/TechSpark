@@ -24,7 +24,6 @@ function App() {
     <LoginProvider>
 
     <Provider store={appStore}>
-    {/* <PersistGate loading={null} persistor={persistor}> */}
       <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<Body />}>
@@ -46,7 +45,6 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    {/* </PersistGate> */}
     </Provider>
     </LoginProvider>
     </>

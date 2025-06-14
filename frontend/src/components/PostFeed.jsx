@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PostFeedCard from "./PostFeedCard";
 import { Base_URL } from "../constant";
 import axios from "axios";
+import FeaturePost from "./FeaturePost";
 
 const PostFeed = () => {
   const [posts, setPosts] = useState([]);
@@ -67,14 +68,20 @@ const PostFeed = () => {
   }
 
   return (
-    <div className="">
-      {posts.map((post, index) => (
-        <div key={post._id+index} className="mb-6">
-          {index > 0 && <div className="divider" key={post._id}></div>}
-          <PostFeedCard key={index+post._id} post={post}  />
-        </div>
-      ))}
-      {loading && <p>Loading more posts...</p>}
+    <div className="flex justify-evenly my-16 ">
+      <div className="w-full lg:w-2/3">
+        {posts.map((post, index) => (
+          <div key={post._id + index} className="mb-6">
+            {index > 0 && <div className="divider" key={post._id}></div>}
+            <PostFeedCard key={index + post._id} post={post} />
+          </div>
+        ))}
+        {loading && <p>Loading more posts...</p>}
+      </div>
+      <div className="hidden lg:block w-1/3">
+
+      <FeaturePost/>
+      </div>
     </div>
   );
 };

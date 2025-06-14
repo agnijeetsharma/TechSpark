@@ -82,9 +82,9 @@ const ChatFeature = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-base mt-24 mb-2">
-      {/* Chat Area Container */}
+  
       <div className="flex flex-col w-full max-w-screen-md h-full bg-base-100 border border-base-300 rounded-lg shadow-lg overflow-hidden">
-        {/* Chat Messages */}
+       
         <div
           className="flex-grow overflow-y-auto p-4 bg-base-200"
           style={{ paddingBottom: "6rem", maxHeight: "calc(100% - 10rem)" }}
@@ -112,7 +112,7 @@ const ChatFeature = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Box */}
+   
         <div className="p-4 bg-base-100 border-t border-base-300">
           <div className="flex items-center">
             <input

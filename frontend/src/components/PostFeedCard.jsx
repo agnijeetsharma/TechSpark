@@ -1,33 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import { IMAGE_URL } from "../constant";
+import userIcon from "../assets/user.png";
 
 const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {
   const navigate = useNavigate();
-
+  console.log(post);
   const handleDelete = (postId) => {
     if (onDelete) onDelete(postId);
   };
 
   return (
-    <div className="card bg-base-100  mx-auto my-8 w-full max-w-2xl rounded-lg overflow-hidden">
-      <div className="flex flex-col lg:flex-row h-full">
-      
-        <div className="w-full lg:w-1/3 h-72 lg:h-56 flex-shrink-0 overflow-hidden rounded-lg">
-          <img
-            src={post?.postImage || IMAGE_URL}
-            alt="Post"
-            className="w-full h-full object-cover lg:mt-5 rounded-lg"
-          />
-        </div>
-
-       
+    <div className="card bg-base-100  mx-auto  w-full max-w-2xl rounded-lg overflow-hidden">
+      <div className="flex  flex-col-reverse lg:flex-row h-full">
         <div className="card-body flex flex-col justify-between p-6">
-          <div>
-            <h2 className="card-title text-2xl font-bold mb-2">
-              {post?.title}
-            </h2>
-
-            <div className="text-sm text-gray-600 mb-4">
+          <div className="text-sm text-gray-600  flex gap-4">
+            <div>
+              <img
+                src={post.author.profileImage || userIcon}
+                alt="Not found"
+                className="h-7 w-7 rounded-full"
+              />
+            </div>
+            <div>
               <span>
                 Posted by{" "}
                 <span className="text-primary font-medium">
@@ -38,6 +32,11 @@ const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {
                 {new Date(post?.createdAt).toDateString()}
               </span>
             </div>
+          </div>
+          <div>
+            <h2 className="card-title text-2xl font-bold mb-2">
+              {post?.title}
+            </h2>
 
             <p className="text-gray-700 line-clamp-2">
               {post?.content || "No content available"}
@@ -60,6 +59,13 @@ const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {
               </button>
             )}
           </div>
+        </div>
+        <div className="w-full lg:w-1/3 h-72 lg:h-44 lg:my-14 flex-shrink-0 overflow-hidden rounded-lg">
+          <img
+            src={post?.postImage || IMAGE_URL}
+            alt="Post"
+            className="w-full h-full object-cover lg:mt-5 rounded-lg"
+          />
         </div>
       </div>
     </div>
