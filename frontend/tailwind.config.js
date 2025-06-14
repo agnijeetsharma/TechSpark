@@ -1,22 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
         customGray: "#36353a",
       },
       fontFamily: {
-        serif: ['"Source Serif Pro"', 'serif'], // custom serif font
+        serif: ['"Source Serif Pro"', "Georgia", "serif"],
       },
     },
   },
-  plugins: [require("daisyui"),require('@tailwindcss/line-clamp')],
+  plugins: [require("daisyui"), require("@tailwindcss/line-clamp")],
   daisyui: {
-    themes: ['light', 'dark'], 
+    themes: ["light", "dark"],
   },
-  
-}
+};
