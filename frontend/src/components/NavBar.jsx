@@ -82,6 +82,9 @@ const NavBar = () => {
                   </Link>
                 </li>
                 <li>
+                  <Link to={"/"}>Explore</Link>
+                </li>
+                <li>
                   <Link to={"/connections"}>Connections</Link>
                 </li>
                 <li>

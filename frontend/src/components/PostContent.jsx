@@ -1,39 +1,34 @@
-import { useParams } from "react-router-dom"; // To fetch dynamic post data based on ID
+import { useParams } from "react-router-dom";
 import { Base_URL, IMAGE_URL } from "../constant";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { FiThumbsUp } from "react-icons/fi";
 
 const ReadMorePage = () => {
-  const [post, setPost] = useState("");
   const { postId } = useParams();
+  const [post, setPost] = useState(null);
   const [isLike, setIsLike] = useState(false);
-  const [likeCount, setLikeCount] = useState();
+  const [likeCount, setLikeCount] = useState(0);
   const [loading, setLoading] = useState(true);
+
   const getContent = async () => {
     try {
-      const response = await axios.get(Base_URL + "/post/content/" + postId, {
+      const response = await axios.get(`${Base_URL}/post/content/${postId}`, {
         withCredentials: true,
       });
       setPost(response?.data?.data);
     } catch (error) {
       console.log(error);
-      setPost("");
-    }finally{
+    } finally {
       setLoading(false);
     }
-   
   };
-  useEffect(() => {
-    getContent();
-  }, []);
-
 
   const fetchInitialLikes = async () => {
     try {
-      const response = await axios.get(
-        Base_URL + "/post/like/details/" + postId,
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${Base_URL}/post/like/details/${postId}`, {
+        withCredentials: true,
+      });
       const { isLiked, likesCount } = response?.data?.data;
       setIsLike(isLiked);
       setLikeCount(likesCount);
@@ -41,17 +36,12 @@ const ReadMorePage = () => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    fetchInitialLikes();
-  }, [postId]);
 
   const toggleLike = async () => {
     try {
-      const response = await axios.put(
-        Base_URL + "/post/like/" + postId,
-        {},
-        { withCredentials: true }
-      );
+      const response = await axios.put(`${Base_URL}/post/like/${postId}`, {}, {
+        withCredentials: true,
+      });
       setIsLike(response?.data?.data?.isLiked);
       setLikeCount(response?.data?.data?.likesCount);
     } catch (error) {
@@ -59,72 +49,66 @@ const ReadMorePage = () => {
     }
   };
 
+  useEffect(() => {
+    getContent();
+    fetchInitialLikes();
+  }, [postId]);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <button className="btn btn-square btn-sm text-primary loading"></button>
+        <span className="loading loading-spinner text-primary"></span>
       </div>
     );
   }
 
-  if (post === undefined || post === "")
+  if (!post) {
     return (
       <div className="flex justify-center mt-52 font-bold text-xl">
-        No content for this post! Check Again After Some Time
+        No content for this post! Try again later.
       </div>
     );
+  }
+
   return (
-    <div className="container text-base-content mx-auto mt-28 mb-8 px-4">
-      <div className="card bg-base-300 shadow-xl max-w-4xl mx-auto">
-        <figure>
-          <img
-            src={post?.postImage || IMAGE_URL}
-            alt="Post Image"
-            className="w-full sm:h-28 lg:h-64 object-cover rounded-lg"
-          />
-        </figure>
-        <div className="card-body p-6">
-          <h1 className="text-3xl font-bold text-center mb-4">{post?.title}</h1>
+    <div className="max-w-3xl mx-auto px-4 mt-5 font-serif text-base leading-7 ">
+      <img
+        src={post?.postImage || IMAGE_URL}
+        alt="Post"
+        className="w-full h-80 object-cover rounded-lg mb-8"
+      />
 
-          <div className="flex justify-between items-center text-sm text-base-content mb-4">
-            <p className="text-base-content font-medium">
-              Posted by {post?.author?.username}
-            </p>
-            <p>{new Date(post.createdAt).toDateString()}</p>
-          </div>
+      <h1 className="text-4xl font-bold mb-6">{post.title}</h1>
 
-          <p className="text-lg  leading-relaxed mb-6">{post?.content}</p>
-
-          <div className="flex justify-center gap-4">
-            <button
-              className={`btn flex items-center gap-2 px-4 py-2 rounded-lg shadow-md transition-all duration-200 ${
-                isLike
-                  ? "bg-blue-500 hover:bg-blue-600 text-white"
-                  : "bg-gray-300 hover:bg-gray-400 text-black"
-              }`}
-              onClick={toggleLike}
-            >
-              <span className="font-medium">{isLike ? "Liked" : "Like"}</span>
-              <span
-                className={`font-bold px-2 py-1 rounded-lg ${
-                  isLike ? "bg-white text-blue-500" : "bg-gray-500 text-white"
-                }`}
-              >
-                {likeCount}
-              </span>
-            </button>
-
-            {/* <button className="btn btn-secondary">Comment</button> */}
-          </div>
-        </div>
+      <div className="flex items-center justify-between text-sm text-gray-500 mb-8">
+        <p>
+          Posted by <span className="font-semibold text-primary">{post.author?.username}</span>
+        </p>
+        <p>{new Date(post.createdAt).toDateString()}</p>
       </div>
 
-      <div className="flex justify-center mt-8">
+      <div className="prose prose-lg max-w-none mb-10 text-gray-500">
+        <p>{post.content}</p>
+      </div>
+
+      <div className="flex justify-start items-center gap-4 mt-8">
+        <button
+          onClick={toggleLike}
+          className={`flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full border transition duration-200 
+          ${isLike ? "bg-blue-600 text-white border-blue-600" : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"}`}
+        >
+          <FiThumbsUp className="text-lg" />
+          {isLike ? "Liked" : "Like"}
+          <span className="ml-1 font-bold">({likeCount})</span>
+        </button>
+      </div>
+
+      <div className="mt-12 text-center">
         <button
           onClick={() => window.history.back()}
-          className="btn btn-outline btn-primary"
+          className="text-blue-600 hover:underline font-medium text-sm"
         >
-          Back to Feed
+          ← Back to Feed
         </button>
       </div>
     </div>

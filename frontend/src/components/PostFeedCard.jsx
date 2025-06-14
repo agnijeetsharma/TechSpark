@@ -39,7 +39,7 @@ const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {
               {post?.title}
             </h2>
 
-            <p className="text-gray-700 line-clamp-2">
+            <p className="text-gray-400 line-clamp-2">
               {post?.content || "No content available"}
             </p>
           </div>
