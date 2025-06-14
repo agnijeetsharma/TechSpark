@@ -9,6 +9,9 @@ export default {
       colors: {
         customGray: "#36353a",
       },
+      fontFamily: {
+        serif: ['"Source Serif Pro"', 'serif'], // custom serif font
+      },
     },
   },
   plugins: [require("daisyui"),require('@tailwindcss/line-clamp')],

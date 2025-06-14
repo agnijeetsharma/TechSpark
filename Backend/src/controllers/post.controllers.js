@@ -33,24 +33,27 @@ const createPost = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, post, "new Post created successfully"));
 });
 
-
 const postFeed = asyncHandler(async (req, res) => {
-  const { lastPostId, limit = 10 } = req.query;
+  const { limit = 50, search = "" } = req.query;
 
   let query = {};
-  if (lastPostId) {
-    const lastPost = await Post.findById(lastPostId).populate("author", "username profileImage");
-    query = { createdAt: { $lt: lastPost.createdAt } }; 
+
+ 
+  if (search.trim()) {
+    const regex = new RegExp(search.trim(), "i");
+    query.title = regex;
   }
 
   const posts = await Post.find(query)
     .sort({ createdAt: -1 })
-    .limit(parseInt(limit)).populate("author", "username profileImage");
+    .limit(parseInt(limit))
+    .populate("author", "username profileImage");
 
-  res
-    .status(200)
-    .json({ posts, nextCursor: posts[posts.length - 1]?._id || null });
+  res.status(200).json({
+    posts,
+  });
 });
+
 
 const updatePost = asyncHandler(async (req, res) => {
   const Id = req.query._id;

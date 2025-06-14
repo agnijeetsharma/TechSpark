@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { IMAGE_URL } from "../constant";
 import userIcon from "../assets/user.png";
+import codeIcon from "../assets/code_image.png";
 
 const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {
   const navigate = useNavigate();
-  console.log(post);
+
   const handleDelete = (postId) => {
     if (onDelete) onDelete(postId);
   };
@@ -62,7 +63,7 @@ const PostFeedCard = ({ post, onDelete, isDeletable = false }) => {
         </div>
         <div className="w-full lg:w-1/3 h-72 lg:h-44 lg:my-14 flex-shrink-0 overflow-hidden rounded-lg">
           <img
-            src={post?.postImage || IMAGE_URL}
+            src={post?.postImage || codeIcon}
             alt="Post"
             className="w-full h-full object-cover lg:mt-5 rounded-lg"
           />

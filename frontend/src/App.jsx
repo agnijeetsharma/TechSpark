@@ -20,7 +20,7 @@ import ContactUs from "./components/ContactUs";
 
 function App() {
   return (
-    <>
+    < >
     <LoginProvider>
 
     <Provider store={appStore}>

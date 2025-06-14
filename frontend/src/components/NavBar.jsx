@@ -38,8 +38,8 @@ const NavBar = () => {
   return (
     <div className="">
       <div className="navbar h-6 bg-base-300  top-0 z-50">
-        <div className="flex-1">
-        <Link to={user ? "/" : "/login"} className=" ml-4 text-xl font-semibold lg:font-extrabold hover:text-primary">
+        <div className="flex-1 z-50 cursor-pointer">
+        <Link to={user ? "/posts" : "/"} className=" ml-4 text-xl font-semibold lg:font-extrabold hover:text-primary cursor-pointer">
             TechSpark
           </Link>
         </div>
