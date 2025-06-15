@@ -38,8 +38,8 @@ const UserProfileDetails = ({ user: passedUser }) => {
   }
 
   return (
-    <div className="bg-base-100 w-full flex items-center justify-center  rounded-xl">
-      <div className="w-full max-w-4xl bg-base-300 shadow-lg rounded-lg p-8">
+    <div className="bg-base-100 mt-10 w-full flex items-center justify-center  rounded-xl">
+      <div className="w-full max-w-4xl bg-base-200 shadow-lg rounded-lg p-8">
     
         <div className="flex flex-col items-center">
          

@@ -4,12 +4,14 @@ import PostFeedCard from "./PostFeedCard";
 import FeaturePost from "./FeaturePost";
 import { Base_URL } from "../constant";
 import { FiSearch } from "react-icons/fi";
+import { useLocation } from "react-router-dom";
 
 const PostFeed = () => {
   const [posts, setPosts] = useState([]);
   const [lastPostId, setLastPostId] = useState(null);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
 
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,13 +46,14 @@ const PostFeed = () => {
   }, []);
 
   useEffect(() => {
-    if (searchQuery !== "") {
-      setPosts([]);
-      setLastPostId(null);
-      setHasMore(true);
-      fetchPosts(true);
-    }
-  }, [searchQuery]);
+    setSearchInput("");
+    setSearchQuery("");
+    setPosts([]);
+    setLastPostId(null);
+    setHasMore(true);
+
+    fetchPosts(true);
+  }, [location.key, searchQuery]);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -59,9 +62,9 @@ const PostFeed = () => {
   };
 
   return (
-    <div className="flex justify-evenly ">
+    <div className="flex justify-evenly mt-16">
       <div className="w-full lg:w-2/3 lg:mt-32 mt-12">
-        <div className="mb-6 flex justify-center lg:sticky lg:-mt-28 z-50">
+        <div className="mb-6 flex ml-28 lg:-mt-28  border-none">
           <div className="relative w-6/7 max-w-md">
             <input
               type="text"
@@ -69,7 +72,7 @@ const PostFeed = () => {
               onChange={(e) => setSearchInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Search posts by title..."
-              className="input input-bordered h-10 w-full pl-10 rounded-full"
+              className="input input-bordered h-10 w-full pl-10 rounded-full  border-gray-300  focus:outline-none"
             />
             <FiSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500" />
           </div>

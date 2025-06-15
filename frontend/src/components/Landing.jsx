@@ -1,4 +1,5 @@
 import { useLogin } from "../utils/LoginContext";
+import Footer from "./Footer";
 
 const FrontPage = () => {
   const { setLoginVisible, isLoginVisible } = useLogin();
@@ -34,7 +35,8 @@ const FrontPage = () => {
               </h2>
               <div className="space-y-4 text-sm">
                 <blockquote className="border-l-4 border-primary pl-4 italic">
-                “It’s like LinkedIn, but built for developers—clean, practical, and full of tech-minded people.”
+                  “It’s like LinkedIn, but built for developers—clean,
+                  practical, and full of tech-minded people.”
                   <br />
                   <span className="block font-medium mt-2 text-primary">
                     — ABHI
@@ -121,6 +123,8 @@ const FrontPage = () => {
           </div>
         </div>
       </section>
+      <div className="divider"></div>
+      <Footer />
     </div>
   );
 };

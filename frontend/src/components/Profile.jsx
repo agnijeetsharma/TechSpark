@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Base_URL } from "../constant";
 import { addUser } from "../utils/userSlice";
-import { IMAGE_URL } from "../constant";
+import userImage from "../assets/user.png";
 const Profile = () => {
   let currUser = useSelector((store) => store.user);
 
@@ -117,19 +117,19 @@ const Profile = () => {
 
   if (!newUser) return;
   return (
-    <div className="min-h-screen text-base-content  ">
-      <div className="max-w-5xl mx-auto p-8 bg-base-100 text-base-content rounded-lg shadow-xl">
-        <h1 className="text-3xl font-bold mb-8 text-primary">My Profile</h1>
+    <div className="min-h-screen mt-16 text-base-content  ">
+      <div className="max-w-5xl mx-auto p-10 bg-base-100 text-base-content rounded-lg ">
+        <h1 className="text-3xl font-bold mb-8 text-primary-300">My Profile</h1>
         <div className="flex gap-6 ">
         
           <div className="w-1/3">
             <div className="avatar mb-6 gap-5 flex justify-center  ">
               <div
-                className="w-28 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
+                className="w-28 rounded-full border-gray-600 border-2 cursor-pointer  "
                 onClick={() => fileInputRef.current.click()}
                 title="Click to change image"
               >
-                <img src={currUser?.profileImage || IMAGE_URL} alt="Profile" />
+                <img src={currUser?.profileImage || userImage} alt="Profile" />
               </div>
               <div>
                 <input
@@ -197,7 +197,6 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Right Column */}
           <div className="w-2/3 ">
             <div className="grid grid-cols-2 gap-4  flex-col">
               <div>
@@ -242,7 +241,7 @@ const Profile = () => {
                 )}
               </div>
 
-              {/* GitHub and LinkedIn Links */}
+              
               <div className="col-span-2 flex justify-between gap-4">
                 <div className="w-1/2">
                   <label className="block font-semibold">GitHub</label>
@@ -360,14 +359,14 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="mt-6 flex gap-4">
+            <div className="mt-6 flex gap-4  justify-end">
               {editMode ? (
                 <>
-                  <button className="btn btn-success" onClick={saveProfile}>
+                  <button className="btn btn-success btn-outline" onClick={saveProfile}>
                     Save
                   </button>
                   <button
-                    className="btn btn-error"
+                    className="btn btn-error btn-outline"
                     onClick={() => setEditMode(false)}
                   >
                     Cancel
@@ -375,7 +374,7 @@ const Profile = () => {
                 </>
               ) : (
                 <button
-                  className="btn btn-primary w-full"
+                  className="btn btn-primary w-34 btn-outline"
                   onClick={() => setEditMode(true)}
                 >
                   Edit Profile

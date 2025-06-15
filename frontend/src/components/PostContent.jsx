@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Base_URL, IMAGE_URL } from "../constant";
+import { Base_URL } from "../constant";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FiThumbsUp } from "react-icons/fi";

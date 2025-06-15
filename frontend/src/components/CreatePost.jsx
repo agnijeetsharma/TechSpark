@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Base_URL } from "../constant";
-import { FiImage, FiEdit } from "react-icons/fi";
+import { FiImage, } from "react-icons/fi";
 
 const CreatePost = () => {
   const [showToast, setShowToast] = useState(false);
@@ -43,7 +43,7 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 pt-20 font-serif">
+    <div className="max-w-3xl mt-16 mx-auto px-4  font-serif">
       <div className="bg-base-100  rounded-lg p-8">
         <h2 className="text-3xl font-bold text-center mb-6">
           Write a new story

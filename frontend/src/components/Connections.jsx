@@ -5,6 +5,7 @@ import { Base_URL } from "../constant";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import userImage from "../assets/user.png";
 
 const Connections = () => {
   const navigate = useNavigate();
@@ -19,7 +20,6 @@ const Connections = () => {
       });
       setConnections(response?.data?.data);
       setLoading(false);
-   
     } catch (error) {
       setLoading(false);
       console.log(error, error?.message);
@@ -30,7 +30,6 @@ const Connections = () => {
     fetchConnections();
   }, []);
 
-  
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -48,12 +47,14 @@ const Connections = () => {
 
   const filteredConnections = connections.filter(
     (connection) =>
-      connection?.username?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
+      connection?.username
+        ?.toLowerCase()
+        ?.includes(searchQuery?.toLowerCase()) ||
       connection?.bio?.toLowerCase()?.includes(searchQuery?.toLowerCase())
   );
 
   return (
-    <div className="min-h-screen p-4 ">
+    <div className="min-h-screen p-4 mt-16">
       <div className="max-w-4xl mx-auto pt-9">
         <div className="mb-6 flex flex-center text-center">
           <input
@@ -61,7 +62,7 @@ const Connections = () => {
             placeholder="Search connections...by username or bio"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="input input-bordered w-full max-w-md "
+            className="input input-bordered w-full max-w-md rounded-full "
           />
         </div>
 
@@ -72,7 +73,7 @@ const Connections = () => {
               className="flex items-center cursor-pointer bg-base-200 p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow"
             >
               <img
-                src={connection.profileImage || IMAGE_URL}
+                src={connection.profileImage || userImage}
                 alt={connection?.username}
                 className="w-16 h-16 rounded-full"
                 onClick={() => navigate(`/profile/${connection._id}`)}
@@ -85,15 +86,25 @@ const Connections = () => {
                 <h2 className="font-semibold text-lg text-primary">
                   {connection.username}
                 </h2>
-                <p className="text-sm text-gray-400">{connection?.bio}</p>
+                <p className="text-sm text-gray-400">
+                  {connection.bio || "No bio for this User"}
+                </p>
                 <p className="text-sm text-gray-500 mt-1">
-                  {connection.connectedTime}
+                  {new Date(connection?.createdAt).toLocaleString("en-US", {
+                    timeZone: "Asia/Kolkata",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  })}
                 </p>
               </div>
 
               <Link to={"/chat/" + connection?._id}>
                 <button className="btn btn-outline btn-primary text-sm">
-                  Message
+                  Chat Now
                 </button>
               </Link>
             </div>

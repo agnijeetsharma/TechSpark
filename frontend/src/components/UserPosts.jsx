@@ -41,10 +41,10 @@ const UserPosts = () => {
     );
   }
 
-  if (posts.length <= 0) return <p className="text-center font-bold text-primary text-3xl mt-44">You have not posted yet.</p>;
+  if (posts.length <= 0) return <p className="text-center font-bold text-primary text-3xl mt-56">You have not posted yet.</p>;
 
   return (
-    <div className="">
+    <div className="mt-16 px-4">
       {posts?.map((post, index) => (
         <PostFeedCard
           key={index}

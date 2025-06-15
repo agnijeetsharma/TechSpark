@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Base_URL, IMAGE_URL } from "../constant";
+import { Base_URL } from "../constant";
 import axios from "axios";
-
+import userImage from "../assets/user.png";
 const Requests = () => {
   const [requests, setRequests] = useState([]);
   const [showToast, setShowToast] = useState(false);
@@ -68,7 +68,7 @@ const Requests = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 mt-7">
+    <div className="min-h-screen p-6 mt-16">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-primary text-2xl font-bold mb-6">
           Connection Requests
@@ -81,7 +81,7 @@ const Requests = () => {
               className="flex items-center bg-base-200 p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
             >
               <img
-                src={request?.sender?.profileImage || IMAGE_URL}
+                src={request?.sender?.profileImage || userImage}
                 alt={request?.sender?.username}
                 className="w-16 h-16 rounded-full"
               />
@@ -90,7 +90,7 @@ const Requests = () => {
                 <h2 className="font-semibold text-lg text-primary">
                   {request?.sender?.username}
                 </h2>
-                <p className="text-sm text-gray-400">{request?.sender?.bio}</p>
+                <p className="text-sm text-gray-400">{request?.sender?.bio ||"No bio for this User"}</p>
                 <p className="text-sm text-gray-500 mt-1">
                   {new Date(request?.createdAt).toLocaleString("en-US", {
                     timeZone: "Asia/Kolkata",

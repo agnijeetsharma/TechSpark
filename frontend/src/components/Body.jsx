@@ -7,6 +7,7 @@ import { Base_URL } from "../constant";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 
+
 const Body = () => {
   const selector = useSelector((store) => store.user);
   const navigate = useNavigate();
@@ -21,8 +22,7 @@ const Body = () => {
       });
       dispatch(addUser(response?.data?.data));
       navigate(location?.pathname);
-    } catch (error) {
-      console.log(error);
+    } catch  {
       navigate("/login");
     }
   };
@@ -62,10 +62,10 @@ const Body = () => {
         <NavBar />
       </div>
 
-      <div className="pt-16 flex-grow">
+      <div className="flex-grow">
         <Outlet />
       </div>
-
+   
       {/* <Footer /> */}
     </div>
   );

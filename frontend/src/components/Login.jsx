@@ -12,6 +12,7 @@ const Login = () => {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { login } = useLogin();
   const { isLoginVisible } = useLogin();
 
   const [emailId, setEmailId] = useState("");
@@ -23,7 +24,7 @@ const Login = () => {
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
-    if (user) navigate("/");
+    if (user) navigate("/posts");
   }, [user, navigate]);
 
   const handleSubmit = async (e) => {
@@ -38,12 +39,16 @@ const Login = () => {
         { email: emailId, password },
         { withCredentials: true }
       );
+      const data = result.data;
       dispatch(addUser(result?.data?.data));
       setShowToast(true);
+      login(data?.token);
       setTimeout(() => setShowToast(false), 3000);
-      navigate("/");
+      navigate("/posts");
     } catch (err) {
-      setError("Error: " + (err?.response?.data?.message || "Something went wrong"));
+      setError(
+        "Error: " + (err?.response?.data?.message || "Something went wrong")
+      );
     }
   };
 
@@ -54,9 +59,11 @@ const Login = () => {
         { username, email: emailId, password },
         { withCredentials: true }
       );
+      const data = result.data;
       dispatch(addUser(result?.data?.data));
-      setIsLogin(true);
       navigate("/profile");
+      login(data?.token);
+      setIsLogin(true);
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     } catch (err) {
@@ -94,7 +101,9 @@ const Login = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 {!isLogin && (
                   <div>
-                    <label className="label label-text font-medium">Username</label>
+                    <label className="label label-text font-medium">
+                      Username
+                    </label>
                     <input
                       type="text"
                       className="input input-bordered w-full"
@@ -115,7 +124,9 @@ const Login = () => {
                   />
                 </div>
                 <div>
-                  <label className="label label-text font-medium">Password</label>
+                  <label className="label label-text font-medium">
+                    Password
+                  </label>
                   <div className="relative">
                     <input
                       type={showPassword ? "text" : "password"}
@@ -129,7 +140,11 @@ const Login = () => {
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
                       onClick={togglePasswordVisibility}
                     >
-                      {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
+                      {showPassword ? (
+                        <AiFillEyeInvisible size={20} />
+                      ) : (
+                        <AiFillEye size={20} />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -158,7 +173,9 @@ const Login = () => {
       {showToast && (
         <div className="toast toast-top toast-center mt-24 z-50">
           <div className="alert alert-success">
-            <span>{isLogin ? "Login successful 🎉" : "Signed up successfully 🎉"}</span>
+            <span>
+              {isLogin ? "Login successful 🎉" : "Signed up successfully 🎉"}
+            </span>
           </div>
         </div>
       )}

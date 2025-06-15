@@ -40,11 +40,11 @@ const UserProfileView = ({ user: passedUser }) => {
   }
 
   return (
-    <div className="bg-base-100 w-full flex items-center justify-center  rounded-xl">
-      <div className="w-full max-w-4xl bg-base-300 shadow-lg rounded-lg p-8">
+    <div className="bg-base-100 w-full mt-20 mb-8 flex items-center justify-center  rounded-xl">
+      <div className="w-full max-w-4xl bg-base-200 rounded-xl  p-8">
         <div className="flex flex-col items-center">
           <div className="avatar">
-            <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+            <div className="w-32 rounded-full border-gray-600 border-2">
               <img
                 src={user?.profileImage || userImage}
                 alt={`${user?.username || "User"}'s Avatar`}

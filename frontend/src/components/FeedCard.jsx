@@ -29,7 +29,7 @@ const FeedCard = ({ user }) => {
   };
 
   return (
-    <div className="card w-full lg:-mt-12 max-w-sm bg-base-300 shadow-md hover:shadow-xl transition duration-300 rounded-xl mx-auto">
+    <div className="card w-full mt-7 max-w-sm bg-base-200 shadow-md hover:shadow-xl transition duration-300 rounded-xl mx-auto">
       <figure onClick={handleViewProfile} className="cursor-pointer">
         <img
           src={user?.profileImage || userImage}
