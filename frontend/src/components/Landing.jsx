@@ -68,12 +68,12 @@ const FrontPage = () => {
                 desc: "Sign up, add skills, and showcase your work.",
               },
               {
-                title: "Connect with Others",
-                desc: "Find and follow developers with similar interests.",
+                title: "Build Your Network",
+                desc: "Discover like-minded developers, follow their journeys, chat directly, and grow together through real connections.",
               },
               {
-                title: "Collaborate on Projects",
-                desc: "Start or join real-world projects with your peers.",
+                title: "Engage with the Community",
+                desc: "Create posts, share your thoughts, and interact with posts from others to stay connected and inspired.",
               },
             ].map((item, idx) => (
               <div

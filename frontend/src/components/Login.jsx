@@ -91,9 +91,9 @@ const Login = () => {
       <FrontPage />
 
       {isLoginVisible && (
-        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md">
-          <div className="card bg-base-200 shadow-md">
-            <div className="card-body">
+        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-50  max-w-md w-96">
+          <div className="card bg-base-200 shadow-md text-center mt-10 sm:mt-16 md:mt-20 lg:mt-0">
+            <div className="card-body ">
               <h2 className="card-title text-center text-2xl font-bold">
                 {isLogin ? "Login" : "Sign Up"}
               </h2>
