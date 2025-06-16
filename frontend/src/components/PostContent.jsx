@@ -72,7 +72,7 @@ const ReadMorePage = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 mt-5 font-serif text-base leading-7 ">
+    <div className="max-w-3xl mx-auto px-4 mt-20 font-serif text-base leading-7 ">
       <img
         src={post?.postImage || contentImage}
         alt="Post"
