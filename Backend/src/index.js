@@ -19,4 +19,11 @@ connectdb()
     console.error('Database connection error:', err);
     process.exit(1); 
   });
+  app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Backend API is running!'
+  });
+});
+
 
