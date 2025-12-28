@@ -10,8 +10,9 @@ export const getSocket = () => {
         : import.meta.env.VITE_SOCKET_URL;
 
     socket = io(SOCKET_URL, {
+      path: "/socket.io",
       withCredentials: true,
-      transports: ["polling", "websocket"], // DO NOT FORCE WS
+      transports: ["websocket"], // DO NOT FORCE WS
     });
   }
 

@@ -17,12 +17,10 @@ const ChatFeature = () => {
   const socketRef = useRef(null);
   const messagesEndRef = useRef(null);
 
-  /* Auto-scroll */
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  /* Load chat + partner info */
   useEffect(() => {
     if (!targetUserId || !userId) return;
 
@@ -53,7 +51,6 @@ const ChatFeature = () => {
     loadChat();
   }, [targetUserId, userId]);
 
-  /* Socket setup */
   useEffect(() => {
     if (!userId || !targetUserId) return;
 
