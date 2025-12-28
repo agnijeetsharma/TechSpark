@@ -6,8 +6,8 @@ const initializeSocket = (server) => {
   const io = new Server(server, {
     // path: "/api/v1/users/socket.io",
     cors: {
-      origin: process.env.CORS_ORIGIN || "http://localhost:3000",
-      methods: ["GET", "POST"],
+      origin: ["http://localhost:5173", "https://tech-spark.vercel.app"],
+      credentials: true,
     },
   });
 
@@ -28,13 +28,13 @@ const initializeSocket = (server) => {
             participants: { $all: [userId, targetUserId] },
           });
           if (!chat) {
-             chat =  new Chat({
+            chat = new Chat({
               participants: [userId, targetUserId],
               messages: [],
             });
           }
           chat.messages.push({ senderId: userId, text });
-          await chat.save()
+          await chat.save();
           io.to(roomId).emit("newMessageReceived", {
             username,
             text,

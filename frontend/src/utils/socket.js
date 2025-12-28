@@ -12,6 +12,7 @@ export const createSocketConnection = () => {
     });
   }
   return io(import.meta.env.VITE_SOCKET_URL, {
-    transports: ["websocket"],
+    withCredentials: true,
+    transports: ["websocket", "polling"],
   });
 };
