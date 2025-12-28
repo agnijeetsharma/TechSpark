@@ -5,9 +5,9 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
 import matchRouter from "./routes/match.routes.js"
 import postRouter from "./routes/post.routes.js"
-app.set("trust proxy", 1);
 
 const app = express();
+
 
 
 app.use(cors({

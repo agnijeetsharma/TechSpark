@@ -4,7 +4,7 @@ import { app } from './app.js';
 dotenv.config({ path: './.env' }); 
 import initializeSocket from './utils/socket.js';
 import http from 'http'
-
+app.set("trust proxy", 1);
 const server = http.createServer(app);
 initializeSocket(server);
 
