@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { IMAGE_URL } from "../constant";
 import { useEffect } from "react";
-import { Base_URL } from "../constant";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../utils/axiosInstance";
 import userImage from "../assets/user.png";
 
 const Connections = () => {
@@ -15,14 +13,12 @@ const Connections = () => {
 
   const fetchConnections = async () => {
     try {
-      const response = await axios.get(`${Base_URL}/match/connection`, {
-        withCredentials: true,
-      });
+      const response = await api.get("/match/connection");
       setConnections(response?.data?.data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error, error?.message);
+      // console.log(error, error?.message);
     }
   };
 

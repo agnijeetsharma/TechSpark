@@ -1,8 +1,7 @@
-import axios from "axios";
-import { Base_URL } from "../constant";
+
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import api from "../utils/axiosInstance";
 
 const UserProfileDetails = ({ user: passedUser }) => {
   const { id } = useParams();
@@ -17,9 +16,7 @@ const UserProfileDetails = ({ user: passedUser }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`${Base_URL}/profile/${id}`, {
-          withCredentials: true,
-        });
+        const response = await api.get(`/profile/${id}`);
         setUser(response?.data?.data);
       } catch (error) {
         console.error("Error fetching user profile:", error);

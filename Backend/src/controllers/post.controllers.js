@@ -11,7 +11,6 @@ const createPost = asyncHandler(async (req, res) => {
     throw new apiError(401, "Post details are missing ");
   }
   let postImagelocalpath;
-
   if (
     req.files &&
     Array.isArray(req.files.postImage) &&
@@ -38,7 +37,6 @@ const postFeed = asyncHandler(async (req, res) => {
 
   let query = {};
 
- 
   if (search.trim()) {
     const regex = new RegExp(search.trim(), "i");
     query.title = regex;
@@ -53,7 +51,6 @@ const postFeed = asyncHandler(async (req, res) => {
     posts,
   });
 });
-
 
 const updatePost = asyncHandler(async (req, res) => {
   const Id = req.query._id;
@@ -91,9 +88,8 @@ const userPost = asyncHandler(async (req, res) => {
 
 const postDetails = asyncHandler(async (req, res) => {
   const postId = req.params.postId;
-  console.log(postId);
 
-  const post = await Post.findById( postId ).populate("author","username");
+  const post = await Post.findById(postId).populate("author", "username");
   if (!post) throw new apiError(401, "Post not found");
   return res
     .status(200)
@@ -102,9 +98,8 @@ const postDetails = asyncHandler(async (req, res) => {
 
 const fetchInitialLikes = asyncHandler(async (req, res) => {
   const postId = req.params.postId;
-  const userId = req.user.id; 
+  const userId = req.user.id;
 
-  
   const post = await Post.findById(postId);
   if (!post) {
     throw new apiError(404, "Post not found");
@@ -112,59 +107,70 @@ const fetchInitialLikes = asyncHandler(async (req, res) => {
 
   const isLiked = post.likes.includes(userId);
 
-  
-  return res.status(200).json(
-    new apiResponse(
-      200,
-      { likesCount: post.likes.length, isLiked },
-      "Likes details retrieved successfully"
-    )
-  );
+  return res
+    .status(200)
+    .json(
+      new apiResponse(
+        200,
+        { likesCount: post.likes.length, isLiked },
+        "Likes details retrieved successfully",
+      ),
+    );
 });
-
-
-
-
 
 const toggleLike = asyncHandler(async (req, res) => {
-  const userId = req.user._id; // Logged-in user ID
-  const postId = req.params.postId; // Post ID from route parameter
+  const userId = req.user._id;
+  const postId = req.params.postId;
 
-    const post = await Post.findById(postId);
+  const post = await Post.findById(postId);
 
-    if (!post) {
-      return res.status(404).json(new apiResponse(404, null, "Post not found"));
-    }
+  if (!post) {
+    return res.status(404).json(new apiResponse(404, null, "Post not found"));
+  }
 
+  const index = post.likes.indexOf(userId);
 
-    const index = post.likes.indexOf(userId);
+  if (index === -1) {
+    post.likes.push(userId);
+  } else {
+    post.likes.splice(index, 1);
+  }
 
-    if (index === -1) {
-    
-      post.likes.push(userId);
-    } else {
-     
-      post.likes.splice(index, 1);
-    }
+  await post.save();
 
-    await post.save();
-
-    const isLiked = post.likes.includes(userId);
-    return res
-      .status(200)
-      .json(new apiResponse(200, { likesCount: post.likes.length, isLiked }, "Like status updated successfully"));
-    
+  const isLiked = post.likes.includes(userId);
+  return res
+    .status(200)
+    .json(
+      new apiResponse(
+        200,
+        { likesCount: post.likes.length, isLiked },
+        "Like status updated successfully",
+      ),
+    );
 });
 
-
-const FeaturePost=asyncHandler(async(req,res)=>{
-  const posts = await Post.find().sort({ createdAt: -1 }).limit(3).populate("author", "username profileImage");
+const FeaturePost = asyncHandler(async (req, res) => {
+  const posts = await Post.find()
+    .sort({ createdAt: -1 })
+    .limit(3)
+    .populate("author", "username profileImage");
   if (!posts || posts.length === 0) {
     return res.status(404).json(new apiResponse(404, null, "No posts found"));
   }
-  return res.status(200).json(new apiResponse(200, posts, "Featured posts retrieved successfully"));
-})
+  return res
+    .status(200)
+    .json(new apiResponse(200, posts, "Featured posts retrieved successfully"));
+});
 
-
-
-export { createPost, postFeed, deletePost, updatePost, userPost, postDetails,toggleLike,fetchInitialLikes,FeaturePost };
+export {
+  createPost,
+  postFeed,
+  deletePost,
+  updatePost,
+  userPost,
+  postDetails,
+  toggleLike,
+  fetchInitialLikes,
+  FeaturePost,
+};

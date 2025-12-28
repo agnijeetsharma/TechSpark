@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Base_URL } from "../constant";
-import axios from "axios";
+import api from "../utils/axiosInstance";
 import { useEffect, useState } from "react";
 import { FiThumbsUp } from "react-icons/fi";
 import contentImage from "../assets/code_image.jpeg";
@@ -14,9 +13,7 @@ const ReadMorePage = () => {
 
   const getContent = async () => {
     try {
-      const response = await axios.get(`${Base_URL}/post/content/${postId}`, {
-        withCredentials: true,
-      });
+      const response = await api.get(`/post/content/${postId}`);
       setPost(response?.data?.data);
     } catch (error) {
       console.log(error);
@@ -27,9 +24,7 @@ const ReadMorePage = () => {
 
   const fetchInitialLikes = async () => {
     try {
-      const response = await axios.get(`${Base_URL}/post/like/details/${postId}`, {
-        withCredentials: true,
-      });
+      const response = await api.get(`/post/like/details/${postId}`);
       const { isLiked, likesCount } = response?.data?.data;
       setIsLike(isLiked);
       setLikeCount(likesCount);
@@ -40,9 +35,7 @@ const ReadMorePage = () => {
 
   const toggleLike = async () => {
     try {
-      const response = await axios.put(`${Base_URL}/post/like/${postId}`, {}, {
-        withCredentials: true,
-      });
+      const response = await api.put(`/post/like/${postId}`);
       setIsLike(response?.data?.data?.isLiked);
       setLikeCount(response?.data?.data?.likesCount);
     } catch (error) {

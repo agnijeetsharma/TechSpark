@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { Base_URL } from "../constant";
-import axios from "axios";
+import api from "../utils/axiosInstance"
 import { removeUser } from "../utils/userSlice";
 import { useLogin } from "../utils/LoginContext";
 import userIcon from "../assets/user.png";
@@ -32,7 +31,7 @@ const NavBar = () => {
   };
   const handleLogout = async () => {
     try {
-      await axios.post(Base_URL + "/logout", {}, { withCredentials: true });
+      await api.post("/logout");
       dispatch(removeUser());
       logout();
       localStorage.removeItem("token"); 

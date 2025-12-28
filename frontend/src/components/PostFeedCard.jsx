@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { IMAGE_URL } from "../constant";
 import userIcon from "../assets/user.png";
 import codeIcon from "../assets/code_image.jpeg";
 

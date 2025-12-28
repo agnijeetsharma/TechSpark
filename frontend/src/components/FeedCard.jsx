@@ -1,6 +1,5 @@
-import axios from "axios";
+import api from "../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import { Base_URL, IMAGE_URL } from "../constant";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 import userImage from "../assets/user.png";
@@ -17,10 +16,8 @@ const FeedCard = ({ user }) => {
 
   const handleRequest = async (status) => {
     try {
-      await axios.post(
-        `${Base_URL}/match/connection-request/${status}/${_id}`,
-        {},
-        { withCredentials: true }
+      await api.post(
+        `/match/connection-request/${status}/${_id}`
       );
       dispatch(removeUserFromFeed(_id));
     } catch (error) {

@@ -3,8 +3,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "../App.css";
 import { createSocketConnection } from "../utils/socket";
-import axios from "axios";
-import { Base_URL } from "../constant";
+import api from "../utils/axiosInstance";
 
 const ChatFeature = () => {
   const targetUserId = useParams().id;
@@ -15,13 +14,10 @@ const ChatFeature = () => {
 
   const getChat = async () => {
     try {
-      const allChat = await axios.get(Base_URL + "/chat/" + targetUserId, {
-        withCredentials: true,
-      });
-      console.log(allChat?.data?.data?.messages);
+      const allChat = await api.get(`/chat/${targetUserId}`);
+
       const chatMessages = allChat?.data?.data?.messages.map((msg) => {
         const { senderId, text } = msg;
-        console.log(senderId?.username);
         return {
           sender: senderId?.username,
           text,
@@ -41,15 +37,12 @@ const ChatFeature = () => {
     const socket = createSocketConnection();
     socket.emit("joinChat", userId, targetUserId);
     socket.on("newMessageReceived", ({ username, text }) => {
-      console.log(username, text);
-      // const currentTime = new Date().toLocaleTimeString();
       setMessages((messages) => [
         ...messages,
         { sender: username, text: text },
       ]);
     });
     return () => {
-      console.log("disconnect");
       socket.disconnect();
     };
   }, [userId, targetUserId]);
@@ -82,9 +75,7 @@ const ChatFeature = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-base mt-24 mb-2">
-  
       <div className="flex flex-col w-full max-w-screen-md h-full bg-base-100 border border-base-300 rounded-lg shadow-lg overflow-hidden">
-       
         <div
           className="flex-grow overflow-y-auto p-4 bg-base-200"
           style={{ paddingBottom: "6rem", maxHeight: "calc(100% - 10rem)" }}
@@ -112,7 +103,6 @@ const ChatFeature = () => {
           <div ref={messagesEndRef} />
         </div>
 
-   
         <div className="p-4 bg-base-100 border-t border-base-300">
           <div className="flex items-center">
             <input

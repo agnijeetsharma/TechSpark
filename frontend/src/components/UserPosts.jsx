@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import PostFeedCard from "./PostFeedCard";
-import { Base_URL } from "../constant";
-import axios from "axios";
+import api from "../utils/axiosInstance";
 
 const UserPosts = () => {
   const [posts, setPosts] = useState([""]);
@@ -9,9 +8,8 @@ const UserPosts = () => {
 
   const fetchPosts = async () => {
     try {
-      const post = await axios.get(`${Base_URL}/post/userPost`, {
-        withCredentials: true,
-      });
+      const post = await api.get("/post/userPost");
+    //  console.log(post,"user posts");
       setLoading(false);
       setPosts(post?.data?.data);
     } catch (err) {
@@ -24,9 +22,7 @@ const UserPosts = () => {
   const handleDeletePost = async (postId) => {
    
     try {
-     await axios.delete(`${Base_URL}/post/delete/${postId}`, {
-        withCredentials: true,
-      });
+     await api.delete(`/post/delete/${postId}`);
     
     } catch (error) {
       console.log(error);

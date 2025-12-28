@@ -14,6 +14,7 @@ router.route("/connection-request/:status/:userId").post(verifyJWT, SendConnecti
 router.route("/connection").get(verifyJWT, getAllConnection);
 router.route("/pending-sentrequest").get(verifyJWT, AllsentRequest);
 router.route("/pending-receivedrequest").get(verifyJWT, AllreceivedRequest);
+// pending-receivedrequest 
 router.route("/accept-request/:status/:fromUserId").post(verifyJWT, acceptConnectionRequests);
 
 export default router;

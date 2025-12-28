@@ -6,7 +6,7 @@ import { connections } from "mongoose";
 
 const SendConnectionRequest = asyncHandler(async (req, res) => {
   const sender = req.user._id;
-  const status=req.params.status
+  const status = req.params.status;
   const receiver = req.params.userId;
   console.log(sender, receiver);
   if (!sender || !receiver) {
@@ -42,7 +42,7 @@ const SendConnectionRequest = asyncHandler(async (req, res) => {
       new apiResponse(
         200,
         newConnection,
-       `${status} Request sent successfully`
+        `${status} Request sent successfully`,
       ),
     );
 });
@@ -135,20 +135,27 @@ const AllsentRequest = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, Connctions, "All connection find successfully"));
 });
 const AllreceivedRequest = asyncHandler(async (req, res) => {
-  const userId = req.user._id;
+  const userId = req?.user?._id;
 
-  if (!userId) throw new apiError(400, "userId is not found");
-
-  const Connctions = await Match.find({ receiver: userId, status: "Pending" }).populate('sender');
-  
-
-  if (!Connctions || Connctions.length === 0) {
-    return next(new apiError(400, "No connection exists"));
+  if (!userId) {
+    throw new apiError(401, "Unauthorized: userId not found");
   }
 
-  res.status(200).json(new apiResponse(200, Connctions, "All connections found successfully"));
-});
+  const connections = await Match.find({
+    receiver: userId,
+    status: "Pending",
+  }).populate("sender");
 
+  if (!connections || connections.length === 0) {
+    throw new apiError(404, "No connection exists");
+  }
+
+  return res
+    .status(200)
+    .json(
+      new apiResponse(200, connections, "All connections found successfully"),
+    );
+});
 
 export {
   SendConnectionRequest,

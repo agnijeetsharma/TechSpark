@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { Base_URL } from "../constant";
+import api from "../utils/axiosInstance";
 import userIcon from "../assets/user.png";
 import { useNavigate } from "react-router-dom";
 
@@ -11,9 +10,7 @@ const FeaturePost = () => {
 
   const fecthPost = async () => {
     try {
-      const response = await axios.get(`${Base_URL}/post/feature`, {
-        withCredentials: true,
-      });
+      const response = await api.get("/post/feature");
   
       setPosts(response?.data?.data);
     } catch (error) {

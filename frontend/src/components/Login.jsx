@@ -2,11 +2,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { Base_URL } from "../constant";
 import { useNavigate } from "react-router-dom";
 import FrontPage from "./Landing";
 import { useLogin } from "../utils/LoginContext";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import api from "../utils/axiosInstance";
 
 const Login = () => {
   const user = useSelector((store) => store.user);
@@ -34,15 +34,12 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const result = await axios.post(
-        `${Base_URL}/login`,
-        { email: emailId, password },
-        { withCredentials: true }
-      );
+      const result = await api.post("/login", { email: emailId, password });
       const data = result.data;
       dispatch(addUser(result?.data?.data));
       setShowToast(true);
       login(data?.token);
+      localStorage.setItem("token", data?.data?.token);
       setTimeout(() => setShowToast(false), 3000);
       navigate("/posts");
     } catch (err) {
@@ -54,13 +51,14 @@ const Login = () => {
 
   const handleSignup = async () => {
     try {
-      const result = await axios.post(
-        `${Base_URL}/register`,
-        { username, email: emailId, password },
-        { withCredentials: true }
-      );
+      const result = await api.post("/register", {
+        username,
+        email: emailId,
+        password,
+      });
       const data = result.data;
       dispatch(addUser(result?.data?.data));
+      localStorage.setItem("token", data?.token);
       navigate("/profile");
       login(data?.token);
       setIsLogin(true);

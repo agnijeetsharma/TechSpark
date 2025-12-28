@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Base_URL } from "../constant";
-import axios from "axios";
+import api from "../utils/axiosInstance";
 import userImage from "../assets/user.png";
 const Requests = () => {
   const [requests, setRequests] = useState([]);
@@ -10,9 +9,8 @@ const Requests = () => {
 
   const fetchReceivedRequest = async () => {
     try {
-      const response = await axios.get(
-        Base_URL + "/match/pending-receivedrequest",
-        { withCredentials: true }
+      const response = await api.get(
+         "/match/pending-receivedrequest",
       );
       setRequests(response?.data?.data);
     } catch (error) {
@@ -28,10 +26,8 @@ const Requests = () => {
 
   const acceptRejectRequest = async (status, _id) => {
     try {
-      const response = await axios.post(
-        Base_URL + "/match/accept-request/" + status + "/" + _id,
-        {},
-        { withCredentials: true }
+      const response = await api.post(
+       `/match/accept-request/${status}/${_id}`
       );
     } catch (error) {
       console.log(error);

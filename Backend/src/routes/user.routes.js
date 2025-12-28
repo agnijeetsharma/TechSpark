@@ -26,12 +26,7 @@ router.route("/register").post(
           {
            name:"profileImage",
            maxCount:1
-          },
-          // {
-          // name:"coverImage",
-          // maxCount:1
-
-          // }
+          }
       ]
   ),
   registerUser,
@@ -40,15 +35,11 @@ router.route("/login").post(loginUser);
 router.route("/logout").post(verifyJWT, logOutUser);
 router.route("/refesh-Token").post(refreshAccessToken);
 router.route("/updateProfile").patch(verifyJWT, updateProfile);
-router.route("/update-profileImage").post(
+router.patch(
+  "/update-profileImage",
   verifyJWT,
-  upload.fields([
-    {
-      name: "profileImage",
-      maxCount: 1,
-    },
-  ]),
-  updateProfileImage,
+  upload.single("profileImage"),
+  updateProfileImage
 );
 
 router.route("/allMatchProfiles").get(verifyJWT,getPotentialMatches)

@@ -32,8 +32,7 @@ const asyncHandler = (requestHandler) => {
             errors: validationErrors, // Send validation error messages
           });
         }
-
-        // Handling other errors (server or unknown)
+      //  console.log("error in async handler",err);
         return res.status(500).json({
           success: false,
           message: 'Internal Server Error',

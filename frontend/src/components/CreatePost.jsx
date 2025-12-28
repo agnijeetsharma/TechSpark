@@ -1,6 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
-import { Base_URL } from "../constant";
+import api from "../utils/axiosInstance";
 import { FiImage, } from "react-icons/fi";
 
 const CreatePost = () => {
@@ -26,13 +25,12 @@ const CreatePost = () => {
     postData.append("title", formData.title);
     postData.append("content", formData.content);
     if (formData.postImage) {
+      
       postData.append("postImage", formData.postImage);
     }
 
     try {
-      await axios.post(`${Base_URL}/post/create`, postData, {
-        withCredentials: true,
-      });
+      await api.post("/post/create",postData);
 
       setFormData({ title: "", content: "", postImage: null });
       setShowToast(true);

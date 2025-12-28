@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../utils/axiosInstance";
 import PostFeedCard from "./PostFeedCard";
 import FeaturePost from "./FeaturePost";
-import { Base_URL } from "../constant";
+
 import { FiSearch } from "react-icons/fi";
 import { useLocation } from "react-router-dom";
 
@@ -21,13 +21,12 @@ const PostFeed = () => {
 
     setLoading(true);
     try {
-      const { data } = await axios.get(`${Base_URL}/post/feed`, {
+      const { data } = await api.get("/post/feed", {
         params: {
           lastPostId: isNewSearch ? undefined : lastPostId,
           limit: 10,
           search: searchQuery.trim(),
         },
-        withCredentials: true,
       });
 
       const newPosts = data?.posts || [];
