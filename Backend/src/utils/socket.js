@@ -4,12 +4,14 @@ import { Chat } from "../models/chat.models.js";
 
 const initializeSocket = (server) => {
   const io = new Server(server, {
-    // path: "/api/v1/users/socket.io",
-    cors: {
-      origin: ["http://localhost:5173", "https://tech-spark.vercel.app"],
-      credentials: true,
-    },
-  });
+  cors: {
+    origin: "https://tech-spark.vercel.app",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  },
+  allowEIO3: true,
+});
 
   io.on("connection", (socket) => {
     socket.on("joinChat", (userId, fromUserId) => {
