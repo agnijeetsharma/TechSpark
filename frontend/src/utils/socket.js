@@ -7,12 +7,12 @@ export const getSocket = () => {
     const SOCKET_URL =
       location.hostname === "localhost"
         ? "http://localhost:3000"
-        : import.meta.env.VITE_SOCKET_URL;
+        : "https://tech-spark.onrender.com";
 
     socket = io(SOCKET_URL, {
       path: "/socket.io",
       withCredentials: true,
-      transports: ["websocket"], // DO NOT FORCE WS
+      transports: ["websocket"], 
     });
   }
 

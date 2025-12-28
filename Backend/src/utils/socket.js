@@ -4,14 +4,16 @@ import { Chat } from "../models/chat.models.js";
 
 const initializeSocket = (server) => {
   const io = new Server(server, {
-  cors: {
-    origin: process.env.CORS_ORIGIN || "https://tech-spark.vercel.app",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  },
-  allowEIO3: true,
-});
+    cors: {
+      origin: process.env.CORS_ORIGIN || "https://tech-spark.vercel.app",
+      methods: ["GET", "POST"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+      credentials: true,
+    },
+    allowEIO3: true,
+    pingInterval: 25000,
+    pingTimeout: 60000,
+  });
 
   io.on("connection", (socket) => {
     socket.on("joinChat", (userId, fromUserId) => {
