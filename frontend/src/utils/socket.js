@@ -1,18 +1,19 @@
 import { io } from "socket.io-client";
 
-export const createSocketConnection = () => {
-  if (location.hostname === "localhost") {
-    return io("http://localhost:3000", {
-      transports: ["websocket"],
+let socket;
+
+export const getSocket = () => {
+  if (!socket) {
+    const SOCKET_URL =
+      location.hostname === "localhost"
+        ? "http://localhost:3000"
+        : import.meta.env.VITE_SOCKET_URL;
+
+    socket = io(SOCKET_URL, {
+      withCredentials: true,
+      transports: ["polling", "websocket"], // DO NOT FORCE WS
     });
   }
-  if (import.meta.env.VITE_USE_NGINX === "true") {
-    return io(window.location.origin, {
-      transports: ["websocket"],
-    });
-  }
-  return io(import.meta.env.VITE_SOCKET_URL, {
-    withCredentials: true,
-    transports: ["polling", "websocket"],
-  });
+
+  return socket;
 };

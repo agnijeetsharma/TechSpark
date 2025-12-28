@@ -32,9 +32,6 @@ export const sendMessage = asyncHandler(async (req, res) => {
   res.status(200).json(message);
 });
 
-
-// main working logic for the chat API
-
 const ChatFeature = asyncHandler(async (req, res) => {
   const { targetUserId } = req.params;
   const userId = req.user._id;
@@ -43,7 +40,7 @@ const ChatFeature = asyncHandler(async (req, res) => {
   }).populate({
     path: "messages.senderId",
     select: "username",
-  });
+  }).populate("participants", "username profileImage");
 
   if (!chat) {
     chat = new Chat({ participants: [userId, targetUserId], messages: [] });

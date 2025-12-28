@@ -1,126 +1,161 @@
 import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import "../App.css";
-import { createSocketConnection } from "../utils/socket";
 import api from "../utils/axiosInstance";
+import { getSocket } from "../utils/socket";
 
 const ChatFeature = () => {
-  const targetUserId = useParams().id;
+  const { id: targetUserId } = useParams();
   const user = useSelector((store) => store.user);
   const userId = user?._id;
+
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
+  const [chatWith, setChatWith] = useState("Loading...");
+  const [chatWithImage, setChatWithImage] = useState(null);
 
-  const getChat = async () => {
-    try {
-      const allChat = await api.get(`/chat/${targetUserId}`);
+  const socketRef = useRef(null);
+  const messagesEndRef = useRef(null);
 
-      const chatMessages = allChat?.data?.data?.messages.map((msg) => {
-        const { senderId, text } = msg;
-        return {
-          sender: senderId?.username,
-          text,
-        };
-      });
-      setMessages(chatMessages);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  /* Auto-scroll */
   useEffect(() => {
-    getChat();
-  }, []);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  /* Load chat + partner info */
   useEffect(() => {
-    if (!userId) return;
-    const socket = createSocketConnection();
+    if (!targetUserId || !userId) return;
+
+    const loadChat = async () => {
+      try {
+        const res = await api.get(`/chat/${targetUserId}`);
+        const chat = res.data.data;
+
+        const chatPartner = chat.participants.find(
+          (p) => p._id.toString() !== userId
+        );
+
+        setChatWith(chatPartner?.username || "Unknown User");
+        setChatWithImage(chatPartner?.profileImage || null);
+
+        const chatMessages =
+          chat.messages?.map((msg) => ({
+            sender: msg.senderId?.username,
+            text: msg.text,
+          })) || [];
+
+        setMessages(chatMessages);
+      } catch (err) {
+        console.error("Chat fetch error:", err);
+      }
+    };
+
+    loadChat();
+  }, [targetUserId, userId]);
+
+  /* Socket setup */
+  useEffect(() => {
+    if (!userId || !targetUserId) return;
+
+    const socket = getSocket();
+    socketRef.current = socket;
+
     socket.emit("joinChat", userId, targetUserId);
-    socket.on("newMessageReceived", ({ username, text }) => {
-      setMessages((messages) => [
-        ...messages,
-        { sender: username, text: text },
-      ]);
-    });
+
+    const handleMessage = ({ username, text }) => {
+      setMessages((prev) => [...prev, { sender: username, text }]);
+    };
+
+    socket.on("newMessageReceived", handleMessage);
+
     return () => {
-      socket.disconnect();
+      socket.off("newMessageReceived", handleMessage);
     };
   }, [userId, targetUserId]);
 
-  const messagesEndRef = useRef(null);
-
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
   const handleSendMessage = () => {
-    const socket = createSocketConnection();
-    if (inputMessage.trim()) {
-      socket.emit("sendMessage", {
-        username: user?.username,
-        userId,
-        targetUserId,
-        text: inputMessage,
-      });
+    if (!inputMessage.trim() || !socketRef.current) return;
 
-      setInputMessage("");
-    }
+    socketRef.current.emit("sendMessage", {
+      username: user?.username,
+      userId,
+      targetUserId,
+      text: inputMessage,
+    });
+
+    setInputMessage("");
   };
+
+  if (!userId) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex justify-center items-center h-screen bg-base mt-24 mb-2">
-      <div className="flex flex-col w-full max-w-screen-md h-full bg-base-100 border border-base-300 rounded-lg shadow-lg overflow-hidden">
-        <div
-          className="flex-grow overflow-y-auto p-4 bg-base-200"
-          style={{ paddingBottom: "6rem", maxHeight: "calc(100% - 10rem)" }}
-        >
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`flex ${
-                msg.sender === user?.username ? "justify-end" : "justify-start"
-              } mb-4`}
-            >
+    <div className="flex justify-center items-center h-screen bg-base-200">
+      <div className="flex flex-col w-full max-w-3xl h-[90vh] bg-base-100 rounded-xl shadow-lg overflow-hidden">
+
+     
+        <div className="p-4 border-b border-base-300 bg-base-100 flex items-center pt-10">
+          {chatWithImage ? (
+            <img
+              src={chatWithImage}
+              alt={chatWith}
+              className="w-10 h-10 rounded-full mr-3"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-gray-300 mr-3"></div>
+          )}
+          <h2 className="text-lg font-semibold text-primary">
+            Chat with {chatWith}
+          </h2>
+        </div>
+
+       
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-base-200">
+          {messages.map((msg, index) => {
+            const isMe = msg.sender === user?.username;
+            return (
               <div
-                className={`p-3 rounded-lg max-w-lg break-words whitespace-pre-wrap ${
-                  msg.sender === user?.username
-                    ? "bg-primary text-primary-content self-end"
-                    : "bg-base-100 border border-base-300 self-start"
-                }`}
+                key={index}
+                className={`flex ${isMe ? "justify-end" : "justify-start"}`}
               >
-                <p className="font-semibold">{msg.sender}</p>
-                <p>{msg?.text}</p>
-                <p className="text-xs text-gray-500 mt-1">{msg.timestamp}</p>
+                <div
+                  className={`max-w-[75%] px-4 py-2 rounded-xl shadow-sm break-words
+                    ${
+                      isMe
+                        ? "bg-primary text-primary-content rounded-br-none"
+                        : "bg-base-100 border border-base-300 rounded-bl-none"
+                    }`}
+                >
+                  <p className="text-xs opacity-70 mb-1">{msg.sender}</p>
+                  <p>{msg.text}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="p-4 bg-base-100 border-t border-base-300">
-          <div className="flex items-center">
+        <div className="p-4 border-t border-base-300 bg-base-100">
+          <div className="flex gap-3">
             <input
               type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
-              placeholder="Type your message..."
-              className="input input-bordered flex-grow resize-none"
-              style={{ overflowY: "auto", maxHeight: "5rem" }}
+              placeholder="Type a message..."
+              className="input input-bordered flex-1"
+              onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
             />
-            <button
-              className="btn btn-primary ml-4"
-              onClick={handleSendMessage}
-            >
+            <button className="btn btn-primary" onClick={handleSendMessage}>
               Send
             </button>
           </div>
         </div>
+
       </div>
     </div>
   );

@@ -100,7 +100,7 @@ const getAllConnection = asyncHandler(async (req, res) => {
     })
     .populate({
       path: "receiver",
-    });
+    })
 
   if (!connections || connections.length === 0) {
     throw new apiError(400, "No connections exist");

@@ -98,7 +98,7 @@ const Connections = () => {
                 </p>
               </div>
 
-              <Link to={"/chat/" + connection?._id}>
+              <Link to={"/chat/" + connection?._id} >
                 <button className="btn btn-outline btn-primary text-sm">
                   Chat Now
                 </button>
