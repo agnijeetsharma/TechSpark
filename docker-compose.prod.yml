@@ -1,0 +1,31 @@
+services:
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: dockerfile.prod
+    container_name: techspark-frontend-prod
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: techspark-backend-prod
+    environment:
+      PORT: 3000
+      MONGODB_URI: mongodb://mongo:27017/techspark
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:8
+    container_name: techspark-mongo-prod
+    volumes:
+      - mongo_data_prod:/data/db
+
+  volumes:
+    mongo_data_prod:

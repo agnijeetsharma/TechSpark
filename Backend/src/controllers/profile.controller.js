@@ -11,7 +11,7 @@ const updateProfile = asyncHandler(async (req, res) => {
   if (!userId) throw new apiError(404, "User not found");
 
   const updatedData = req.body;
-
+  console.log("Updated Data:", updatedData);
   const profile = await User.findByIdAndUpdate(
     userId,
     updatedData,

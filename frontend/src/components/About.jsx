@@ -8,7 +8,7 @@ const About = () => {
           About TechSpark
         </h1>
         <p className="text-lg mb-6">
-          Welcome to <span className="font-semibold">TechSpark</span>, the
+          Welcome to <span className="font-semibold">TechSparkiii</span>, the
           ultimate platform for developers and tech enthusiasts. Our goal is to
           create a space where innovation, collaboration, and skill-building
           come together to help you succeed in the tech industry.

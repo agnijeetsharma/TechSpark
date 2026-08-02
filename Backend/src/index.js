@@ -12,7 +12,7 @@ connectdb()
   .then(() => {
     const port = process.env.PORT || 8000;
     server.listen(port, () => {
-      console.log(`Server started at port: ${port}`);
+      console.log(`Server started at port enjoy: ${port}`);
     });
   })
   .catch((err) => {
@@ -22,7 +22,7 @@ connectdb()
   app.get('/', (req, res) => {
   res.status(200).json({
     success: true,
-    message: 'Backend API is running!'
+    message: 'Backend API is running! '
   });
 });
 

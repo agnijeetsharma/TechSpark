@@ -12,7 +12,7 @@ const FrontPage = () => {
             <div className="space-y-6">
               <div className="flex flex-col space-y-4 ">
                 <h1 className="text-4xl md:text-5xl font-bold">
-                  Welcome to <span className="text-primary">TechSpark</span>
+                  Welcome to <span className="text-primary">TechSpark </span>
                 </h1>
                 <p className="text-lg text-base-content/70">
                   A modern platform where developers connect, learn, and

@@ -20,7 +20,8 @@ const asyncHandler = (requestHandler) => {
             errors: err.errors, // Custom errors from your apiError class
           });
         }
-
+         console.log("save");
+         console.log(err);
         // Handling Mongoose ValidationError
         if (err.name === 'ValidationError') {
           const validationErrors = Object.values(err.errors).map(
